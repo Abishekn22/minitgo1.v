@@ -1,10 +1,59 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../components/images/minitgo.png";
+import {  useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function ContactUs() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const [emailData, setEmailData] = useState({
+    from: 'minitgo@mintigo.com', // Initialize with an empty string or default if needed
+    to: '',
+    subject: '',
+    text: ''
+  });
+  const navigate = useNavigate();
+  const [phone, setPhone] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "phone") {
+      setPhone(value);
+    } else {
+      setEmailData({
+        ...emailData,
+        [name]: value
+      });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    const emailDataWithPhone = {
+      ...emailData,
+      text: `Phone: ${phone}\n\n${emailData.text}`
+    };
+    console.log(emailDataWithPhone);
+    try {
+      const response = await axios.post('http://localhost:3001/send-email', emailDataWithPhone);
+      console.log(response.status);
+      if (response.status === 200) {
+        toast.success("Message successfully sent", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          onClose: () => {
+            navigate('/'); // Navigate to home page and refresh
+          }
+        });
+      }
+    } catch (error) {
+      alert('Error sending email: ' + error.message);
+    }
+  };
+
 
   return (
     <div className="container py-2 mb-4" style={{ marginTop: "4vh"  }}>
@@ -51,34 +100,34 @@ function ContactUs() {
         <div className="col-md-6 shadow py-4 border rounded">
           <form
             className="p-2"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
+            onSubmit={handleSubmit}
           >
             <input
               type="text"
-              placeholder="First Name"
+              placeholder="Full Name"
               className="form-control mb-2"
+              name="subject" value={emailData.subject} onChange={handleChange} required
             />
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="form-control mb-2"
-            />
+            
             <input
               type="email"
               placeholder="Email"
               className="form-control mb-2"
+              name="to" value={emailData.to} onChange={handleChange} required
             />
             <input
               type="tel"
               placeholder="Phone Number"
               className="form-control mb-2"
+              name="phone"
+              value={phone}
+              onChange={handleChange}
             />
             <textarea
               type="text"
               placeholder="Message"
               className="form-control mb-2"
+              name="text" value={emailData.text} onChange={handleChange} required
             />
 
             <div className="form-check mb-2">
@@ -88,7 +137,7 @@ function ContactUs() {
                 offers from Vimeo
               </label>
             </div>
-            <button className="btn btn-primary">Contact</button>
+            <button className="btn btn-primary" type="submit">Contact</button>
           </form>
         </div>
       </div>

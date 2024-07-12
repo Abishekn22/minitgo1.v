@@ -37,6 +37,7 @@ function SignUp() {
 
   const { showModal, setShowModal } = context;
   // const otpRefs = useRef([]);
+// otp send on email
 
   useEffect(() => {
     let intervalId;
@@ -59,12 +60,27 @@ function SignUp() {
       clearInterval(intervalId);
     };
   }, [showOTP, sendOTPagain]);
+  
+  async function handleOTP(OTP) {
 
-  function handleOTP() {
     setTimer(30);
     setShowOTP(true);
     setSendOTPagain(true);
     setOTPExpiry(false);
+    const emailData={
+      from: 'minitgo@mintigo.com', 
+      to: `${email}`,
+      subject: 'OTP',
+      text: `${OTP}`
+    }
+    console.log(emailData);
+    try {
+      const response = await axios.post('http://localhost:3001/send-email', emailData);
+      // alert('Email sent successfully: ' + response.data);
+      console.log(response.data);
+    } catch (error) {
+      alert('Error sending email: ' + error.message);
+    }
     toast.success("OTP sent successfully", {
       autoClose: 1000,
       hideProgressBar: true,
@@ -85,8 +101,9 @@ function SignUp() {
   }
 
   function sendOTPtoEmail(OTP) {
+    console.log("otp",OTP);
     if (OTP) {
-      handleOTP();
+      handleOTP(OTP);
     }
   }
 
@@ -243,6 +260,7 @@ function SignUp() {
   function generateOTP() {
     
     const otp = Math.floor(100000 + Math.random() * 900000);
+    // setOTP(otp)
     console.log("GENERATED OTP:", otp);
    
 

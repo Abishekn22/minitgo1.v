@@ -22,6 +22,7 @@ function App() {
     try {
       const response = await axios.post('http://localhost:3001/send-email', emailData);
       alert('Email sent successfully: ' + response.data);
+      console.log(response.data);
     } catch (error) {
       alert('Error sending email: ' + error.message);
     }

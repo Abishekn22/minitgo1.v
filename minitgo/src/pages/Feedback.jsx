@@ -1,9 +1,47 @@
+import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Feedback() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const signInData = localStorage.getItem("user");
+  const parsedSignInData = JSON.parse(signInData);
+  console.log("parsedSignInData", parsedSignInData);
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    const rating = document.querySelector('input[name="flexRadioDefault"]:checked').nextSibling.textContent.trim();
+    const feedback = document.getElementById("feedbackText").value;
+
+    const feedbackData = {
+      from: `${parsedSignInData.email}`,
+      // to: 'minitgo@mintigo.com',
+      to: 'raghabm7@gmail.com',
+      subject: `Feedback from user `,
+      text: `${rating}\n\n${feedback}  `
+    };
+    console.log(feedbackData);
+    try {
+      const response = await axios.post('http://localhost:3001/send-email', feedbackData);
+      console.log(response.status);
+      if (response.status === 200) {
+        toast.success("Message successfully sent", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          onClose: () => {
+            navigate('/'); // Navigate to home page and refresh
+          }
+        });
+        // alert("Feedback submitted successfully!");
+        
+      }
+    } catch (error) {
+      alert('Error submitting feedback: ' + error.message);
+    }
+  };
 
   return (
     <>
@@ -111,6 +149,7 @@ function Feedback() {
                     <button
                       class="btn btn-primary  btn-lg rounded-pill "
                       type="button"
+                      onClick={handleSubmit}
                     >
                       Submit
                     </button>
