@@ -18,8 +18,8 @@ function Feedback() {
 
     const feedbackData = {
       from: `${parsedSignInData.email}`,
-      // to: 'minitgo@mintigo.com',
-      to: 'raghabm7@gmail.com',
+      to: 'minitgo@mintigo.com',
+      // to: 'raghabm7@gmail.com',
       subject: `Feedback from user `,
       text: `${rating}\n\n${feedback}  `
     };
