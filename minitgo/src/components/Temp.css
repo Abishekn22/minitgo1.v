@@ -1,0 +1,24 @@
+/* src/TemperatureRegulator.css */
+.regulator-container {
+    /* background-color: red; */
+    /* width: 100%; */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* height: 100vh; */
+    /* background: #f9f9f9; */
+    /* height: 40px; */
+  }
+  
+  .circular-slider {
+    cursor: pointer;
+  }
+  
+  .temperature-display {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+  }
+  

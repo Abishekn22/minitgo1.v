@@ -1,0 +1,9 @@
+.increase-items {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.increase-items:hover {
+    transform: scale(1.01);
+    transition: transform 0.4s ease;
+    cursor: pointer;
+}

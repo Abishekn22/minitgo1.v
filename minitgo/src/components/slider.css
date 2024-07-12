@@ -1,0 +1,72 @@
+
+
+.add {
+  height: 60vh;
+  border-radius: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+ 
+.sponsor{
+    /* background-image: url("./images/bg1.jpg"); */
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 1;
+    
+}
+ 
+@media (max-width: 768px) {
+
+    .carousel-img {
+      width: 260%;
+      height: 100%;
+      /* background-image: url("./images/bg1.jpg"); */
+      background-repeat: no-repeat;
+      background-size: 260% 100%; /* Adjust as needed */
+      background-position: 40% center; /* Move the image to the right */
+      opacity: 1;
+    }
+  }
+  
+  /* Add a media query for tablet views */
+  @media (max-width: 992px) { /* Adjust the max-width as needed for tablet breakpoints */
+    .carousel-img {
+      /* width: 220%;
+      height: 80%; */
+      /* background-image: url("./images/bg1.jpg"); */
+      background-repeat: no-repeat;
+      background-size: 220% 80%; /* Adjust as needed */
+      background-position: 40% center; /* Move the image to the right */
+      opacity: 1;
+    }
+  }
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(100%) !important; /* Invert the color to black */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  color: black; /* Set the color to black */
+}
+.carousel-custom .carousel-indicators button {
+  background-color:black; /* Change indicator color to green */
+  border-radius: 100%; /* Make indicators circular */
+  width: 10px; /* Adjust the width of the indicators */
+  height: 10px; /* Adjust the height of the indicators */
+}
+
+.carousel-custom .carousel-indicators button .active {
+color: black; /* Change active indicator color to green */
+}

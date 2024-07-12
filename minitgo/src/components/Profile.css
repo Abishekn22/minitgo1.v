@@ -1,0 +1,186 @@
+.custom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.custom-sidebar {
+  transition: all;
+  transition-duration: 200ms;
+
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  gap: 1.3rem;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.mobile-sidebar {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-105%);
+}
+
+.mobile-sidebar.active {
+  transform: translateX(-7%);
+}
+
+.custom-sidebar-item {
+  font-size: x-large;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #eeeeee;
+  width: 100%;
+  text-align: start;
+  font-weight: 600;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.custom-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.custom-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.custom-save-button {
+  background-color: #149849;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.custom-profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.custom-profile-picture {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.custom-profile-picture img {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+}
+
+.custom-change-picture {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: max-content;
+}
+
+.custom-profile-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.custom-profile-details label {
+  font-weight: bold;
+}
+
+.custom-profile-details input {
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.custom-update-password {
+  background-color: #149849;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  width: max-content;
+  margin: 1rem auto;
+}
+
+.custom-password-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-password-fields input {
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.custom-password-fields.hidden {
+  transform: scale(0);
+}
+
+/*  1280px */
+@media (min-width: 1280px) {
+}
+
+/*  1024px */
+@media (min-width: 1024px) {
+  .custom-profile-body {
+    flex-direction: row;
+  }
+
+  .custom-container {
+    flex-direction: row;
+  }
+
+  .custom-sidebar {
+    width: 25%;
+  }
+
+  .custom-content {
+    width: 65%;
+  }
+}
+
+/*  768px */
+@media (min-width: 768px) {
+}
+
+/*  640px */
+@media (min-width: 640px) {
+  /* Your CSS rules for sm breakpoint */
+}
