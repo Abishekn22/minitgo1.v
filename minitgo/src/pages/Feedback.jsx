@@ -19,20 +19,19 @@ function Feedback() {
     const feedbackData = {
       from: `${parsedSignInData.email}`,
       to: 'minitgo@mintigo.com',
-      // to: 'raghabm7@gmail.com',
       subject: `Feedback from user `,
-      text: `${rating}\n\n${feedback}  `
+      text: `${rating}\n\n${feedback}`
     };
     console.log(feedbackData);
     try {
       const response = await axios.post('http://localhost:3001/send-email', feedbackData);
-      console.log(response.status);
+      console.log(response);
       if (response.status === 200) {
         toast.success("Message successfully sent", {
           autoClose: 1000,
           hideProgressBar: true,
           onClose: () => {
-            navigate('/'); // Navigate to home page and refresh
+            // navigate('/'); // Navigate to home page and refresh
           }
         });
         // alert("Feedback submitted successfully!");

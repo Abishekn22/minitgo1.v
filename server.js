@@ -37,14 +37,15 @@ transporter.verify(function (error, success) {
 
 // API endpoint to send email
 app.post('/send-email', (req, res) => {
-  const { to, subject, text } = req.body;
+  const {from, to, subject, text } = req.body;
 
   const mailOptions = {
-    from: smtpUser,
+    from,
     to,
     subject,
     text,
   };
+  console.log("mailOption",mailOptions);
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

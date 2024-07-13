@@ -10,7 +10,7 @@ function ContactUs() {
   }, []);
 
   const [emailData, setEmailData] = useState({
-    from: 'minitgo@mintigo.com', // Initialize with an empty string or default if needed
+    from: 'minitgo@minitgo.com', // Initialize with an empty string or default if needed
     to: '',
     subject: '',
     text: ''

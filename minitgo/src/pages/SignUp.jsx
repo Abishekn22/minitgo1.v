@@ -68,7 +68,7 @@ function SignUp() {
     setSendOTPagain(true);
     setOTPExpiry(false);
     const emailData={
-      from: 'minitgo@mintigo.com', 
+      from: 'minitgo@minitgo.com', 
       to: `${email}`,
       subject: 'OTP',
       text: `${OTP}`
@@ -76,15 +76,19 @@ function SignUp() {
     console.log(emailData);
     try {
       const response = await axios.post('http://localhost:3001/send-email', emailData);
-      // alert('Email sent successfully: ' + response.data);
-      console.log(response.data);
+      console.log(response.status);
+      if (response.status === 200) {
+        toast.success("Message successfully sent", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          onClose: () => {
+            // navigate('/'); // Navigate to home page and refresh
+          }
+        });
+      }
     } catch (error) {
       alert('Error sending email: ' + error.message);
     }
-    toast.success("OTP sent successfully", {
-      autoClose: 1000,
-      hideProgressBar: true,
-    });
   }
 
  
