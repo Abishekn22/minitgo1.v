@@ -60,22 +60,63 @@ function SignUp() {
       clearInterval(intervalId);
     };
   }, [showOTP, sendOTPagain]);
+  const [emailData, setEmailData] = useState({
+    from: 'minitgo@minitgo.com', // Initialize with an empty string or default if needed
+    to: '',
+    subject: '',
+    text: ''
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmailData({
+      ...emailData,
+      [name]: value
+    });
+  };
+  
+  
   
   async function handleOTP(OTP) {
-
+    
     setTimer(30);
     setShowOTP(true);
     setSendOTPagain(true);
     setOTPExpiry(false);
-    const emailData={
-      from: 'minitgo@minitgo.com', 
-      to: `${email}`,
-      subject: 'OTP',
-      text: `${OTP}`
-    }
-    console.log(emailData);
+    // const emailData={
+      //   from: 'minitgo@minitgo.com', 
+      //   to: `${email}`,
+      //   subject: 'OTP',
+      //   text: `${OTP}`
+      // }
+      // console.log(emailData);
+      // try {
+        //   const response = await axios.post('http://localhost:3001/send-email', emailData);
+        //   console.log(response.status);
+        //   if (response.status === 200) {
+          //     toast.success("Message successfully sent", {
+            //       autoClose: 1000,
+            //       hideProgressBar: true,
+            //       onClose: () => {
+              //         // navigate('/'); // Navigate to home page and refresh
+              //       }
+              //     });
+              //   }
+              // } catch (error) {
+                //   alert('Error sending email: ' + error.message);
+                // }
+                console.log("emaildata_to",emailData.to);
+                const otp = generateOTP();
+                setOTP(otp)
+    const emailDataWithPhoneAndOTP = {
+      ...emailData,
+      to:`${emailData.to}`,
+      subject: `OTP: ${otp}`,
+      text: `OTP: ${otp}`
+    };
+
+    console.log("emaildatawith phone and otp",emailDataWithPhoneAndOTP);
     try {
-      const response = await axios.post('http://localhost:3001/send-email', emailData);
+      const response = await axios.post('http://localhost:3001/send-email', emailDataWithPhoneAndOTP);
       console.log(response.status);
       if (response.status === 200) {
         toast.success("Message successfully sent", {
@@ -89,6 +130,7 @@ function SignUp() {
     } catch (error) {
       alert('Error sending email: ' + error.message);
     }
+
   }
 
  
@@ -112,6 +154,7 @@ function SignUp() {
   }
 
   function verifySentOTP() {
+    console.log(OTP);
     const otpInputs = document.querySelectorAll(".otp-input");
     let enteredOTP = "";
 
@@ -182,7 +225,7 @@ function SignUp() {
     if (
       fullName === "" ||
       phoneNumber === "" ||
-      email === "" ||
+      emailData.to === "" ||
       addresss === "" ||
       password === ""
     ) {
@@ -197,7 +240,7 @@ function SignUp() {
         hideProgressBar: true,
       });
       return;
-    } else if (!emailPattern.test(email)) {
+    } else if (!emailPattern.test(emailData.to)) {
       toast.error("Please enter a valid email", {
         autoClose: 1000,
         hideProgressBar: true,
@@ -243,7 +286,7 @@ function SignUp() {
             full_name: fullName,
             phone_number: phoneNumber,
             office_address: addresss,
-            email: email,
+            email: emailData.to,
             password: password,
             landmark: "Near Central Park",
           };
@@ -561,11 +604,16 @@ function SignUp() {
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
                 <Form.Control
-                  type="text"
+                  // type="text"
+                  // placeholder="Email"
+                  // className=" w-100 px-4 mb-4  rounded rounded-pill"
+                  // // value={email}
+                  // // onChange={(e) => setEmail(e.target.value)}
+                  // name="to" value={emailData.to} onChange={handleChange} required
+                  type="email"
                   placeholder="Email"
-                  className=" w-100 px-4 mb-4  rounded rounded-pill"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control mb-2"
+                  name="to" value={emailData.to} onChange={handleChange} required
                 />
                 <Form.Control
                   type="text"
