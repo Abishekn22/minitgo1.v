@@ -568,10 +568,10 @@ const Profile = () => {
                       </div>
                     {parsedSignInData.userId && orderData.length > 0 && (
                       <div
-                        className=" border bg-body-tertiary  "
+                        className=" border bg-body-tertiary  mt-3 "
                         style={{ borderRadius: "10px" }}
                       >
-                        <div className="card-header px-4 py-4 col d-flex flex-column gap-2  ">
+                        <div className="card-header px-4 py-4 col d-flex flex-column gap-2 ">
                           <div className=" d-flex flex-wrap">
                           <h5 className="text-muted mb-0  ">
                               Thanks for your Order,{" "}
