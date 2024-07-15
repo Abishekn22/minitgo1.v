@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useSelector } from "react-redux";
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import { IoMdCash } from "react-icons/io";
 import { FaGooglePay } from "react-icons/fa";
@@ -24,6 +25,8 @@ import {
 import { selectTotalQuantity } from "../components/redux/Slices/CartSlice.js";
 import { Toast } from "bootstrap";
 export const Checkout = () => {
+  const modalRef = useRef(null);
+
   const dispatch = useDispatch();
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
@@ -33,7 +36,7 @@ export const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
   const [selectedAddress, setSelectedAddress] = useState({
     type: "Home Address",
-    location: "",
+    location: `${parsedSignInData ? parsedSignInData.address : ""}`,
   });
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [additionalFields, setAdditionalFields] = useState({
@@ -42,6 +45,7 @@ export const Checkout = () => {
     city: "",
     country: "",
   });
+
   const [isMobile, setIsMobile] = useState(false);
   const [isLocationFetched, setIsLocationFetched] = useState(false);
   const [location, setLocation] = useState({ lat: null, log: null });
@@ -83,7 +87,16 @@ export const Checkout = () => {
   const handleDeleteFromWishList = (productId) => {
     dispatch(deleteWishList({ product_id: productId }));
   };
+  const handleCloseModal = () => {
+    if (modalRef.current) {
+      const bootstrapModal = new window.bootstrap.Modal(modalRef.current);
+      bootstrapModal.hide();
+    }
+  };
+  const [confirmingOrder, setConfirmingOrder] = useState(false);
+
   const handleConfirmOrder = async () => {
+    setConfirmingOrder(true);
     const orderItems = cart.map((item) => {
       return {
         product_id: item.pid,
@@ -146,10 +159,14 @@ export const Checkout = () => {
     } else {
       alert("Failed to place order. Please try again.");
     }
+    setConfirmingOrder(false);
   };
+  // console.log("showmoal",showModal);
   console.log("cart data", cart);
   // code end by ganesh
+  const [loading, setLoading] = useState(false);
   const handleUseCurrentLocation = () => {
+    setLoading(true); // Set loading state to true when fetching starts
     // setButtonText("Fetching current location...");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -158,7 +175,6 @@ export const Checkout = () => {
             lat: position.coords.latitude,
             log: position.coords.longitude,
           };
-          setLocation(newLocation);
           // Update cart items with the new location
           const updatedCart = cart.map((item) => ({
             ...item,
@@ -168,14 +184,18 @@ export const Checkout = () => {
           updatedCart.forEach((item) => {
             item.coordinates = `${newLocation.lat},${newLocation.log}`;
           });
-          setLocation(newLocation);
+          setSelectedAddress({
+            type: "Current Address",
+            location: `${newLocation.lat},${newLocation.log}`,
+          });
           toast.success("Location fetched successfully", {
             autoClose: 1000,
             hideProgressBar: true,
           });
-          setIsLocationFetched(true);
+          setLoading(false); // Set loading state to false after fetching
         },
         (err) => {
+          setLoading(false); // Set loading state to false on error
           setError(err.message);
           toast.error("Failed to fetch location: " + err.message, {
             autoClose: 1000,
@@ -184,6 +204,7 @@ export const Checkout = () => {
         }
       );
     } else {
+      setLoading(false); // Set loading state to false if geolocation is not supported
       setError("Geolocation is not supported by this browser.");
       toast.error("Geolocation is not supported by this browser.", {
         autoClose: 1000,
@@ -221,7 +242,7 @@ export const Checkout = () => {
   const handleNewAddressInputChange = (event) => {
     setNewAddress(event.target.value);
   };
-
+  const [address, setAddress] = useState(false);
   const handleSaveNewAddress = () => {
     setSelectedAddress({
       type: "Custom Address",
@@ -229,7 +250,9 @@ export const Checkout = () => {
     });
     setNewAddressInputVisible(false);
     setNewAddress("");
+    setAddress(true);
   };
+  console.log(selectedAddress);
   console.log("location", location);
   console.log(selectedAddress);
 
@@ -550,7 +573,7 @@ export const Checkout = () => {
                           }
                         />
                       </div>
-                      <div className="rounded border d-flex w-100 p-3 align-items-center">
+                      <div className="rounded border d-flex w-100 p-3 align-items-center gap-5">
                         <button
                           className="mb-0 fw-semibold btn btn-primary"
                           onClick={handleUseCurrentLocation}
@@ -561,8 +584,18 @@ export const Checkout = () => {
                                 : 0.5,
                           }}
                         >
-                          Use Current Address
+                          {loading ? "Fetching..." : "Use Current Address"}
                         </button>
+                        {loading ? "" :  <a
+                   href={`https://www.google.com/maps/search/?api=1&query=${selectedAddress.location}`}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="text-sm text-blue-500 "
+                >
+                  Open in maps
+                </a>}
+                       
+                        
                         {/* <span className="ms-auto fs-6">
                           {"Street #4, City 59 , India"}
                         </span> */}
@@ -592,16 +625,21 @@ export const Checkout = () => {
                   )}
 
                   {/* Add New Address Button */}
-                  
-                  <div className="place-button mx-4 mb-4">
+
+                  <div className="place-button mx-4 mb-4 d-flex gap-5 items-center justify-center">
                     <button
-                    type="button"
-                    className="btn btn-primary btn-lg"
-                    
+                      type="button"
+                      className="btn btn-primary btn-lg"
                       onClick={handleAddNewAddress}
                     >
-                       Add Address
+                      Add Address
                     </button>
+                    {address && (
+                      <div className="d-flex mt-3 ">
+                        <h6>{selectedAddress.type}:</h6>
+                        <h6>{selectedAddress.location}</h6>
+                      </div>
+                    )}
                   </div>
                   <div className="place-button mx-4">
                     <button
@@ -635,6 +673,7 @@ export const Checkout = () => {
                     tabIndex="-1"
                     aria-labelledby="placeOrderModal"
                     aria-hidden="true"
+                    
                   >
                     <div className="modal-dialog">
                       <div className="modal-content">
@@ -653,29 +692,24 @@ export const Checkout = () => {
                           <h3 className="mb-0 mx-3 text-start">Items:</h3>
                           <hr />
                           <div className="product-section my-2">
-                            {cart?.map((item, index) => {
-                              return (
-                                <div
-                                  key={index}
-                                  className="col-12 mx-md-auto px-3 my-2 product-item d-flex justify-content-start gap-4"
-                                >
-                                  <img
-                                    src={item.product_image1}
-                                    alt="Product"
-                                    width={70}
-                                    height={70}
-                                    className="border rounded p-1"
-                                  />
-                                  <div className="d-flex flex-column ">
-                                    {" "}
-                                    <h5>{item.client_name}</h5>
-                                    <p className="fs-5">
-                                      {item.product_price}₹
-                                    </p>
-                                  </div>
+                            {cart?.map((item, index) => (
+                              <div
+                                key={index}
+                                className="col-12 mx-md-auto px-3 my-2 product-item d-flex justify-content-start gap-4"
+                              >
+                                <img
+                                  src={item.product_image1}
+                                  alt="Product"
+                                  width={70}
+                                  height={70}
+                                  className="border rounded p-1"
+                                />
+                                <div className="d-flex flex-column">
+                                  <h5>{item.client_name}</h5>
+                                  <p className="fs-5">{item.product_price}₹</p>
                                 </div>
-                              );
-                            })}
+                              </div>
+                            ))}
                           </div>
                           <hr />
                           <div className="px-3 payment-info">
@@ -685,20 +719,18 @@ export const Checkout = () => {
                             </div>
                           </div>
                           <hr />
-
                           <div className="px-3 address-info">
                             <h4>Shipping Information</h4>
                             <div className="mt-3 d-flex justify-content-between">
-                              <h5>Location: </h5>
+                              <h5>Location:</h5>{" "}
                               <h6>{selectedAddress.location}</h6>
                             </div>
                           </div>
                           <hr />
-
                           <div className="px-3 total-amount d-flex justify-content-between align-items-center">
                             <h3>Total Amount:</h3>
                             <h5 className="text-success">
-                              {calculateTotalPrice() } RS
+                              {calculateTotalPrice()} RS
                             </h5>
                           </div>
                           <hr />
@@ -707,12 +739,14 @@ export const Checkout = () => {
                           <button
                             type="button"
                             className="btn btn-primary mx-auto"
-                            // code start by ansari
-                            // confirm order function
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
                             onClick={handleConfirmOrder}
-                            // code end by ansari
+                            disabled={confirmingOrder}
                           >
-                            Confirm Order
+                            {confirmingOrder
+                              ? "Confirming..."
+                              : "Confirm Order"}
                           </button>
                         </div>
                       </div>
