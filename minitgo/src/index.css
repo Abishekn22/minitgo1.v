@@ -12,7 +12,7 @@ body {
 }
 
 /* Sonali changing the h3 to bold */
-.intial-profile1{
+.intial-profile1 {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -25,6 +25,7 @@ body {
   font-weight: bold;
   /* margin-right: 0.5rem; */
 }
+
 .spacing {
   gap: 15px;
   margin-left: 10px;
@@ -187,20 +188,23 @@ p,
   border: 2.55px solid #cbd394;
   border-radius: 10px 0 0 10px;
 }
+
 /* temp for desktop */
-.temp{
+.temp {
   height: 100%;
   display: flex;
   text-align: center;
 }
-.inr-temp{
+
+.inr-temp {
   position: relative;
   width: 55px;
   height: 40px;
   overflow: hidden;
   margin: 0 auto;
 }
-.temp-add{
+
+.temp-add {
   position: absolute;
   width: 50px;
   height: 45px;
@@ -214,13 +218,15 @@ p,
   font-size: 15px;
   font-weight: bold;
 }
+
 /* App.css */
 .loading-spinner {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9999; /* Ensure it is above other content */
+  z-index: 9999;
+  /* Ensure it is above other content */
 }
 
 
@@ -293,6 +299,7 @@ p,
   width: 80%;
   margin-bottom: 40px;
 }
+
 @media (max-width: 557px) {
   .banner {
     width: 100%;
@@ -385,9 +392,11 @@ p,
   margin-bottom: 8px;
 
 }
+
 .dropdown-toggle::after {
   display: none;
 }
+
 .dropdown-toggle1::after {
   display: inline-block;
   margin-left: 0.255em;
@@ -1384,9 +1393,10 @@ button:hover {
     margin-top: 6.7rem;
   }
 }
+
 @media screen and (min-width: 992px) {
   .catlog {
-    margin-top:3.8rem;
+    margin-top: 3.8rem;
   }
 }
 
@@ -1681,7 +1691,7 @@ button:hover {
 }
 
 /* code end by ganesh */
-.cart-btn{
+.cart-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1689,7 +1699,8 @@ button:hover {
   justify-content: space-between;
   /* justify-content: end; */
 }
-.cart-btn1{
+
+.cart-btn1 {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1697,6 +1708,7 @@ button:hover {
   /* justify-content: space-between; */
   justify-content: end;
 }
+
 /*code started by isha*/
 .FilterHeadingCss {
   font-size: 18px;
@@ -1728,36 +1740,43 @@ button:hover {
 }
 
 .card-disabled {
-  opacity: 0.6; /* Makes the card look faded */
-  pointer-events: none; /* Prevents any interaction */
+  opacity: 0.6;
+  /* Makes the card look faded */
+  pointer-events: none;
+  /* Prevents any interaction */
 }
 
 
 .dot {
- height: 0.8rem;  
- width: 0.8rem;
+  height: 0.8rem;
+  width: 0.8rem;
   background-color: red;
   border-radius: 50%;
   animation: blink 1s infinite;
 }
 
 @keyframes blink {
-  0%, 50%, 100% {
-      opacity: 1;
+
+  0%,
+  50%,
+  100% {
+    opacity: 1;
   }
-  25%, 75% {
-      opacity: 0;
+
+  25%,
+  75% {
+    opacity: 0;
   }
 }
 
 @media screen and (min-width: 344px) and (max-width: 344px) {
-.minitgo-logo{
-  width: 60px !important;
-}
+  .minitgo-logo {
+    width: 60px !important;
+  }
 }
 
 /* profile name initial */
-.intial-profile{
+.intial-profile {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -1771,9 +1790,27 @@ button:hover {
   margin-right: 0.5rem;
 }
 
-.user-profile{
+.user-profile {
   border-radius: 50% !important;
-  background-color: #fff  !important;
+  background-color: #fff !important;
   width: 1.8rem;
   height: 1.8rem;
+}
+
+/* for profile page */
+@media screen and (min-width: 300px) and (max-width: 600px) {
+  .paid-data {
+    font-size: 16px !important;
+  }
+
+  .order-button {
+    margin-bottom: 18px ;
+  }
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 768px) {
+  .thank-section{
+    margin-top: 20px !important;
+  }
 }
