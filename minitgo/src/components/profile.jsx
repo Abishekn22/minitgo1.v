@@ -525,7 +525,7 @@ const Profile = () => {
                   <div className="mx-2  mx-md-5 ">
                     <div className=" col-lg-8 col-xl-8 w-100  ">
                     <div
-                        className="mt-4 pb-4"
+                        className="mt-4 pb-4 mobile-section"
                         style={{ borderBottom: "1px solid  #c4c4c4" }}
                       >
                         <div className="mobile-menu-logo">
