@@ -33,9 +33,17 @@ export const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
   const [selectedAddress, setSelectedAddress] = useState({
     type: "Home Address",
-    location: parsedSignInData.address,
+    location: "",
+  });
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [additionalFields, setAdditionalFields] = useState({
+    // Define additional fields here
+    street: "",
+    city: "",
+    country: "",
   });
   const [isMobile, setIsMobile] = useState(false);
+  const [isLocationFetched, setIsLocationFetched] = useState(false);
   const [location, setLocation] = useState({ lat: null, log: null });
   const [userLocation, setuserLocation] = useState("");
   console.log("userlocation", userLocation);
@@ -115,76 +123,116 @@ export const Checkout = () => {
     });
     console.log("orderItems", orderItems);
     const sendOrderItem = async (orderItem) => {
-        console.log("orderitem", orderItem);
-        try {
-          const response = await axios.post(
-            "https://minitgo.com/api/insert_order.php",
-            orderItem
-          );
-          console.log("response", response.data);
-          return response.data.status === true;
-        } catch (error) {
-          console.error("Error placing order:", error);
-          return false;
-        }
-      };
-      const results = await Promise.all(orderItems.map(sendOrderItem));
-  
-      if (results.every((result) => result === true)) {
-        toast.success("Order successfully placed", {
-          autoClose: 1000,
-          hideProgressBar: true,
-        });
-      } else {
-        alert("Failed to place order. Please try again.");
-      }
-    };
-    console.log("cart data", cart);
-    // code end by ganesh
-    const handleUseCurrentLocation = () => {
-      // setButtonText("Fetching current location...");
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const newLocation = {
-              lat: position.coords.latitude,
-              log: position.coords.longitude,
-            };
-            setLocation(newLocation);
-            // Update cart items with the new location
-            const updatedCart = cart.map(item => ({
-              ...item,
-              coordinates: `${newLocation.lat},${newLocation.log}`,
-            }));
-            // Update cart state with new coordinates
-            updatedCart.forEach(item => {
-              item.coordinates = `${newLocation.lat},${newLocation.log}`;
-            });
-            setLocation(newLocation);
-            toast.success("Location fetched successfully", {
-              autoClose: 1000,
-              hideProgressBar: true,
-            });
-          },
-          (err) => {
-            setError(err.message);
-            toast.error("Failed to fetch location: " + err.message, {
-              autoClose: 1000,
-              hideProgressBar: true,
-            });
-          }
+      console.log("orderitem", orderItem);
+      try {
+        const response = await axios.post(
+          "https://minitgo.com/api/insert_order.php",
+          orderItem
         );
-      } else {
-        setError("Geolocation is not supported by this browser.");
-        toast.error("Geolocation is not supported by this browser.", {
-          autoClose: 1000,
-          hideProgressBar: true,
-        });
+        console.log("response", response.data);
+        return response.data.status === true;
+      } catch (error) {
+        console.error("Error placing order:", error);
+        return false;
       }
     };
-    console.log("location",location);
-    
-  
+    const results = await Promise.all(orderItems.map(sendOrderItem));
+
+    if (results.every((result) => result === true)) {
+      toast.success("Order successfully placed", {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
+    } else {
+      alert("Failed to place order. Please try again.");
+    }
+  };
+  console.log("cart data", cart);
+  // code end by ganesh
+  const handleUseCurrentLocation = () => {
+    // setButtonText("Fetching current location...");
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newLocation = {
+            lat: position.coords.latitude,
+            log: position.coords.longitude,
+          };
+          setLocation(newLocation);
+          // Update cart items with the new location
+          const updatedCart = cart.map((item) => ({
+            ...item,
+            coordinates: `${newLocation.lat},${newLocation.log}`,
+          }));
+          // Update cart state with new coordinates
+          updatedCart.forEach((item) => {
+            item.coordinates = `${newLocation.lat},${newLocation.log}`;
+          });
+          setLocation(newLocation);
+          toast.success("Location fetched successfully", {
+            autoClose: 1000,
+            hideProgressBar: true,
+          });
+          setIsLocationFetched(true);
+        },
+        (err) => {
+          setError(err.message);
+          toast.error("Failed to fetch location: " + err.message, {
+            autoClose: 1000,
+            hideProgressBar: true,
+          });
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+      toast.error("Geolocation is not supported by this browser.", {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
+    }
+  };
+  const handleAddAddress = () => {
+    setShowAdditionalFields(true);
+  };
+
+  const handleAdditionalFieldsChange = (e) => {
+    setSelectedAddress({
+      type: "Address",
+      location: e.target.value,
+    });
+  };
+  // const handleAddressTypeChange = (addressType) => {
+  //   // Handle radio button change for address types
+  //   setSelectedAddress(null); // Reset selectedAddress when changing address type
+  //   setIsLocationFetched(false); // Reset location fetched state
+  //   setShowAdditionalFields(false); // Hide additional fields when changing address type
+  // };
+  // const [selectedAddress, setSelectedAddress] = useState({
+  //   type: '',
+  //   location: '',
+  // });
+  const [newAddressInputVisible, setNewAddressInputVisible] = useState(false);
+  const [newAddress, setNewAddress] = useState("");
+
+  const handleAddNewAddress = () => {
+    setNewAddressInputVisible(true);
+  };
+
+  const handleNewAddressInputChange = (event) => {
+    setNewAddress(event.target.value);
+  };
+
+  const handleSaveNewAddress = () => {
+    setSelectedAddress({
+      type: "Custom Address",
+      location: newAddress,
+    });
+    setNewAddressInputVisible(false);
+    setNewAddress("");
+  };
+  console.log("location", location);
+  console.log(selectedAddress);
+
   return (
     <>
       <div
@@ -410,7 +458,7 @@ export const Checkout = () => {
                       />
                     </div>
                     <div className="rounded border d-flex w-100 p-3 align-items-center">
-                    pay after arrived via 
+                      pay after arrived via
                       <p className="mb-0 fw-semibold">
                         <SiPaytm
                           className="me-2"
@@ -452,7 +500,7 @@ export const Checkout = () => {
                           Home Address
                         </p>
                         <span className="ms-auto fs-6">
-                        {parsedSignInData.address}
+                          {parsedSignInData ? parsedSignInData.address : ""}
                         </span>
                       </div>
                     </div>
@@ -481,7 +529,9 @@ export const Checkout = () => {
                           Office Address
                         </p>
                         <span className="ms-auto fs-6">
-                        {parsedSignInData.officeAddress}
+                          {parsedSignInData
+                            ? parsedSignInData.officeAddress
+                            : ""}
                         </span>
                       </div>
                     </div>
@@ -501,8 +551,15 @@ export const Checkout = () => {
                         />
                       </div>
                       <div className="rounded border d-flex w-100 p-3 align-items-center">
-                        <button className="mb-0 fw-semibold btn btn-primary"
-                        onClick={handleUseCurrentLocation}
+                        <button
+                          className="mb-0 fw-semibold btn btn-primary"
+                          onClick={handleUseCurrentLocation}
+                          style={{
+                            opacity:
+                              selectedAddress.type === "Current Address"
+                                ? 1
+                                : 0.5,
+                          }}
                         >
                           Use Current Address
                         </button>
@@ -512,12 +569,61 @@ export const Checkout = () => {
                       </div>
                     </div>
                   </div>
+                  {newAddressInputVisible && (
+                    <div className="d-flex flex-row pb-3">
+                      <div className="d-flex align-items-center pe-2">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter new address"
+                          value={newAddress}
+                          onChange={handleNewAddressInputChange}
+                        />
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <button
+                          className="btn btn-primary"
+                          onClick={handleSaveNewAddress}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Add New Address Button */}
+                  
+                  <div className="place-button mx-4 mb-4">
+                    <button
+                    type="button"
+                    className="btn btn-primary btn-lg"
+                    
+                      onClick={handleAddNewAddress}
+                    >
+                       Add Address
+                    </button>
+                  </div>
                   <div className="place-button mx-4">
                     <button
                       type="button"
                       className="btn btn-primary btn-lg"
                       data-bs-toggle="modal"
                       data-bs-target="#placeOrderModal"
+                      // disabled={!isLocationFetched}
+                      // disabled={!selectedAddress.type && !isLocationFetched}
+                      disabled={
+                        !selectedAddress ||
+                        (selectedAddress.type === "Current Address" &&
+                          !isLocationFetched)
+                      }
+                      style={{
+                        opacity:
+                          !selectedAddress ||
+                          (selectedAddress.type === "Current Address" &&
+                            !isLocationFetched)
+                            ? 0.5
+                            : 1,
+                      }}
                     >
                       Place Order
                     </button>
@@ -533,9 +639,7 @@ export const Checkout = () => {
                     <div className="modal-dialog">
                       <div className="modal-content">
                         <div className="modal-header">
-                          <h5 className="modal-title" 
-                          id="placeOrderModal"
-                          >
+                          <h5 className="modal-title" id="placeOrderModal">
                             Order Confirmation
                           </h5>
                           <button
@@ -594,7 +698,7 @@ export const Checkout = () => {
                           <div className="px-3 total-amount d-flex justify-content-between align-items-center">
                             <h3>Total Amount:</h3>
                             <h5 className="text-success">
-                              {calculateTotalPrice() + 350} RS
+                              {calculateTotalPrice() } RS
                             </h5>
                           </div>
                           <hr />
