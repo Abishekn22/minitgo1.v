@@ -85,7 +85,7 @@ const App = () => {
           {parsedSignInData ? <Route path="/orders" element={<OrdersPage />} /> : ""}
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/feedback" element={<Feedback />} />
+          {/* <Route path="/feedback" element={<Feedback />} /> */}
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/products" element={<Products />} />
           <Route path="/category" element={<Category />} />

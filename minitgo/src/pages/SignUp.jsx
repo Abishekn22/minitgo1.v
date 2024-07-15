@@ -20,7 +20,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [addresss, setAddresss] = useState("");
   const [password, setPassword] = useState("");
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(60);
   const [sendOTPagain, setSendOTPagain] = useState(false);
   const [buttonText, setButtonText] = useState("Use Current Location");
 
@@ -28,6 +28,7 @@ function SignUp() {
   const [OTP, setOTP] = useState("");
   const [OTPExpiry, setOTPExpiry] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(true);
+  const [isLocationFetched, setIsLocationFetched] = useState(false);
 
   const [credentials, setCredentials] = useState({});
 
@@ -49,7 +50,7 @@ function SignUp() {
             clearInterval(intervalId);
             setSendOTPagain(false);
             setOTPExpiry(true);
-            return 30;
+            return 60;
           }
           return prevTimer - 1;
         });
@@ -78,7 +79,7 @@ function SignUp() {
   
   async function handleOTP(OTP) {
     
-    setTimer(30);
+    setTimer(60);
     setShowOTP(true);
     setSendOTPagain(true);
     setOTPExpiry(false);
@@ -259,7 +260,7 @@ function SignUp() {
           if (response.data && response.data.length > 0) {
             const allUsers = response.data;
 
-            const foundUser = allUsers.find((user) => user.email === email);
+            const foundUser = allUsers.find((user) => user.email === emailData.to);
             const foundUserByPhone = allUsers.find(
               (user) => user.phone_number === phoneNumber
             );
@@ -329,6 +330,7 @@ function SignUp() {
             autoClose: 1000,
             hideProgressBar: true,
           });
+          setIsLocationFetched(true)
         },
         (err) => {
           setError(err.message);
@@ -536,7 +538,7 @@ function SignUp() {
               </div>
             </div>
 
-            {timer === 30 && (
+            {timer === 60 && (
               <div className=" text-center ">
                 <p
                   className="underline"
@@ -606,13 +608,13 @@ function SignUp() {
                 <Form.Control
                   // type="text"
                   // placeholder="Email"
-                  // className=" w-100 px-4 mb-4  rounded rounded-pill"
                   // // value={email}
                   // // onChange={(e) => setEmail(e.target.value)}
                   // name="to" value={emailData.to} onChange={handleChange} required
                   type="email"
                   placeholder="Email"
-                  className="form-control mb-2"
+                  // className="form-control mb-2"
+                  className=" w-100 px-4 mb-3 rounded rounded-pill"
                   name="to" value={emailData.to} onChange={handleChange} required
                 />
                 <Form.Control
@@ -638,6 +640,7 @@ function SignUp() {
                 variant="success"
                 className="my-2"
                 onClick={handleRegister}
+                disabled={!isLocationFetched} 
               >
                 Continue
               </Button>

@@ -1200,7 +1200,7 @@ function Header() {
                   Connect
                 </Link>
 
-                <Link
+                {/* <Link
                   to="/feedback"
                   className="border-bottom py-3 fw-semibold px-2"
                   style={{
@@ -1208,7 +1208,7 @@ function Header() {
                     color: "black",
                   }}
                   onClick={() => setShowOffcanvas(false)}
-                >
+                 >
                   <FaCommentDots
                     className="me-3 "
                     style={{
@@ -1218,7 +1218,7 @@ function Header() {
                     }}
                   />
                   Feedback
-                </Link>
+                </Link> */}
                 <Link
                   to="/blog"
                   className="border-bottom py-3 fw-semibold px-2"

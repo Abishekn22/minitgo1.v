@@ -156,14 +156,14 @@ const Footer = () => {
                                             Return's Policy
                                         </Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <Link
                                             to="/feedback"
                                             className="text-black text-left text-decoration-none"
                                         >
                                             Feedback
                                         </Link>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <Link
                                             to="/help"
