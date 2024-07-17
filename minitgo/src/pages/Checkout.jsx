@@ -165,6 +165,13 @@ export const Checkout = () => {
   console.log("cart data", cart);
   // code end by ganesh
   const [loading, setLoading] = useState(false);
+  // useEffect(() => {
+  //   const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7614.91157113474!2d${location.lat}!3d${location.log}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1721060362402!5m2!1sen!2sin`;
+
+  //   // Set the src attribute of the iframe
+  //   document.getElementById("map").src = mapUrl;
+  // }, []);
+
   const handleUseCurrentLocation = () => {
     setLoading(true); // Set loading state to true when fetching starts
     // setButtonText("Fetching current location...");
@@ -184,15 +191,21 @@ export const Checkout = () => {
           updatedCart.forEach((item) => {
             item.coordinates = `${newLocation.lat},${newLocation.log}`;
           });
-          setSelectedAddress({
-            type: "Current Address",
-            location: `${newLocation.lat},${newLocation.log}`,
+          // setSelectedAddress({
+          //   type: "Current Address",
+          //   location: `${newLocation.lat},${newLocation.log}`,
+          // });
+          setLocation({
+            lat: `${newLocation.lat}`,
+            log: `${newLocation.log}`,
           });
+
           toast.success("Location fetched successfully", {
             autoClose: 1000,
             hideProgressBar: true,
           });
           setLoading(false); // Set loading state to false after fetching
+          setIsLocationFetched(true)
         },
         (err) => {
           setLoading(false); // Set loading state to false on error
@@ -212,6 +225,12 @@ export const Checkout = () => {
       });
     }
   };
+  // const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7614.91157113474!2d${location.log}!3d${location.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1721060362402!5m2!1sen!2sin&markers=${location.lat},${location.log}`;
+  // const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7614.91157113474!2d${location.log}!3d${location.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1721060362402!5m2!1sen!2sin&markers=${location.lat},${location.log}`;
+  // const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7614.91157113474!2d${location.log}!3d${location.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1721060362402!5m2!1sen!2sin&markers=${location.lat},${location.log}`;
+  const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7614.91157113474!2d${location.log}!3d${location.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1721060362402!5m2!1sen!2sin&markers=${location.lat},${location.log},color:red`;
+
+  // const mapUrl = `https://www.google.com/maps/embed/v1/view?!1m14!1m12!1m3!1d7614.91157113474!2d${location.log}!3d${location.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1721060362402!5m2!1sen!2sin&center=${location.lat},${location.log}&zoom=15&markers=${location.lat},${location.log}`;
   const handleAddAddress = () => {
     setShowAdditionalFields(true);
   };
@@ -245,7 +264,7 @@ export const Checkout = () => {
   const [address, setAddress] = useState(false);
   const handleSaveNewAddress = () => {
     setSelectedAddress({
-      type: "Custom Address",
+      type: "Add adress",
       location: newAddress,
     });
     setNewAddressInputVisible(false);
@@ -255,7 +274,7 @@ export const Checkout = () => {
   console.log(selectedAddress);
   console.log("location", location);
   console.log(selectedAddress);
-
+  console.log("cart", cart);
   return (
     <>
       <div
@@ -564,7 +583,10 @@ export const Checkout = () => {
                           type="radio"
                           name="address"
                           id="currentAddress"
-                          checked={selectedAddress.type === "Current Address"}
+                          checked={
+                            selectedAddress.type === "Current Address" ||
+                            selectedAddress.type === "Add adress"
+                          }
                           onChange={() =>
                             setSelectedAddress({
                               type: "Current Address",
@@ -573,74 +595,90 @@ export const Checkout = () => {
                           }
                         />
                       </div>
-                      <div className="rounded border d-flex w-100 p-3 align-items-center gap-5">
-                        <button
-                          className="mb-0 fw-semibold btn btn-primary"
-                          onClick={handleUseCurrentLocation}
-                          style={{
-                            opacity:
-                              selectedAddress.type === "Current Address"
-                                ? 1
-                                : 0.5,
-                          }}
-                        >
-                          {loading ? "Fetching..." : "Use Current Address"}
-                        </button>
-                        {loading ? "" :  <a
-                   href={`https://www.google.com/maps/search/?api=1&query=${selectedAddress.location}`}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   className="text-sm text-blue-500 "
-                >
-                  Open in maps
-                </a>}
-                       
-                        
+                      <div className="rounded border current-location  w-100 p-3 align-items-center gap-5">
+                        <div className="w-full flex justify-between gap-5">
+                          <button
+                            className="mb-0 fw-semibold btn btn-primary"
+                            onClick={handleUseCurrentLocation}
+                            disabled={
+                              !selectedAddress.type === "Current Address"
+                            }
+                            style={{
+                              opacity:
+                                selectedAddress.type === "Current Address"
+                                  ? 1
+                                  : 0.5,
+                            }}
+                          >
+                            {loading ? "Fetching..." : "Use Current Address"}
+                          </button>
+                          {loading || !isLocationFetched ? (
+                            ""// Or display a loading indicator
+                          ) : (
+                            <iframe
+                              id="map"
+                              width="400"
+                              height="300"
+                              style={{ border: 0 }}
+                              loading="lazy"
+                              allowFullScreen
+                              referrerPolicy="no-referrer-when-downgrade"
+                              src={mapUrl}
+                            />
+                            
+                          )}
+                        </div>
+                        <div>
+                          <div className=" mt-3 mb-4 d-flex gap-5 items-center justify-center">
+                            <button
+                              type="button"
+                              className="mb-0 fw-semibold btn btn-primary"
+                              onClick={handleAddNewAddress}
+                            >
+                              Add Address
+                            </button>
+                          </div>
+                          {newAddressInputVisible && (
+                            <div className="d-flex flex-row pb-3">
+                              <div className="d-flex align-items-center pe-2">
+                                <input
+                                  type="text"
+                                  // className="form-control"
+                                  placeholder="Enter new address"
+                                  value={newAddress}
+                                  onChange={handleNewAddressInputChange}
+                                />
+                              </div>
+                              <div className="d-flex align-items-center">
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={handleSaveNewAddress}
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                          {address && (
+                            <div className="d-flex mt-3 ">
+                              <h6>{selectedAddress.type}:</h6>
+                              <h6>
+                                {selectedAddress.location},{location.lat},
+                                {location.log}
+                              </h6>
+                            </div>
+                          )}
+                        </div>
+
                         {/* <span className="ms-auto fs-6">
                           {"Street #4, City 59 , India"}
                         </span> */}
                       </div>
                     </div>
                   </div>
-                  {newAddressInputVisible && (
-                    <div className="d-flex flex-row pb-3">
-                      <div className="d-flex align-items-center pe-2">
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter new address"
-                          value={newAddress}
-                          onChange={handleNewAddressInputChange}
-                        />
-                      </div>
-                      <div className="d-flex align-items-center">
-                        <button
-                          className="btn btn-primary"
-                          onClick={handleSaveNewAddress}
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  )}
 
                   {/* Add New Address Button */}
 
-                  <div className="place-button mx-4 mb-4 d-flex gap-5 items-center justify-center">
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-lg"
-                      onClick={handleAddNewAddress}
-                    >
-                      Add Address
-                    </button>
-                    {address && (
-                      <div className="d-flex mt-3 ">
-                        <h6>{selectedAddress.type}:</h6>
-                        <h6>{selectedAddress.location}</h6>
-                      </div>
-                    )}
-                  </div>
                   <div className="place-button mx-4">
                     <button
                       type="button"
@@ -654,14 +692,6 @@ export const Checkout = () => {
                         (selectedAddress.type === "Current Address" &&
                           !isLocationFetched)
                       }
-                      style={{
-                        opacity:
-                          !selectedAddress ||
-                          (selectedAddress.type === "Current Address" &&
-                            !isLocationFetched)
-                            ? 0.5
-                            : 1,
-                      }}
                     >
                       Place Order
                     </button>
@@ -673,7 +703,6 @@ export const Checkout = () => {
                     tabIndex="-1"
                     aria-labelledby="placeOrderModal"
                     aria-hidden="true"
-                    
                   >
                     <div className="modal-dialog">
                       <div className="modal-content">
