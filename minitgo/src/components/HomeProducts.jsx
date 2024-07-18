@@ -350,13 +350,12 @@ const HomeProducts = () => {
                     <option value="20">20 km</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  {/* Code change start by isha */}
-                  {/* <label htmlFor="priceFilter">Set Price</label> */}
+                {/* <div className="form-group">
+                  
                   <label htmlFor="priceFilter" className="FilterInnerHeading">
                     Set Price
                   </label>
-                  {/* Code change end by isha */}
+               
                   <select
                     className="form-control rounded-pill "
                     id="priceFilter"
@@ -367,7 +366,7 @@ const HomeProducts = () => {
                     <option value="$19.99">5000 - 10000</option>
                     <option value="Null"> </option>
                   </select>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>

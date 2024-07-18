@@ -18,6 +18,7 @@ import {
   showSnackbarForWishlist,
 } from "../components/redux/Slices/CartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
+import Slider from "../components/Addslider.jsx";
 
 const HomeProducts = () => {
   useEffect(() => {
@@ -453,7 +454,7 @@ const HomeProducts = () => {
                   No Products Found
                 </div>
               ) : (
-                filteredProducts?.map((product, index) => (
+                filteredProducts.slice(0, 8).map((product, index) => (
                   <div key={index} className="col-6 col-sm-3 py-2">
                     <div className="product-card">
                       <div
@@ -544,7 +545,7 @@ const HomeProducts = () => {
                               ? product.product_name.substring(0, 15) + "..."
                               : product.product_name
                             : product.product_name.length > 20
-                            ? product.product_name.substring(0, 25) + "..."
+                            ? product.product_name.substring(0, 20) + "..."
                             : product.product_name}
                         </a>
 
@@ -630,6 +631,7 @@ const HomeProducts = () => {
               )}
             </div>
           </div>
+          <Slider/>
         </div>
       </div>
       <br></br>

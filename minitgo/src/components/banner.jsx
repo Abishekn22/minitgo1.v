@@ -5,10 +5,15 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Add from "./images/shop.jpg";
+import Add2 from "../assets/ads1.png"
+import Add3 from "./images/best-deal3.jpg"
 import { BiInfoCircle } from "react-icons/bi";
 import myContext from "./context/MyContext";
 import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css';
+import "react-loading-skeleton/dist/skeleton.css";
+import Carousel from "react-bootstrap/Carousel";
+// import Add from "./images/shop.jpg"; // You can add more images as needed
+
 
 /* banner */
 export default function Banner() {
@@ -27,7 +32,7 @@ export default function Banner() {
   }
   return (
     <>
-       <div className="container " style={{ marginTop: "30px", }}>
+      <div className="container " style={{ marginTop: "30px" }}>
         <Row>
           <div className="custom-bg ">
             <Col className="left-box ">
@@ -35,9 +40,21 @@ export default function Banner() {
               {loading ? (
                 <>
                   <Skeleton height={40} width={300} />
-                  <Skeleton height={30} width={150} style={{ marginTop: "15px" }} />
-                  <Skeleton height={40} width={150} style={{ marginTop: "15px" }} />
-                  <Skeleton height={20} width={250} style={{ marginTop: "15px" }} />
+                  <Skeleton
+                    height={30}
+                    width={150}
+                    style={{ marginTop: "15px" }}
+                  />
+                  <Skeleton
+                    height={40}
+                    width={150}
+                    style={{ marginTop: "15px" }}
+                  />
+                  <Skeleton
+                    height={20}
+                    width={250}
+                    style={{ marginTop: "15px" }}
+                  />
                 </>
               ) : (
                 <>
@@ -51,16 +68,22 @@ export default function Banner() {
                     <span className="cursor">&nbsp;</span>
                   </h1>
                   <br />
-                  <Button className="buynow " onClick={handleNavigateToProducts}>
+                  <Button
+                    className="buynow "
+                    onClick={handleNavigateToProducts}
+                  >
                     Buy now{" "}
                   </Button>
-                  <Button className="find-btn" onClick={handleNavigateToProducts}>
+                  <Button
+                    className="find-btn"
+                    onClick={handleNavigateToProducts}
+                  >
                     Find near me
                   </Button>
-                  <p style={{marginTop:"16px"}}>
+                  <p style={{ marginTop: "16px" }}>
                     {" "}
-                    <BiInfoCircle style={{ fontSize: "10pt" }} /> Get the products
-                    from nearest & trusted stores
+                    <BiInfoCircle style={{ fontSize: "10pt" }} /> Get the
+                    products from nearest & trusted stores
                   </p>
                 </>
               )}
@@ -69,14 +92,36 @@ export default function Banner() {
               {loading ? (
                 <Skeleton height={200} width={200} />
               ) : (
-                <img className="imgs " src={Add} />
+                <Carousel className="custom-carousel">
+                  <Carousel.Item>
+                    <img
+                      className="imgs "
+                      src={Add}
+                      alt="First slide"
+                    />
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img
+                       className="imgs "
+                      src={Add2}
+                      alt="Second slide"
+                    />
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img
+                       className="imgs "
+                      src={Add3}
+                      alt="Third slide"
+                    />
+                  </Carousel.Item>
+                </Carousel>
+                // <img className="imgs " src={Add} />
               )}
             </Col>
           </div>
         </Row>
       </div>
       <br />
-      
     </>
   );
 }

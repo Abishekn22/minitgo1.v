@@ -7,6 +7,8 @@ import { MdMenuOpen } from "react-icons/md";
 import { HiMenu, HiMenuAlt1 } from "react-icons/hi";
 import { toast } from "react-toastify";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button, Form } from "react-bootstrap";
 
 const Profile = () => {
   const [section, setSection] = useState("profile");
@@ -210,10 +212,74 @@ const Profile = () => {
   const formattedTime = `${hours < 10 ? "0" : ""}${hours}:${
     minutes < 10 ? "0" : ""
   }${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  const [showModal, setShowModal] = useState(false);
+  const [OTP, setOTP] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
+  function generateOTP() {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    setOTP(otp);
+    //
+    
+    console.log("GENERATED OTP:", otp);
+
+    return otp.toString();
+  }
+  
+
+  const resetPassword = async () => {
+    handleShow();
+    let otp=generateOTP();
+    console.log(otp);
+    const emailData = {
+      from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
+      // to: `${parsedSignInData.email}`,
+      to: `raghabm7@gmail.com`,
+      subject: `OTP: ${otp}`,
+      text: `OTP: ${otp}`,
+    };
+    console.log("emil", emailData);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/send-email",
+        emailData
+      );
+      console.log(response.status);
+      if (response.status === 200) {
+        toast.success("Message successfully sent", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          onClose: () => {
+            // navigate('/'); // Navigate to home page and refresh
+          },
+        });
+      }
+    } catch (error) {
+      alert("Error sending email: " + error.message);
+    }
+  };
+  const [confirmOtp, setConfirmOtp] = useState("");
+  const handleSubmit = () => {
+    if (confirmOtp !== OTP.toString()) {
+      toast.error("OTP does not match!");
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    // Handle the password reset logic here
+    toast.success("Password reset successfully!");
+    handleClose();
+    setPassword("")
+    setConfirmOtp("")
+    setConfirmPassword("")
+  };
 
   return (
     <>
-    
       <br className="d-lg-block d-none"></br>
       <br className="d-lg-block d-none"></br>
       <div className="custom-container">
@@ -444,16 +510,66 @@ const Profile = () => {
                     {showPasswordFields && (
                       <div className="custom-password-fields">
                         <label htmlFor="email">Email</label>
-                        <input
+                        {/* <input
                           type="email"
                           id="email"
                           placeholder="Enter your email"
-                        />
-                        <button className="custom-update-password bg-dark">
+                        /> */}
+                        <p>{parsedSignInData ? parsedSignInData.email : ""}</p>
+                        <button
+                          className="custom-update-password bg-dark"
+                          onClick={resetPassword}
+                        >
                           Send link
                         </button>
                       </div>
                     )}
+                    <Modal show={showModal} onHide={handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Reset Password</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Form>
+                          <Form.Group controlId="formOtp">
+                            <Form.Label>Enter OTP</Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={confirmOtp}
+                              onChange={(e) => setConfirmOtp(e.target.value)}
+                            />
+                          </Form.Group>
+                          <Form.Group controlId="formPassword" className="mt-3">
+                            <Form.Label>New Password</Form.Label>
+                            <Form.Control
+                              type="password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                          </Form.Group>
+                          <Form.Group
+                            controlId="formConfirmPassword"
+                            className="mt-3"
+                          >
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control
+                              type="password"
+                              value={confirmPassword}
+                              onChange={(e) =>
+                                setConfirmPassword(e.target.value)
+                              }
+                            />
+                          </Form.Group>
+                        </Form>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Close
+                        </Button>
+                        <Button variant="primary" onClick={handleSubmit}>
+                          Submit
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
                   </div>
                 </div>
               </div>
@@ -524,7 +640,7 @@ const Profile = () => {
                 <div className=" py-3   ">
                   <div className="mx-2  mx-md-5 ">
                     <div className=" col-lg-8 col-xl-8 w-100  ">
-                    <div
+                      <div
                         className="mt-4 pb-4 mobile-section"
                         style={{ borderBottom: "1px solid  #c4c4c4" }}
                       >
@@ -566,25 +682,24 @@ const Profile = () => {
                           </div>
                         </div> */}
                       </div>
-                    {parsedSignInData.userId && orderData.length > 0 && (
-                      <div
-                        className=" border bg-body-tertiary  mt-3 "
-                        style={{ borderRadius: "10px" }}
-                      >
-                        <div className="card-header px-4 py-4 col d-flex flex-column gap-2 ">
-                          <div className=" d-flex flex-wrap">
-                          <h5 className="text-muted mb-0  ">
-                              Thanks for your Order,{" "}
-                              <span style={{ color: "black" }}>
-                                {parsedSignInData.fullName}
-                              </span>
-                              !
-                            </h5>
+                      {parsedSignInData.userId && orderData.length > 0 && (
+                        <div
+                          className=" border bg-body-tertiary  mt-3 "
+                          style={{ borderRadius: "10px" }}
+                        >
+                          <div className="card-header px-4 py-4 col d-flex flex-column gap-2 ">
+                            <div className=" d-flex flex-wrap">
+                              <h5 className="text-muted mb-0  ">
+                                Thanks for your Order,{" "}
+                                <span style={{ color: "black" }}>
+                                  {parsedSignInData.fullName}
+                                </span>
+                                !
+                              </h5>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                     
+                      )}
                     </div>
                   </div>
                 </div>
@@ -788,7 +903,7 @@ const Profile = () => {
                           </div>
                         </div>
                       </div> */}
-                         {Array.isArray(orderData) && orderData.length > 0
+                      {Array.isArray(orderData) && orderData.length > 0
                         ? orderData.map((order, index) => {
                             const progress = getStatusProgress(
                               order.product_status
@@ -953,7 +1068,9 @@ const Profile = () => {
                                                 role="button"
                                                 aria-disabled=""
                                               >
-                                               <span className="order-button">Cancel Order</span> 
+                                                <span className="order-button">
+                                                  Cancel Order
+                                                </span>
                                               </Link>
                                             ) : (
                                               <Link
@@ -962,7 +1079,9 @@ const Profile = () => {
                                                 role="button"
                                                 aria-disabled=""
                                               >
-                                                <span className="order-button">Cancel Order</span> 
+                                                <span className="order-button">
+                                                  Cancel Order
+                                                </span>
                                               </Link>
                                             )}
 
@@ -972,7 +1091,10 @@ const Profile = () => {
                                               role="button"
                                               aria-disabled=""
                                             >
-                                            <span className="order-button">   Feedback</span>
+                                              <span className="order-button">
+                                                {" "}
+                                                Feedback
+                                              </span>
                                             </Link>
                                             {formattedTime === "00:00:00" ? (
                                               <Link
@@ -981,7 +1103,10 @@ const Profile = () => {
                                                 role="button"
                                                 aria-disabled=""
                                               >
-                                               <span className="order-button"> Return</span>
+                                                <span className="order-button">
+                                                  {" "}
+                                                  Return
+                                                </span>
                                               </Link>
                                             ) : (
                                               <Link
@@ -990,8 +1115,10 @@ const Profile = () => {
                                                 role="button"
                                                 aria-disabled=""
                                               >
-                                                <span className="order-button"> Return</span>
-                                               
+                                                <span className="order-button">
+                                                  {" "}
+                                                  Return
+                                                </span>
                                               </Link>
                                             )}
                                             <Link
@@ -1000,7 +1127,9 @@ const Profile = () => {
                                               role="button"
                                               aria-disabled=""
                                             >
-                                             <span className="order-button">Review</span>  
+                                              <span className="order-button">
+                                                Review
+                                              </span>
                                             </Link>
                                           </div>
 

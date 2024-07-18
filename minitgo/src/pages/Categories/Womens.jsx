@@ -104,7 +104,7 @@ const Women = () => {
     setAccessoriesCategory("");
     // Apply price filtering
     let productsToFilter = products;
-    const lowerCategory = category.toLowerCase();
+    // const lowerCategory = category.toLowerCase();
     setSelectedCategory("Women's Fashion");
     let womensProduct = productsToFilter.filter(
       (product) =>
