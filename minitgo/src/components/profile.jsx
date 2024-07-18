@@ -235,8 +235,8 @@ const Profile = () => {
     console.log(otp);
     const emailData = {
       from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
-      // to: `${parsedSignInData.email}`,
-      to: `raghabm7@gmail.com`,
+      to: `${parsedSignInData.email}`,
+      // to: `raghabm7@gmail.com`,
       subject: `OTP: ${otp}`,
       text: `OTP: ${otp}`,
     };
@@ -261,7 +261,7 @@ const Profile = () => {
     }
   };
   const [confirmOtp, setConfirmOtp] = useState("");
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (confirmOtp !== OTP.toString()) {
       toast.error("OTP does not match!");
       return;
@@ -271,11 +271,28 @@ const Profile = () => {
       return;
     }
     // Handle the password reset logic here
-    toast.success("Password reset successfully!");
-    handleClose();
-    setPassword("")
-    setConfirmOtp("")
-    setConfirmPassword("")
+    const updatedData = { ...userData, password };
+    try {
+      const response = await fetch("https://minitgo.com/api/update_user.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success("Password reset successfully!");
+        handleClose();
+        setPassword("");
+        setConfirmOtp("");
+        setConfirmPassword("");
+      } else {
+        toast.error("Error updating password: " + result.message);
+      }
+    } catch (error) {
+      toast.error("Error updating password: " + error.message);
+    }
   };
 
   return (
