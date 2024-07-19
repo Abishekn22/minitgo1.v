@@ -287,6 +287,9 @@ const Profile = () => {
         setPassword("");
         setConfirmOtp("");
         setConfirmPassword("");
+        // Clear user data and logout
+        localStorage.removeItem("user");
+        navigate("/");
       } else {
         toast.error("Error updating password: " + result.message);
       }

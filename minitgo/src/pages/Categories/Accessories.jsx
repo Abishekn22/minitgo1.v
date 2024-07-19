@@ -56,6 +56,8 @@ const Accessories = () => {
   const queryParams = new URLSearchParams(search);
   const suggestedData = queryParams.get("suggestion");
   const category = queryParams.get("category");
+  console.log("catagory",category);
+  console.log("selected",selectedCategory);
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -94,54 +96,44 @@ const Accessories = () => {
     )}`;
     navigate(url);
   }
-
+  
   useEffect(() => {
     setSearchQuery("");
     setSelectedCategory("");
-    // Apply price filtering
     let productsToFilter = products;
-    let accessoriesProducts = productsToFilter.filter(
-      (product) =>
-        product.category.toLowerCase().includes("footwear") ||
-        product.product_name.toLowerCase().includes("sneakers") ||
-        product.product_name.toLowerCase().includes("jacket") ||
-        product.product_name.toLowerCase().includes("shoes")
-    );
-
-    if (
-      accessoriesCategory === "Mens" ||
-      accessoriesCategory === "Womens" ||
-      accessoriesCategory === "Kids"
-    ) {
-      // Apply additional filtering based on selected accessories category
-      if (accessoriesCategory.toLowerCase() === "mens") {
-        setSelectedCategory("");
-        accessoriesProducts = accessoriesProducts.filter(
-          (product) =>
-            product.category.toLowerCase().startsWith("men") ||
-            product.product_name.toLowerCase().startsWith("men")
+    console.log("selectcategory",selectedCategory);
+    if (category) {
+      if (category === 'Other') {
+        productsToFilter = products.filter(product => 
+          !['Men', 'Women', 'Kids'].some(term => 
+            Object.values(product).some(value => 
+              typeof value === 'string' && value.includes(term)
+            )
+          )
+        );  
+        console.log("other",productsToFilter);
+      } else if (category === 'Offer') {
+        productsToFilter = products.filter(product => 
+          product.offers && product.offers > 0
         );
-      } else if (accessoriesCategory.toLowerCase() === "womens") {
-        setSelectedCategory("");
-        accessoriesProducts = accessoriesProducts.filter(
-          (product) =>
-            product.category.toLowerCase().includes("women") ||
-            product.product_name.toLowerCase().includes("women")
+        console.log("offer",productsToFilter);
+      } else if (category === 'BestDeals') {
+        productsToFilter = products.filter(product => 
+          product.offers && product.offers >= 50
         );
-      } else if (accessoriesCategory.toLowerCase() === "kids") {
-        accessoriesProducts = accessoriesProducts.filter(
-          (product) =>
-            product.category.toLowerCase().includes("kids") ||
-            product.product_name.toLowerCase().includes("kids")
+        console.log("bestDels",productsToFilter);
+      } else {
+        productsToFilter = products.filter(product => 
+          product.category === category
         );
       }
-
-      productsToFilter = accessoriesProducts;
-    } else {
-      productsToFilter = accessoriesProducts;
     }
+  
+    
+    // Apply price filtering
 
-    let filtered = [...productsToFilter]; // Copy the accessories products array
+    let filtered = [...productsToFilter]; 
+    console.log("filterd",filtered);// Copy the accessories products array
 
     if (selectedPrice !== "" && selectedPrice !== "500 +") {
       const [minPrice, maxPrice] = selectedPrice.split("-").map(Number);
@@ -238,7 +230,7 @@ const Accessories = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedPrice, accessoriesCategory, offer]);
+  }, [products, selectedPrice, accessoriesCategory,category]);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -319,6 +311,10 @@ const Accessories = () => {
                     <Skeleton height={20} width="30%" />
                   </div>
                 ))
+              ) :filteredProducts.length === 0 ? (
+                <div className="col-12 text-center py-5">
+                  <h5>MINITGO is cooming soon with the  {category}.</h5>
+                </div>
               ) :(
               filteredProducts?.map((product, index) => (
                 <div

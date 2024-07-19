@@ -146,7 +146,7 @@ export default function Catlog() {
             </div>
             {/* added [fontSize: "16px", textDecoration:"none" ,paddingTop:"2px",fontWeight:"bolder"] by sonali */}
             <Link
-              to={{ pathname: "/accessories", search: `?category=offer` }}
+              to={{ pathname: "/accessories", search: `?category=Accessories`, }}
               style={{
                 color: "#dfd7d7",
                 fontSize: "16px",
@@ -194,7 +194,7 @@ export default function Catlog() {
             <Link
               to={{
                 pathname: "/accessories",
-                search: `?category=Accessories`,
+                search: `?category=Other`,
               }}
               style={{
                 color: "#dfd7d7",
@@ -209,7 +209,7 @@ export default function Catlog() {
             <Link
               to={{
                 pathname: "/accessories",
-                search: `?category=Accessories`,
+                search: `?category=BestDeals`,
               }}
               style={{
                 color: "#dfd7d7",
@@ -224,7 +224,7 @@ export default function Catlog() {
             <Link
               to={{
                 pathname: "/accessories",
-                search: `?category=Accessories`,
+                search: `?category=Offer`,
               }}
               style={{
                 color: "#dfd7d7",
