@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { MdLocalOffer } from "react-icons/md";
 import img from './images/product.png'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const DiscountProduct = () => {
   const products = [
     {
@@ -17,6 +17,7 @@ const DiscountProduct = () => {
 
   const handleMenFashionClick = () => {
     navigate('/mens-category');
+    
   };
 
   // Handler function for navigating to Women's Fashion category
@@ -41,13 +42,23 @@ const DiscountProduct = () => {
     <hr />
       <br />
       <div className="container">
-        <h3>Today Deal's<MdLocalOffer className='fs-2 p-1'/></h3>
+        <h3>c Deal's<MdLocalOffer className='fs-2 p-1'/></h3>
         <p className=''>Best deal from our sellers</p>
         <div className="row">
           <div className="col-md-3">
             <div className="best-cat">
               <h4>Upto 50% Off Men's Fashion</h4>
-              <button className="btn btn-outline-light bg-warning rounded-pill border-0 mx-3" onClick={handleMenFashionClick}>Shop Now</button>
+              <button className="btn btn-outline-light bg-warning rounded-pill border-0 mx-3" ><Link
+              to={{ pathname: "/products", search: `?category=Mens`, }}style={{
+                color: "#f8f9fa",
+                fontSize: "16px",
+                textDecoration: "none",
+                paddingTop: "2px",
+                fontWeight: "bolder",
+              }}
+            >
+              <span className="mt-3 ">Fashion</span>
+            </Link></button>
             </div>
           </div>
           <div className="col-md-3">

@@ -190,7 +190,7 @@ const HomeProducts = () => {
     if (!user) return;
 
     const range =
-      distanceValue && distanceValue === "all" ? "5" : distanceValue || "5";
+      distanceValue && distanceValue === "all" ? "10" : distanceValue || "10";
 
     const productsWithoutCoordinates = products.filter(
       (product) => !product.lat || !product.log
@@ -534,13 +534,13 @@ const HomeProducts = () => {
                           }}
                           className="fw-semibold"
                         >
-                          {windowWidth <= 1024
-                            ? product.product_name.length > 15
-                              ? product.product_name.substring(0, 15) + "..."
-                              : product.product_name
-                            : product.product_name.length > 23
-                            ? product.product_name.substring(0, 23) + "..."
-                            : product.product_name}
+                         {windowWidth <= 1024
+  ? product.product_name && product.product_name.length > 15
+    ? product.product_name.substring(0, 15) + "..."
+    : product.product_name
+  : product.product_name && product.product_name.length > 23
+  ? product.product_name.substring(0, 23) + "..."
+  : product.product_name}
                         </a>
                         {/* code start by ganesh */}
                         <div className="flex-container ">

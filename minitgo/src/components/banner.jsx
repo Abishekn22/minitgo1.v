@@ -34,7 +34,7 @@ export default function Banner() {
     <>
       <div className="container " style={{ marginTop: "30px" }}>
         <Row>
-          <div className="custom-bg ">
+          <div className="custom-bg p-0 ">
             <Col className="left-box ">
               <br />
               {loading ? (
@@ -92,7 +92,7 @@ export default function Banner() {
               {loading ? (
                 <Skeleton height={200} width={200} />
               ) : (
-                <Carousel className="custom-carousel">
+                <Carousel className="custom-carousel ">
                   <Carousel.Item>
                     <img
                       className="imgs "

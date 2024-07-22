@@ -343,6 +343,10 @@ p,
   width: 110%;
   margin: -2% 0 0 0%;
   height: 63vh;
+  background-image: url("");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 
 }
 

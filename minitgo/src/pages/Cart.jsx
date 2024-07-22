@@ -40,7 +40,7 @@ const Cart = () => {
 
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
-  console.log("signInData", signInData)
+  console.log("userdata",parsedSignInData )
 
   //redux code start
 
@@ -298,7 +298,7 @@ const Cart = () => {
                       </span>
                     </li>
                   </ul>
-                  {parsedSignInData?.userId && cartData?.length > 0 ? (
+                  {parsedSignInData && cartData?.length > 0 ? (
                     <Link to="/checkout">
                       <button className="btn btn-lg btn-block btn-primary">
                         Go to checkout
@@ -306,7 +306,7 @@ const Cart = () => {
                     </Link>
                   ) : (
                     <>
-                      {!parsedSignInData?.userId && (
+                      {!parsedSignInData && (
                         <>
                           <div
                             className="btn btn-lg btn-block btn-primary"
