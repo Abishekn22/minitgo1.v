@@ -54,10 +54,10 @@ const DiscountProduct = () => {
                 fontSize: "16px",
                 textDecoration: "none",
                 paddingTop: "2px",
-                fontWeight: "bolder",
+                // fontWeight: "",
               }}
             >
-              <span className="mt-3 ">Fashion</span>
+              <span className="mt-3 ">Shop now</span>
             </Link></button>
             </div>
           </div>

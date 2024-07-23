@@ -168,9 +168,10 @@ function Header() {
         .replace(/[^a-zA-Z0-9 ]/g, "");
 
       const suggestions = products.filter((product) => {
-        product.product_name.toLowerCase().includes(searchQuery.toLowerCase());
+        // product.product_name.toLowerCase().includes(searchQuery.toLowerCase());
+        const productName = product.product_name || "";
         // Normalize the product name for comparison
-        const normalizedProductName = product.product_name
+        const normalizedProductName = productName
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
         return normalizedProductName.includes(normalizedQuery);
@@ -197,7 +198,8 @@ function Header() {
         const normalizedProductTitle = product.product_title
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
-        const normalizedProductName = product.product_name
+          const productName = product.product_name || "";
+        const normalizedProductName = productName
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
         const normalizedDescription =

@@ -273,7 +273,8 @@ const HomeProducts = () => {
         const normalizedProductTitle = product.product_title
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
-        const normalizedProductName = product.product_name
+          const productName = product.product_name || "";
+        const normalizedProductName = productName
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
         const normalizedDescription =
@@ -541,12 +542,12 @@ const HomeProducts = () => {
                           }}
                         >
                           {windowWidth <= 1024
-                            ? product.product_name.length > 15
-                              ? product.product_name.substring(0, 15) + "..."
-                              : product.product_name
-                            : product.product_name.length > 20
-                            ? product.product_name.substring(0, 20) + "..."
-                            : product.product_name}
+  ? product.product_name && product.product_name.length > 15
+    ? product.product_name.substring(0, 15) + "..."
+    : product.product_name
+  : product.product_name && product.product_name.length > 23
+  ? product.product_name.substring(0, 23) + "..."
+  : product.product_name}
                         </a>
 
                         <h5 className="mt-1">

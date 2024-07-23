@@ -106,11 +106,15 @@ const Women = () => {
     let productsToFilter = products;
     // const lowerCategory = category.toLowerCase();
     setSelectedCategory("Women's Fashion");
-    let womensProduct = productsToFilter.filter(
-      (product) =>
-        product.category.toLowerCase().includes("women") ||
-        product.product_name.toLowerCase().includes("women")
-    );
+    let womensProduct = productsToFilter.filter((product) => {
+      const category = product.category || ""; 
+      const productName = product.product_name || ""; 
+    
+      return (
+        category.toLowerCase().includes("women") ||
+        productName.toLowerCase().includes("women")
+      );
+    });
     productsToFilter = womensProduct;
 
     if (selectedPrice !== "" && selectedPrice !== "500 +") {
@@ -352,12 +356,12 @@ const Women = () => {
                           className="fw-semibold"
                         >
                           {windowWidth <= 1024
-                            ? product.product_name.length > 15
-                              ? product.product_name.substring(0, 15) + "..."
-                              : product.product_name
-                            : product.product_name.length > 23
-                            ? product.product_name.substring(0, 23) + "..."
-                            : product.product_name}
+  ? product.product_name && product.product_name.length > 15
+    ? product.product_name.substring(0, 15) + "..."
+    : product.product_name
+  : product.product_name && product.product_name.length > 23
+  ? product.product_name.substring(0, 23) + "..."
+  : product.product_name}
                         </a>
                         {/* code start by ganesh */}
                         <div className="flex-container">

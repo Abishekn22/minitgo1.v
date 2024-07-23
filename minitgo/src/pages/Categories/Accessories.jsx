@@ -388,13 +388,13 @@ const Accessories = () => {
                           className="fw-semibold clamped-text "
                           // code end by ganesh
                         >
-                          {windowWidth <= 1024
-                            ? product.product_name.length > 15
-                              ? product.product_name.substring(0, 15) + "..."
-                              : product.product_name
-                            : product.product_name.length > 23
-                            ? product.product_name.substring(0, 23) + "..."
-                            : product.product_name}
+                         {windowWidth <= 1024
+  ? product.product_name && product.product_name.length > 15
+    ? product.product_name.substring(0, 15) + "..."
+    : product.product_name
+  : product.product_name && product.product_name.length > 23
+  ? product.product_name.substring(0, 23) + "..."
+  : product.product_name}
                         </a>
                         {/* code start by ganesh */}
                         <div className="flex-container">
