@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Plainheader from "./components/Plain-header";
 import Axios from "axios";
 import axios from "axios";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { toast } from "react-toastify";
 function Client_register() {
   const navigate = useNavigate();
@@ -45,6 +46,20 @@ function Client_register() {
   const [locationsnackbarOpen, setLocationSnackbarOpen] = useState(false);
   const [locationsnackbarmessage, setLocationSnackbarmessage] = useState(false);
   const [OTP, setOTP] = useState("");
+  const [isValid, setIsValid] = useState(true);
+  const handleChange = (e) => {
+    const input = e.target.value;
+    setPhone(input);
+
+    // Parse and validate phone number
+    const phoneNumber = parsePhoneNumberFromString(input, "IN"); // Replace 'IN' with your country code
+    if (phoneNumber && phoneNumber.isValid()) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  };
+
   // dis agree buttion
 
   //snack bar function
@@ -156,59 +171,164 @@ function Client_register() {
   const [confirmOtp, setConfirmOtp] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (confirmOtp !== OTP.toString()) {
-      toast.error("OTP does not match!");
+
+    // Define regex patterns for email and phone validation
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phonePattern = /^[0-9]{10}$/;
+
+    // Validate phone number
+    if (!phonePattern.test(phone)) {
+      toast.error("Please enter a valid phone number", {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
       return;
     }
-    
-    Axios.post("https://minitgo.com/api/insert.php", {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-      phone: phone,
-      address: townDistrict,
-      pincode: pincode,
-      city: city,
-      state: state,
-      gst: gst,
-      panid: panid,
-      account: bankaccount,
-      seller_name: seller,
-      shop_name: shop,
-      coordinates: coordinates,
-      account_name: accountName,
-      ifsc: ifsc,
-      upi: upi,
-      agreement: agreement,
-    })
+
+    // Validate email
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email", {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    // Fetch all users to check for existing email and phone number
+    axios
+      .get("https://minitgo.com/api/fetch_login.php")
       .then((response) => {
-        console.log(response);
-        setSnackbarMessage("Registration successful!");
-        setSnackbarOpen(true);
-        // Clear the form fields
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setPassword("");
-        setPhone("");
-        setTownDistrict("");
-        setPincode("");
-        setCity("");
-        setState("");
-        setGst("");
-        setPanid("");
-        setBankaccount("");
-        setSeller("");
-        setShop("");
-        // Set the formSubmitted state to true
-        setFormSubmitted(true);
-        setOTP("")
+        if (response.data && response.data.length > 0) {
+          const allUsers = response.data;
+
+          const foundUser = allUsers.find((user) => user.email === email);
+          const foundUserByPhone = allUsers.find(
+            (user) => user.phone_number === phone
+          );
+
+          if (foundUser) {
+            toast.error(
+              "This email is already registered. Please use a different email address.",
+              {
+                autoClose: 1000,
+                hideProgressBar: true,
+              }
+            );
+            return;
+          }
+          if (foundUserByPhone) {
+            toast.error(
+              "This phone number is already in use. Please provide a different number.",
+              {
+                autoClose: 1000,
+                hideProgressBar: true,
+              }
+            );
+            return;
+          }
+        }
+
+        // Validate OTP
+        if (confirmOtp !== OTP.toString()) {
+          toast.error("OTP does not match!");
+          return;
+        }
+
+        // Proceed with form submission
+        axios
+          .post("https://minitgo.com/api/insert.php", {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password,
+            phone: phone,
+            address: townDistrict,
+            pincode: pincode,
+            city: city,
+            state: state,
+            gst: gst,
+            panid: panid,
+            account: bankaccount,
+            seller_name: seller,
+            shop_name: shop,
+            coordinates: coordinates,
+            account_name: accountName,
+            ifsc: ifsc,
+            upi: upi,
+            agreement: agreement,
+          })
+          .then((response) => {
+            console.log(response);
+            setSnackbarMessage("Registration successful!");
+            setSnackbarOpen(true);
+
+            // Clear the form fields
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+            setPassword("");
+            setPhone("");
+            setTownDistrict("");
+            setPincode("");
+            setCity("");
+            setState("");
+            setGst("");
+            setPanid("");
+            setBankaccount("");
+            setSeller("");
+            setShop("");
+            setOTP("");
+
+            // Set the formSubmitted state to true
+            setFormSubmitted(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        console.log("Form submitted!");
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log("Form submitted!");
+  };
+  const [gstStatus, setGstStatus] = useState('');
+
+  const validateAndAutoFillGST = (gstNumber) => {
+    const apiEndpoint = `http://sheet.gstincheck.co.in/check/437f81ba5b0aeed5f3db37fbd75ec786/${gstNumber}`;
+
+    fetch(apiEndpoint, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('API Response:', data);
+        if(data.flag === true){
+          setGstStatus('✓');
+          toast.success("GST number is valid and data has been auto-filled.", {
+            autoClose: 3000,
+            hideProgressBar: true,
+          });
+        }else{
+          setGstStatus('!');
+          toast.error("An error occurred while validating GST number.", {
+            autoClose: 3000,
+            hideProgressBar: true,
+          });
+        }
+        
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        
+      });
+  };
+
+  const handleGstChange = (event) => {
+    const newGstNumber = event.target.value;
+    setGst(newGstNumber);
+    validateAndAutoFillGST(newGstNumber);
   };
 
   return (
@@ -369,18 +489,19 @@ function Client_register() {
               <Row className="align-items-center justify-content-between  ">
                 <Col>
                   <Form.Control
-                    type="number"
+                    type="tel"
+                    // id="phone"
                     placeholder="+91"
                     value={phone}
-                    onChange={(e) => {
-                      const input = e.target.value;
-                      // Check if input is a number and its length is less than or equal to 10
-                      if (/^\d*$/.test(input) && input.length <= 10) {
-                        setPhone(input);
-                      }
-                    }}
+                    onChange={handleChange}
+                    // onBlur={handleBlur}
                     required
                   />
+                  {!isValid && (
+                    <small style={{ color: "red" }}>
+                      Invalid phone number format.
+                    </small>
+                  )}
                 </Col>
 
                 <Col>
@@ -482,8 +603,14 @@ function Client_register() {
                     type="text"
                     placeholder="Optional"
                     value={gst}
-                    onChange={(e) => setGst(e.target.value)}
+                    onChange={handleGstChange}
                   />
+                  <span
+                    id="gstStatus"
+                    style={{ color: gstStatus === "✓" ? "green" : "yellow" }}
+                  >
+                    {gstStatus}
+                  </span>
                 </Form.Group>
               </Col>
               <Col>
@@ -549,10 +676,9 @@ function Client_register() {
                   />
                 </Form.Group>
               </Col>
-              
             </Row>
             <Row>
-            <Col>
+              <Col>
                 <Form.Group controlId="formOtp">
                   <Form.Label>Enter OTP</Form.Label>
                   <Form.Control
