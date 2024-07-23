@@ -71,7 +71,9 @@ function Client_register() {
   function isValidPan() {
     if (panid.length > 10) return alert("Enter valid pan card details");
   }
+  const [showOtpInput, setShowOtpInput] = useState(false);
   const handleSendOTP = async () => {
+    setShowOtpInput(true);
     console.log("email", email);
     let otp = generateOTP();
     console.log(otp);
@@ -292,7 +294,7 @@ function Client_register() {
         console.log(error);
       });
   };
-  const [gstStatus, setGstStatus] = useState('');
+  const [gstStatus, setGstStatus] = useState("");
 
   const validateAndAutoFillGST = (gstNumber) => {
     const apiEndpoint = `http://sheet.gstincheck.co.in/check/437f81ba5b0aeed5f3db37fbd75ec786/${gstNumber}`;
@@ -303,25 +305,23 @@ function Client_register() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('API Response:', data);
-        if(data.flag === true){
-          setGstStatus('✓');
+        console.log("API Response:", data);
+        if (data.flag === true) {
+          setGstStatus("✓");
           toast.success("GST number is valid and data has been auto-filled.", {
             autoClose: 3000,
             hideProgressBar: true,
           });
-        }else{
-          setGstStatus('!');
+        } else {
+          setGstStatus("!");
           toast.error("An error occurred while validating GST number.", {
             autoClose: 3000,
             hideProgressBar: true,
           });
         }
-        
       })
       .catch((error) => {
-        console.error('Error:', error);
-        
+        console.error("Error:", error);
       });
   };
 
@@ -483,6 +483,20 @@ function Client_register() {
                 </Form.Group>
               </Col>
             </Row>
+            {showOtpInput && (
+              <Row>
+                <Col>
+                  <Form.Group controlId="formOtp">
+                    <Form.Label>Enter OTP</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={confirmOtp}
+                      onChange={(e) => setConfirmOtp(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+            )}
 
             <Form.Group className="mb-3" controlId="phone">
               <Form.Label>Phone </Form.Label>
@@ -677,18 +691,7 @@ function Client_register() {
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <Form.Group controlId="formOtp">
-                  <Form.Label>Enter OTP</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={confirmOtp}
-                    onChange={(e) => setConfirmOtp(e.target.value)}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+
             <Row>
               <Col>
                 <div className="py-3">

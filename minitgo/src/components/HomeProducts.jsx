@@ -418,7 +418,7 @@ const HomeProducts = () => {
                                 }`}
                               >
                                 <a
-                                  href={`/${product.product_id}`}
+                                  href={`/${product.pid}`}
                                   target="_blank"
                                   style={{
                                     textDecoration: "none",

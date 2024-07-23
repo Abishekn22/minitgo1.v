@@ -45,7 +45,7 @@ function RightSection({ productId }) {
 
   useEffect(() => {
     const item = products.filter(
-      (productItem) => productItem.product_id === id
+      (productItem) => productItem.pid === id
     );
     const fProduct = item[0];
     if (fProduct) {
@@ -55,6 +55,7 @@ function RightSection({ productId }) {
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
+    console.log("pro",product);
     dispatch(addToCart(product));
     toast.success('Item added to cart!', {
       position: "top-right",

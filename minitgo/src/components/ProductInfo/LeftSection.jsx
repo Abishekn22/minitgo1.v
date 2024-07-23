@@ -19,9 +19,11 @@ function LeftSection({ productId, scrollToReviews }) {
       .get("https://minitgo.com/api/fetch_products.php")
       .then((response) => {
         const products = response.data.data;
+        // console.log("products",products);
         const foundProduct = products.find(
-          (product) => product.product_id === productId
+          (product) => product.pid === productId
         );
+        console.log("foundproduct",foundProduct);
         if (foundProduct) {
           setProduct(foundProduct);
         }
@@ -31,6 +33,7 @@ function LeftSection({ productId, scrollToReviews }) {
         console.error("Error fetching products:", error);
       });
   }, [productId]);
+  console.log("product",product);
 
   return (
     <>

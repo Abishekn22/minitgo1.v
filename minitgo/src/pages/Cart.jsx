@@ -37,16 +37,15 @@ const Cart = () => {
     return totalPrice;
   }
 
-
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
-  console.log("userdata",parsedSignInData )
+  console.log("userdata", parsedSignInData);
 
   //redux code start
 
   const cart = useSelector((state) => state.cart);
   const cartData = cart.items;
-  console.log(cartData,"cartData")
+  console.log(cartData, "cartData");
   const wishListData = cart.wishList;
   const totalQuantity = useSelector(selectTotalQuantity);
 
@@ -68,7 +67,6 @@ const Cart = () => {
 
   return (
     <>
-
       <section className="h-100 gradient-custom">
         <div className="container h-100">
           <div className="row justify-content-center my-4">
@@ -341,14 +339,16 @@ const Cart = () => {
                       <div className="d-flex flex-column justify-content-between p-1">
                         <div className="d-flex flex-column">
                           <h1 className="fs-4">{prod.product_name}</h1>
-                          <p className="text-muted fs-6">  {prod.product_discription.length > 40
-                            ? prod.product_discription.slice(0, 40) + "..."
-                            : prod.product_discription}</p>
+                          <p className="text-muted fs-6">
+                            {prod.product_discription &&
+                            prod.product_discription.length > 40
+                              ? prod.product_discription.slice(0, 40) + "..."
+                              : prod.product_discription || ""}
+                          </p>
                           <div className="d-flex justify-content-between flex-wrap">
                             <p className="text-muted">{prod.product_size}</p>
                             <p className="text-muted">{prod.product_price}</p>
                           </div>
-
                         </div>
                         <div className="d-flex justify-content-center align-items-center fs-4 my-1 pb-1 mt-auto">
                           <button className="btn  btn-dark w-100">❤</button>
@@ -368,8 +368,6 @@ const Cart = () => {
         </div>
       </section>
 
-
-
       <Modal
         show={loginModal}
         onHide={() => setLoginModal(false)}
@@ -380,7 +378,6 @@ const Cart = () => {
           className="p-0 rounded-4 d-flex w-max "
           style={{ minWidth: "100%" }}
         >
-
           <Login closeLoginModal={() => setLoginModal(false)} />
         </Modal.Body>
       </Modal>

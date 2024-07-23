@@ -350,6 +350,7 @@ function SignUp() {
     }
     console.log(location);
   };
+  console.log("creditials",credentials);
   return (
     <>
       {showOTP ? (

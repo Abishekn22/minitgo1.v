@@ -13,7 +13,9 @@ function CarouselComponent({ productId, selectedImageIndex }) {
     axios.get('https://minitgo.com/api/fetch_products.php')
       .then(response => {
         const products = response.data.data;
-        const selectedProduct = products.find(p => p.product_id === productId);
+        console.log("product img",products);
+        const selectedProduct = products.find(p => p.pid === productId);
+        console.log("image",selectedProduct);
         if (selectedProduct) {
           const productImages = [];
           for (let i = 1; i <= 5; i++) {
@@ -29,7 +31,9 @@ function CarouselComponent({ productId, selectedImageIndex }) {
       .catch(error => {
         setError(error);
       });
-  }, [productId]);
+    }, [productId]);
+    
+    console.log("image",images);
 
   return (
     <div id="carouselExampleIndicators" className="carousel slide v w-100 border rounded-2" data-bs-ride="carousel" style={{ height: '100%' }}>
