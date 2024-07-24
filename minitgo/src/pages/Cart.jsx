@@ -97,11 +97,15 @@ const Cart = () => {
                           </div>
                         </div>
                         <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                          <p>
+                          <p className="mb-1">
                             <strong>{cart_item.client_name}</strong>
                           </p>
-                          <p>Color: {cart_item.product_color1}</p>
-                          <p>Size: {cart_item.product_size}</p>
+                          <p className="mb-1">Material: {cart_item.material}</p>
+                          <p className="mb-1">Color: {cart_item.product_color1}</p>
+                          <p className="mb-1">Size: {cart_item.product_size}</p>
+                          <p className="mb-1">Category: {cart_item.category}</p>
+                          <p className="line-clamp-2 mb-0 ">Description: {cart_item.product_discription
+                          }</p>
                           <br></br>
                           <button
                             className="btn btn-danger mx-2"
@@ -320,7 +324,7 @@ const Cart = () => {
                 </div>
               </div>
               {/* div for Recomended */}
-              <div className="card">
+              {/* <div className="card">
                 <div className="card-header py-2 rounded-pill">
                   <h5 className="mb-0">Recommended Items</h5>
                 </div>
@@ -362,7 +366,7 @@ const Cart = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
