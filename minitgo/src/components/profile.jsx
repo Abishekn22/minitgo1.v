@@ -119,8 +119,59 @@ const Profile = () => {
   // user data
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
-  console.log("parsedSignInData", parsedSignInData);
+  // console.log("parsedSignInData", parsedSignInData);
 
+  const [coordinates, setCoordinates] = useState({ lat: null, lon: null });
+  useEffect(() => {
+    // Check local storage for user data
+    const signInData = localStorage.getItem("user");
+    if (signInData) {
+      const parsedSignInData = JSON.parse(signInData);
+      const userCoordinates = parsedSignInData.user_coordinates;
+
+      if (userCoordinates) {
+        // Handle coordinates if available
+        // Example: "12.908139760299258.77.61097406490475"
+        // Adjust the delimiter as needed based on actual format
+        const coordsArray = userCoordinates.split('.'); // Split by period (.)
+        if (coordsArray.length >= 2) {
+          const lat = parseFloat(coordsArray[0]);
+          const lon = parseFloat(coordsArray[1]);
+          setCoordinates({ lat, lon });
+        } else {
+          console.error("Unexpected coordinates format.");
+          getCurrentCoordinates(); // Fallback to current coordinates
+        }
+      } else {
+        getCurrentCoordinates(); // Fallback if no coordinates found
+      }
+    } else {
+      getCurrentCoordinates(); // Fallback if no user data
+    }
+  }, []);
+
+  const getCurrentCoordinates = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const currentCoordinates = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          };
+          setCoordinates(currentCoordinates);
+          localStorage.setItem("coordinates", JSON.stringify(currentCoordinates));
+        },
+        (error) => {
+          console.error("Error getting current position:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+  const mapUrl = coordinates.lat && coordinates.lon 
+  ? `https://www.google.com/maps?q=${coordinates.lat},${coordinates.lon}&z=15&output=embed` 
+  : '';
   //for order section
   const [orderData, setOrderData] = useState([]);
   useEffect(() => {
@@ -336,6 +387,24 @@ const Profile = () => {
           >
             Your Orders
           </div>
+          <div
+            className={`custom-sidebar-item fs-5 bg-light `}
+            
+          >
+            {mapUrl && (
+        <iframe
+        // className="map"
+          id="map"
+          width="200px"
+          height="150"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          src={mapUrl}
+        />
+      )}
+          </div>
         </div>
         {/* Hamburger menu for smaller screens */}
         <div className="d-lg-none" ref={menuRef}>
@@ -516,6 +585,19 @@ const Profile = () => {
                         }));
                       }}
                     />
+                    <div className="mt-2">
+                    <iframe
+        className="map1"
+          id="map"
+          width="200px"
+          height="150"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          src={mapUrl}
+        />
+                    </div>
                     <div className="text-center">
                       <button
                         className="custom-update-password bg-dark"

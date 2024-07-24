@@ -1561,6 +1561,14 @@ button:hover {
   }
 
 }
+@media only screen and (min-width: 992px) {
+  .map1{
+    display: none;
+  }
+ 
+
+  /* Add other mobile-specific styles here */
+}
 
 @media screen and (min-width: 390px) and (max-width: 413px) {
   .mobile-menu-logo {
