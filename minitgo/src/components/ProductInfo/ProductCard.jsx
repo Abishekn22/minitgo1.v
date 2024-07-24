@@ -76,7 +76,7 @@ function ProductCard({ product, index }) {
     <div key={index} className="col-6 col-sm-3 py-2 w-100 ">
       <div className="product-card">
         <a
-          href={`/${product.product_id}`}
+          href={`/${product.pid}`}
           target="_blank"
           style={{
             textDecoration: "none",

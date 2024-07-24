@@ -49,7 +49,7 @@ export default function Carousel() {
             >
               {/* end code by Ganesh  */}
               <a
-                href={`/${prod.product_id}`}
+                href={`/${prod.pid}`}
                 target="_blank"
                 style={{
                   textDecoration: "none",
