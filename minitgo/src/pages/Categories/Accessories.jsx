@@ -128,6 +128,33 @@ const Accessories = () => {
         );
       }
     }
+    if (
+      accessoriesCategory === "Mens" ||
+      accessoriesCategory === "Womens" ||
+      accessoriesCategory === "Kids"
+    ) {
+      if (accessoriesCategory.toLowerCase() === "mens") {
+        setSelectedCategory("");
+        productsToFilter = productsToFilter.filter(
+          (product) =>
+            (product.category && product.category.toLowerCase().startsWith("men")) ||
+            (product.product_name && product.product_name.toLowerCase().startsWith("men"))
+        );
+      } else if (accessoriesCategory.toLowerCase() === "womens") {
+        setSelectedCategory("");
+        productsToFilter = productsToFilter.filter(
+          (product) =>
+            (product.category && product.category.toLowerCase().includes("women")) ||
+            (product.product_name && product.product_name.toLowerCase().includes("women"))
+        );
+      } else if (accessoriesCategory.toLowerCase() === "kids") {
+        productsToFilter = productsToFilter.filter(
+          (product) =>
+            (product.category && product.category.toLowerCase().includes("kids")) ||
+            (product.product_name && product.product_name.toLowerCase().includes("kids"))
+        );
+      }
+    }
   
     
     // Apply price filtering
@@ -323,7 +350,7 @@ const Accessories = () => {
                 >
                   <div className="product-card">
                     <a
-                      href={`/${product.product_id}`}
+                      href={`/${product.pid}`}
                       target="_blank"
                       style={{
                         textDecoration: "none",
@@ -453,9 +480,9 @@ const Accessories = () => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-1">
-                          <div className="product-rating text-warning d-flex ">
+                          {/* <div className="product-rating text-warning d-flex ">
                             <StarRatings rating={product.product_ratings} />
-                          </div>
+                          </div> */}
                           {userCords && (
                             <div className="product-distance text-secondary ">
                               {product.distance ||

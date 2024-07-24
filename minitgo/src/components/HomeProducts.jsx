@@ -63,9 +63,15 @@ const HomeProducts = () => {
       ...product,
       coordinates,
     };
-    // code end by ganesh
+    
+    console.log("Product to add: ", product);
+    console.log("Coordinates: ", coordinates);
+    console.log("Product with coordinates: ", productWithCoordinates);
+  
+    alert("Adding product to cart");
     dispatch(addToCart(productWithCoordinates));
-    console.log("product send to cart", productWithCoordinates);
+    console.log("Product added to cart", productWithCoordinates);
+  
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
     setTimeout(() => {
       dispatch(hideSnackbar());
@@ -600,9 +606,9 @@ const HomeProducts = () => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-1">
-                          <div className="product-rating text-warning d-flex ">
+                          {/* <div className="product-rating text-warning d-flex ">
                             <StarRatings rating={product.product_ratings} />
-                          </div>
+                          </div> */}
                           {userCords && (
                             <div className="product-distance text-secondary ">
                               {product.distance ||

@@ -1517,6 +1517,12 @@ button:hover {
 
   }
 }
+.partner{
+  /* background-color:black; */
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
+}
 
 .filter-btn {
   width: 100%;
@@ -1664,6 +1670,10 @@ button:hover {
 
 
   }
+  .partner{
+    flex-direction: column;
+    
+  }
 
   #cart-btns {
     width: 90px;
@@ -1697,6 +1707,7 @@ button:hover {
     margin-right: auto;
   }
 }
+
 
 
 /* code starte by ganesh */

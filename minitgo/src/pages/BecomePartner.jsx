@@ -64,7 +64,7 @@ function BecomePartner() {
           <button
             type="button"
             className="btn btn-md rounded-4"
-            style={{ border: "3px solid #d9dfab" }}
+            style={{ border: "3px solid #d9dfab", fontSize:"2rem" }}
           >
             Start Selling
           </button>

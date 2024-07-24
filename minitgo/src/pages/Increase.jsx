@@ -11,16 +11,19 @@ const Increase = () => {
       style={{ marginBlock: "5vh" }}
     >
       <div className="row">
-      <div className="w-100 d-flex justify-content-between align-items-center p-3 border border-2 rounded rounded-lg m-0">
-        <div className="d-flex flex-column justify-content-center">
+      <div className=" partner w-100 d-flex justify-between  p-3 border border-2 rounded rounded-lg m-0">
+        <div className="d-flex flex-column justify-content-center ">
           <h1 className="fw-bold fs-3">
             Increace sales in local and become a local king
           </h1>
           <p className=" fs-5">Growing your business made simple</p>
         </div>
-        <Link to="/clientregister" className="btn rounded-3 btn-primary py-2">
+        <div className="d-flex flex-column justify-content-center  w-full">
+
+        <Link to="/clientregister" className="btn rounded-3 btn-primary px-1 py-2 " style={{width:'150px',height:"40px"}}>
         Start Selling
       </Link>
+        </div>
       </div>
       </div>
      
@@ -320,7 +323,7 @@ const Increase = () => {
         </div>
       </div>
 
-      <div className="w-100 d-flex justify-content-between align-items-center mt-5 p-3 border border-2 rounded rounded-lg">
+      <div className="partner w-100 d-flex  mt-5 p-3 border border-2 rounded rounded-lg">
         <div className="d-flex flex-column justify-content-center">
           <h1 className="fw-bold fs-3">Start selling today</h1>
           <p className=" fs-5">
@@ -328,9 +331,12 @@ const Increase = () => {
             minitgo.com every day.
           </p>
         </div>
-        <button className="btn btn-primary" style={{ height: "min-content" }}>
+        <div className="d-flex flex-column justify-content-center">
+
+        <button className="btn btn-primary" style={{width:'150px',height:"40px",left:"5px"}}>
           Start Selling
         </button>
+        </div>
       </div>
     </div>
   );

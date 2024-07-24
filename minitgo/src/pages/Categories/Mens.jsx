@@ -283,7 +283,7 @@ const Mens = () => {
                 >
                   <div className="product-card ">
                     <a
-                      href={`/${product.product_id}`}
+                      href={`/${product.pid}`}
                       target="_blank"
                       style={{
                         textDecoration: "none",
@@ -411,9 +411,7 @@ const Mens = () => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-1">
-                          <div className="product-rating text-warning d-flex ">
-                            <StarRatings rating={product.product_ratings} />
-                          </div>
+                          {/* w */}
                           {userCords && (
                             <div className="product-distance text-secondary ">
                               {product.distance ||

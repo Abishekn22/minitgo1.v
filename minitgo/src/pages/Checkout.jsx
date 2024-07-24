@@ -375,11 +375,16 @@ export const Checkout = () => {
                             </div>
                           </div>
                           <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                            <p>
-                              <strong>{cart_item.product_name}</strong>
-                            </p>
-                            <p>Color: {cart_item.product_color1}</p>
-                            <p>Size: {cart_item.product_size}</p>
+                          <p className="mb-1">
+                            <strong>{cart_item.client_name}</strong>
+                          </p>
+                          <p className="mb-1">Material: {cart_item.material}</p>
+                          <p className="mb-1">Color: {cart_item.product_color1}</p>
+                          <p className="mb-1">Size: {cart_item.product_size}</p>
+                          <p className="mb-1">Price: {cart_item.product_price}</p>
+                          <p className="mb-1">Category: {cart_item.category}</p>
+                          <p className="line-clamp-1 mb-0 ">Description: {cart_item.product_discription
+                          }</p>
                             <div
                               className="mt-1 line-clamp-1"
                               style={{ textAlign: "justify" }}

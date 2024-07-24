@@ -580,10 +580,10 @@ const HomeProducts = () => {
                             : product.product_discription}
                         </div>
 
-                        <div className="product-rating text-warning d-flex ">
+                        {/* <div className="product-rating text-warning d-flex ">
                           Rating:{" "}
                           <StarRatings rating={product.product_ratings} />
-                        </div>
+                        </div> */}
                         <div className="product-distance text-secondary ">
                           Distance: {product.distance}km away.
                         </div>

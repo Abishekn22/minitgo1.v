@@ -15,7 +15,7 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart(state, action) {
-      const existingItemIndex = state.items.findIndex(item => item.product_id === action.payload.product_id);
+      const existingItemIndex = state.items.findIndex(item => item.pid === action.payload.product_id);
       if (existingItemIndex !== -1) {
         state.items[existingItemIndex].quantity += 1;
       } else {
@@ -61,7 +61,7 @@ const cartSlice = createSlice({
     deleteWishList(state, action) {
       const { product_id } = action.payload;
       // Completely remove the item from the wishlist
-      state.wishList = state.wishList.filter(item => item.product_id !== product_id);
+      state.wishList = state.wishList.filter(item => item.pid !== product_id);
     },
     showSnackbarForWishlist(state, action) {
       const { message, index } = action.payload;

@@ -11,6 +11,7 @@ import {
   removeFromCart,
   deleteWishList,
 } from "../components/redux/Slices/CartSlice";
+import { addToCart } from "../components/redux/Slices/CartSlice.js";
 import { selectTotalQuantity } from "../components/redux/Slices/CartSlice.js";
 import { useLocation } from "react-router-dom";
 import { Col, Modal, Row } from "react-bootstrap";
@@ -44,6 +45,7 @@ const Cart = () => {
   //redux code start
 
   const cart = useSelector((state) => state.cart);
+  console.log("cart", cart);
   const cartData = cart.items;
   console.log(cartData, "cartData");
   const wishListData = cart.wishList;
@@ -63,6 +65,15 @@ const Cart = () => {
 
   const handleDeleteFromWishList = (productId) => {
     dispatch(deleteWishList({ product_id: productId }));
+  };
+  const handleAddToCart = (product, index) => {
+    dispatch(addToCart(product));
+    dispatch(showSnackbar({ message: "Product added successfully!", index }));
+
+    // Wait for 1 second, then hide snackbar
+    setTimeout(() => {
+      dispatch(hideSnackbar());
+    }, 1000);
   };
 
   return (
@@ -101,21 +112,27 @@ const Cart = () => {
                             <strong>{cart_item.client_name}</strong>
                           </p>
                           <p className="mb-1">Material: {cart_item.material}</p>
-                          <p className="mb-1">Color: {cart_item.product_color1}</p>
+                          <p className="mb-1">
+                            Color: {cart_item.product_color1}
+                          </p>
                           <p className="mb-1">Size: {cart_item.product_size}</p>
+                          <p className="mb-1">
+                            Price: {cart_item.product_price}
+                          </p>
                           <p className="mb-1">Category: {cart_item.category}</p>
-                          <p className="line-clamp-2 mb-0 ">Description: {cart_item.product_discription
-                          }</p>
+                          <p className="line-clamp-2 mb-0 ">
+                            Description: {cart_item.product_discription}
+                          </p>
                           <br></br>
                           <button
-                            className="btn btn-danger mx-2"
+                            className="btn btn-danger  ml-2 mr-2"
                             onClick={() =>
                               handleRemoveFromCart(cart_item.product_id)
                             }
                           >
                             <BsTrash3 />
                           </button>
-                          <button className="btn btn-secondary">
+                          <button className="btn btn-secondary  mx-2">
                             {" "}
                             <AiOutlineHeart />
                           </button>
@@ -224,8 +241,8 @@ const Cart = () => {
                                   />
                                 </div>
 
-                                <div className="product-content">
-                                  <h6>{prod.product_name} </h6>
+                                <div className="product-content mt-2">
+                                  {/* <h6>{prod.product_name} </h6>
                                   <h5>
                                     Price: <sup>&#x20B9;</sup>
                                     {prod.product_price}
@@ -241,18 +258,39 @@ const Cart = () => {
                                       {" "}
                                       {prod.product_stock}
                                     </span>
-                                  </h5>
+                                  </h5> */}
+                                  <p className="mb-1">
+                                    <strong>{prod.client_name}</strong>
+                                  </p>
+                                  <p className="mb-1">
+                                    Material: {prod.material}
+                                  </p>
+                                  <p className="mb-1">
+                                    Color: {prod.product_color1}
+                                  </p>
+                                  <p className="mb-1">
+                                    Size: {prod.product_size}
+                                  </p>
+                                  <p className="mb-1">
+                                    Price: {prod.product_price}
+                                  </p>
+                                  <p className="mb-1">
+                                    Category: {prod.category}
+                                  </p>
+                                  <p className="line-clamp-1 mb-0 ">
+                                    Description: {prod.product_discription}
+                                  </p>
                                 </div>
-                                <div className="d-flex justify-content-center align-items-center ">
+                                <div className="cart-btn px-1 ">
                                   <button
-                                    className="btn btn-dark mx-2"
+                                    className="btn btn-dark "
                                     onClick={() =>
-                                      handleDeleteFromWishList(prod.product_id)
+                                      handleDeleteFromWishList(prod.pid)
                                     }
                                   >
                                     <BsTrash3 />
                                   </button>
-                                  <button className="btn btn-dark w-100 mx-2 px-5">
+                                  {/* <button className="btn btn-dark w-100 mx-2 px-5">
                                     <Link
                                       to="/checkout"
                                       style={{
@@ -263,6 +301,14 @@ const Cart = () => {
                                       {" "}
                                       Buy
                                     </Link>
+                                  </button> */}
+                                  <button
+                                    onClick={() =>
+                                      handleAddToCart(prod, index)
+                                    }
+                                    className="btn btn-primary my-2  ms-2"
+                                  >
+                                    Add to cart
                                   </button>
                                 </div>
                               </div>

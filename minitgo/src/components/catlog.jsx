@@ -119,7 +119,8 @@ export default function Catlog() {
             {/* code end by ganesh */}
             <div className="dropdown  rounded text-white">
               <p className="btn  m-0 " type="button">
-                {/* <FaLocationDot className="fs-4 p-1 mb-1" /> */}
+                <FaLocationDot className="fs-4 p-1 mb-1"
+                style={{color:"white"}} />
                 {/* <span > Delivery Address</span> */}
 
                 <span style={{ color: "#dfd7d7", fontSize: "16px" }}>

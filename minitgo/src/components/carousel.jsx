@@ -1,4 +1,6 @@
 // Import the css, for the scroll bar
+import 'react-loading-skeleton/dist/skeleton.css'; // Import default skeleton styles
+import Skeleton from 'react-loading-skeleton';
 
 import { useContext } from "react";
 import myContext from "./context/MyContext";
@@ -64,11 +66,15 @@ export default function Carousel() {
                   {/* {/* code end by ganesh * */}
                   {/* code started by ganesh  */}
                   <div style={{ width: "100%", height: "55%" }}>
-                    <img
-                      className="w-100 rounded h-100"
-                      src={prod.product_image1}
-                      alt={`Image ${prod.product_id}`}
-                    />
+                  {prod.product_image1 ? (
+                      <img
+                        className="w-100 rounded h-100"
+                        src={prod.product_image1}
+                        alt={`Image ${prod.product_id}`}
+                      />
+                    ) : (
+                      <Skeleton height="100%" />
+                    )}
                   </div>
                   {/* code end by ganesh */}
                   <div className=" p-2">
@@ -78,7 +84,6 @@ export default function Carousel() {
                     <div className="row">
                       <h1 className="fs-5 fw-medium">{prod.product_name}</h1>
                       <p className="fs-6 fw-light">{prod.category}</p>
-                      <p className="fs-6 line-clamp-2 fw-light">{prod.product_discription}</p>
                       <div className="d-flex justify-content-between flex-wrap">
                         <p className="fs-6 fw-light">Price: {prod.product_price}</p>
                         <p className="fs-6 fw-light">Material: {prod.material}</p>
@@ -90,6 +95,7 @@ export default function Carousel() {
                         <p className="fs-6 fw-light">Color: {prod.product_color1}</p>
                         <p className="fs-6 fw-light">Size: {prod.product_size}</p>
                       </div>
+                      <p className="fs-6 line-clamp-2 fw-light">{prod.product_discription}</p>
 
                     </div>
                     {cart.snackbar.open && cart.snackbar.index === index && (

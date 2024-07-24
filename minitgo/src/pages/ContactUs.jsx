@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../components/images/minitgo.png";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -10,42 +10,46 @@ function ContactUs() {
   }, []);
 
   const [emailData, setEmailData] = useState({
-    from: 'minitgo@minitgo.com', // Initialize with an empty string or default if needed
-    to: '',
+    from: 'minitgo@minitgo.com',
+    to: 'abishekn222@gmail.com',
     subject: '',
     text: ''
   });
   const navigate = useNavigate();
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
       setPhone(value);
+    } else if (name === "email") {
+      setEmail(value);
+      
     } else {
       setEmailData({
         ...emailData,
-        [name]: value
+        [name]: value,
+       
       });
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault();
     const emailDataWithPhone = {
       ...emailData,
-      text: `Phone: ${phone}\n\n${emailData.text}`
+      text: `Email: ${email}\n\nPhone: ${phone}\n\n${emailData.text}`
     };
-    console.log(emailDataWithPhone);
+
     try {
       const response = await axios.post('http://localhost:3001/send-email', emailDataWithPhone);
-      console.log(response.status);
       if (response.status === 200) {
         toast.success("Message successfully sent", {
           autoClose: 1000,
           hideProgressBar: true,
           onClose: () => {
-            navigate('/'); // Navigate to home page and refresh
+            navigate('/');
           }
         });
       }
@@ -54,9 +58,8 @@ function ContactUs() {
     }
   };
 
-
   return (
-    <div className="container py-2 mb-4" style={{ marginTop: "4vh"  }}>
+    <div className="container py-2 mb-4" style={{ marginTop: "4vh" }}>
       <div className="row">
         <div className="col-md-6 text-dark">
           <h3 className="text-center text-md-start display-5 ">
@@ -89,31 +92,30 @@ function ContactUs() {
               <img
                 src={Logo}
                 alt="zendesk"
-                // original code
-                // className="img-fluid w-25 img-thumbnail opacity-75 "
-                // updated code by sonali
-                className="img-fluid w-25  opacity-75 "
+                className="img-fluid w-25 opacity-75"
               />
             </div>
           </div>
         </div>
         <div className="col-md-6 shadow py-4 border rounded">
-          <form
-            className="p-2"
-            onSubmit={handleSubmit}
-          >
+          <form className="p-2" onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Full Name"
               className="form-control mb-2"
-              name="subject" value={emailData.subject} onChange={handleChange} required
+              name="subject"
+              value={emailData.subject}
+              onChange={handleChange}
+              required
             />
-            
             <input
               type="email"
               placeholder="Email"
               className="form-control mb-2"
-              name="to" value={emailData.to} onChange={handleChange} required
+              name="email"
+              value={email}
+              onChange={handleChange}
+              required
             />
             <input
               type="tel"
@@ -127,9 +129,11 @@ function ContactUs() {
               type="text"
               placeholder="Message"
               className="form-control mb-2"
-              name="text" value={emailData.text} onChange={handleChange} required
+              name="text"
+              value={emailData.text}
+              onChange={handleChange}
+              required
             />
-
             <div className="form-check mb-2">
               <input type="checkbox" className="form-check-input" />
               <label className="form-check-label text-secondary">
