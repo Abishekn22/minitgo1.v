@@ -156,8 +156,13 @@ export const Checkout = () => {
         autoClose: 1000,
         hideProgressBar: true,
       });
+      setTimeout(() => {
+        navigate("/orders");
+      }, 2000);
     } else {
       alert("Failed to place order. Please try again.");
+      window.location.reload()
+      
     }
     setConfirmingOrder(false);
   };
