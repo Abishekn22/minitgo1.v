@@ -12,81 +12,75 @@ import { FaRegClock } from "react-icons/fa"; // Import the timer icon from Font 
 const OrdersPage = () => {
   const [orderData, setOrderData] = useState([]);
   const context = useContext(myContext);
-
   const { products } = context;
+  
+  // Retrieve user data from localStorage
   const signInData = localStorage.getItem("user");
-  const parsedSignInData = JSON.parse(signInData);
-  console.log("parsedSignInData", parsedSignInData);
+  const parsedSignInData = signInData ? JSON.parse(signInData) : null;
 
+  // Function to fetch and sort order data
+  const fetchData = () => {
+    if (!parsedSignInData) {
+      console.error("No user data found in localStorage");
+      return;
+    }
+
+    const postData = { user_id: parsedSignInData.userId };
+
+    axios.post("https://minitgo.com/api/user_orders.php", postData)
+      .then((response) => {
+        console.log("data of order", response.data.data);
+        if (Array.isArray(response.data.data)) {
+          // Sort orders by time in descending order
+          const sortedOrders = response.data.data.sort(
+            (a, b) => new Date(b.time) - new Date(a.time)
+          );
+          setOrderData(sortedOrders);
+        } else {
+          console.error("Expected an array but got:", response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the data!", error);
+      });
+  };
+
+  // UseEffect to fetch data initially and set up polling
   useEffect(() => {
-    const fetchData = () => {
-      const postData = { user_id: parsedSignInData.userId };
-
-      axios
-        .post("https://minitgo.com/api/user_orders.php", postData)
-        .then((response) => {
-          console.log(response.data.data);
-          if (Array.isArray(response.data.data)) {
-            setOrderData(response.data.data);
-          } else {
-            console.error("Expected an array but got:", response.data.data);
-          }
-        })
-        .catch((error) => {
-          console.error("There was an error fetching the data!", error);
-        });
-    };
-
     fetchData(); // Fetch data immediately
-
     const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
-
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, [parsedSignInData.userId]);
+  }, [parsedSignInData?.userId]);
 
+  // Function to get status progress
   const getStatusProgress = (status) => {
     switch (status.toLowerCase()) {
       case "waiting":
-        return {
-          width: "99%",
-          message: "Waiting for order confirmation",
-          animate: true,
-        };
+        return { width: "99%", message: "Waiting for order confirmation", animate: true };
       case "rejected":
         return { width: "0%", message: "Rejected", animate: false };
       case "out for delivery":
         return { width: "65%", message: "Out for delivery", animate: false };
       case "finding delivery boy":
-        return {
-          width: "35%",
-          message: "Finding delivery boy",
-          animate: false,
-        };
+        return { width: "35%", message: "Finding delivery boy", animate: false };
       case "delivered":
         return { width: "100%", message: "Delivered", animate: false };
       case "accepted":
         return { width: "10%", message: "Accepted", animate: false };
       default:
-        return {
-          width: "99%",
-          message: "Waiting for order confirmation",
-          animate: true,
-        };
+        return { width: "99%", message: "Waiting for order confirmation", animate: true };
     }
   };
 
-  const initialSeconds = localStorage.getItem("timerSeconds")
-    ? parseInt(localStorage.getItem("timerSeconds"))
-    : 5;
+  // Timer logic
+  const initialSeconds = localStorage.getItem("timerSeconds") ? parseInt(localStorage.getItem("timerSeconds")) : 5;
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     let interval;
     if (isActive && seconds > 0) {
-      interval = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds - 1);
-      }, 1000);
+      interval = setInterval(() => setSeconds(prevSeconds => prevSeconds - 1), 1000);
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);
     }
@@ -94,19 +88,15 @@ const OrdersPage = () => {
   }, [isActive, seconds]);
 
   useEffect(() => {
-    // Store the seconds in localStorage
     localStorage.setItem("timerSeconds", seconds.toString());
   }, [seconds]);
 
-  // Calculate hours, minutes, and seconds
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
+  const formattedTime = `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 
-  // Format the timer display
-  const formattedTime = `${hours < 10 ? "0" : ""}${hours}:${
-    minutes < 10 ? "0" : ""
-  }${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  console.log("order data", orderData);
 
   return (
     <div className="border ">
@@ -317,7 +307,7 @@ const OrdersPage = () => {
 
                                             <div className="d-flex justify-content-between">
                                               <p className="text-muted mb-0">
-                                                Invoice Date : {order.date}
+                                                Invoice Date : {order.time}
                                               </p>
                                             </div>
 

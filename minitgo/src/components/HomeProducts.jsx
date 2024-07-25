@@ -68,7 +68,7 @@ const HomeProducts = () => {
     console.log("Coordinates: ", coordinates);
     console.log("Product with coordinates: ", productWithCoordinates);
   
-    alert("Adding product to cart");
+    // alert("Adding product to cart");
     dispatch(addToCart(productWithCoordinates));
     console.log("Product added to cart", productWithCoordinates);
   
