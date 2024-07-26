@@ -77,7 +77,7 @@ function ProductInfo() {
             </div>
           </div>
 
-          <div className=" d-flex  flex-column flex-md-row  gap-3  mb-2">
+          {/* <div className=" d-flex  flex-column flex-md-row  gap-3  mb-2">
             
             <div id="reviews-section " className="w-100  reviews-w-md">
               <div className="h-120px w-100 d-flex flex-column gap-1 pt-2 ">
@@ -146,7 +146,7 @@ function ProductInfo() {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>

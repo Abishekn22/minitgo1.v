@@ -23,7 +23,7 @@ function LeftSection({ productId, scrollToReviews }) {
         const foundProduct = products.find(
           (product) => product.pid === productId
         );
-        console.log("foundproduct",foundProduct);
+        console.log("foundproduct", foundProduct);
         if (foundProduct) {
           setProduct(foundProduct);
         }
@@ -33,16 +33,20 @@ function LeftSection({ productId, scrollToReviews }) {
         console.error("Error fetching products:", error);
       });
   }, [productId]);
-  console.log("product",product);
+  console.log("product", product);
 
   return (
     <>
-     {loading ? (
+      {loading ? (
         <div className="w-100 md:w-50 d-flex flex-column gap-4 position-relative px-md-4 h-100">
           <div className="w-100 rounded-lg position-relative d-flex justify-between">
             <div className="col-2 d-flex flex-column gap-3">
               {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton key={index} height={80} className="border rounded-2" />
+                <Skeleton
+                  key={index}
+                  height={80}
+                  className="border rounded-2"
+                />
               ))}
             </div>
             <div className="col-10 ps-3" style={{ height: "500px" }}>
@@ -181,12 +185,12 @@ function LeftSection({ productId, scrollToReviews }) {
                   className="d-flex justify-content-between align-items-center border-top pt-2"
                   style={{ fontSize: "12px" }}
                 >
-                  <p>100+ Positive Feedback</p>
+                  {/* <p>100+ Positive Feedback</p> */}
                   <p>Missing Information</p>
                 </div>
               </div>
             </div>
-            <div
+            {/* <div
               className="d-flex flex-column py-3 rounded gap-4"
               onClick={scrollToReviews}
               style={{ cursor: "pointer" }}
@@ -260,6 +264,30 @@ function LeftSection({ productId, scrollToReviews }) {
                   </div>
                 </div>
               </div>
+            </div> */}
+            <div className="d-flex flex-column gap-1">
+              <h2 className="fs-4 text-start">Description</h2>
+              <ul className="list-unstyled d-flex flex-column gap-1 fs-6">
+                <h1 className="fs-5 fw-medium">{product.product_name}</h1>
+                <h1 className="fs-5 fw-medium">{product.client_name}</h1>
+                <p className="fs-6 fw-light">{product.category}</p>
+                <div className="d-flex justify-content-between flex-wrap">
+                  <p className="fs-6 fw-light">
+                    Price: {product.product_price}
+                  </p>
+                  <p className="fs-6 fw-light">Material: {product.material}</p>
+                </div>
+
+                <div className="d-flex justify-content-between flex-wrap">
+                  <p className="fs-6 fw-light">
+                    Color: {product.product_color1}
+                  </p>
+                  <p className="fs-6 fw-light">Size: {product.product_size}</p>
+                </div>
+                <p className="fs-6 line-clamp-2 fw-light">
+                  {product.product_discription}
+                </p>
+              </ul>
             </div>
           </section>
         )
