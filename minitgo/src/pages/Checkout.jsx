@@ -380,8 +380,11 @@ export const Checkout = () => {
                             </div>
                           </div>
                           <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                          <p className="mb-1">
+                              <p>{cart_item.client_name}</p>
+                            </p>
                             <p className="mb-1">
-                              <strong>{cart_item.client_name}</strong>
+                              <strong>{cart_item.product_title}</strong>
                             </p>
                             <p className="mb-1">
                               Material: {cart_item.material}
@@ -754,11 +757,12 @@ export const Checkout = () => {
                                   className="border rounded p-1"
                                 />
                                 <div className="d-flex flex-column">
-                                  <h5>{item.client_name}</h5>
-                                  <p className="fs-5 mb-0">{item.product_price}₹</p>
-                                  <p className="fs-5 mb-0">{item.category}</p>
-                                  <p className="fs-5 mb-0">{item.material}</p>
-                                  <p className="fs-5 mb-0">{item.product_color1}</p>
+                                  <p>{item.client_name}</p>
+                                  <h5>{item.product_title}</h5>
+                                  <p className="fs-6 mb-0">{item.product_price}₹</p>
+                                  <p className="fs-6 mb-0">{item.category}</p>
+                                  <p className="fs-6 mb-0">{item.material}</p>
+                                  <p className="fs-6 mb-0">{item.product_color1}</p>
 
                                   <div className="d-flex justify-content-between flex-wrap">
                                     <p className="fs-6 fw-light">

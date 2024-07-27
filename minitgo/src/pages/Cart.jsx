@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import myContext from "../components/context/MyContext";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   addQuantity,
   deleteQuantity,
@@ -76,6 +78,33 @@ const Cart = () => {
     }, 1000);
   };
 
+
+// size validation
+function productSizeSelection() {
+  if (Array.isArray(cartData)) {
+    let notificationShown = false;
+
+    for (let cart_item of cartData) {
+      const sizes = cart_item.product_size;
+      if (sizes.length > 2 && !notificationShown) {
+        notificationShown = true; // Set the flag to true
+        // Add a delay before showing the toast notification
+        setTimeout(() => {
+          toast.error(`Please select the size for product with name: ${cart_item.product_title}`);
+        }, 100); // 500 milliseconds = 0.5 seconds
+        break; // Exit the loop after showing the notification
+      } else if (sizes.length === 2) {
+        console.log(sizes[0], "Single size selected");
+      }
+    }
+  } else {
+    console.log("cartData is not an array");
+  }
+}
+
+ 
+ 
+ 
   return (
     <>
       <section className="h-100 gradient-custom">
@@ -109,7 +138,10 @@ const Cart = () => {
                         </div>
                         <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
                           <p className="mb-1">
-                            <strong>{cart_item.client_name}</strong>
+                            <span>{cart_item.client_name}</span>
+                          </p>
+                          <p className="mb-1">
+                            <strong>{cart_item.product_title}</strong>
                           </p>
                           <p className="mb-1">Material: {cart_item.material}</p>
                           <p className="mb-1">
@@ -348,7 +380,7 @@ const Cart = () => {
                   </ul>
                   {parsedSignInData && cartData?.length > 0 ? (
                     <Link to="/checkout">
-                      <button className="btn btn-lg btn-block btn-primary">
+                      <button className="btn btn-lg btn-block btn-primary" onClick={productSizeSelection}>
                         Go to checkout
                       </button>
                     </Link>
