@@ -27,6 +27,7 @@ function RightSection({ productId }) {
   const id = productId;
 
   const { handleImageClick } = useContext(myContext);
+  const [productSizes, setProductSizes] = useState([]);
 
   useEffect(() => {
     axios
@@ -45,8 +46,13 @@ function RightSection({ productId }) {
     const fProduct = item[0];
     if (fProduct) {
       setProduct(fProduct);
+      // Parse the product_size string into an array
+      if (fProduct.product_size) {
+        setProductSizes(fProduct.product_size.split(','));
+      }
     }
   }, [id, products]);
+  console.log("product size",productSizes);
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
@@ -175,7 +181,7 @@ function RightSection({ productId }) {
                     )}
                   </div>
                 </div>
-                {product.product_size && (
+                {productSizes.length > 0 && (
                   <div className="d-grid gap-1">
                     <h2 className="fw-semibold fs-5 text-start">Select Size</h2>
                     <div
@@ -186,18 +192,15 @@ function RightSection({ productId }) {
                           "repeat(auto-fit, minmax(35px, 1fr))",
                       }}
                     >
-                      {["M", "S", "L", "XL", "2XL"].map((size) => (
+                      {productSizes.map((size) => (
                         <button
                           key={size}
                           className={`border py-1 px-1 rounded text-center ${
-                            product.product_size.includes(size)
-                              ? product.product_size === size
-                                ? "bg-primary text-white"
-                                : "bg-body-secondary"
-                              : "disabled bg-light"
+                            product.product_size === size
+                              ? "bg-primary text-white"
+                              : "bg-body-secondary"
                           }`}
                           onClick={() => handleSizeClick(size)}
-                          disabled={!product.product_size.includes(size)}
                         >
                           {size}
                         </button>
