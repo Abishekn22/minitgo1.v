@@ -105,7 +105,7 @@ export const Checkout = () => {
         quantity: item.quantity,
         payment_mode: paymentMethod,
         transition_id: "1452",
-        payment_status: paymentMethod,
+        payment_status: "waiting",
         product_size: item.product_size,
         cid: item.cid,
         client_name: item.client_name,

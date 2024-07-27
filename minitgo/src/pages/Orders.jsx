@@ -53,6 +53,7 @@ console.log("sorted data",sortedAndReversedData);
     }
 
     const postData = { user_id: parsedSignInData.userId };
+    console.log("post data",postData);
     /////test
 
     axios.post("https://minitgo.com/api/user_orders.php", postData)
