@@ -106,6 +106,7 @@ export const Checkout = () => {
         payment_mode: paymentMethod,
         transition_id: "1452",
         payment_status: paymentMethod,
+        product_size:item.product_size,
         cid: item.cid,
         client_name: item.client_name,
         client_coordinates: item.lat + "." + item.log,

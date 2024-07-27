@@ -226,7 +226,7 @@ function RightSection({ productId }) {
                 <div className="d-flex gap-3 pb-1">
                   <button
                     onClick={handleAddToCart}
-                    className="btn btn-primary my-2 ms-2 px-2"
+                    className="btn btn-primary my-2 ms-2 px-5"
                   >
                     Add to cart
                   </button>

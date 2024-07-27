@@ -221,11 +221,13 @@ const OrdersPage = () => {
                                               Item Name:
                                             </p>
                                             <p>{order.product_name}</p>
+                                            <p>{order.product_name}</p>
                                           </div>
                                           <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
                                             <p className="text-muted mb-0 small">
                                               Item Color:
                                             </p>
+                                            <p>{order.product_color}</p>
                                             <p>{order.product_color}</p>
                                           </div>
                                           <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
