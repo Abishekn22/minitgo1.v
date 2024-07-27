@@ -247,21 +247,28 @@ console.log("sorted data",sortedAndReversedData);
                                           </div>
                                           <div className="col-md-2 text-center d-flex flex-column justify-content-center align-items-center">
                                             <p className="text-muted mb-0">
-                                              Item Name:
+                                              Name:
                                             </p>
-                                            <p>{order.product_name}</p>
+                                            <p>{order.product_title}</p>
                                             {/* <p>{order.product_name}</p> */}
                                           </div>
                                           <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
                                             <p className="text-muted mb-0 small">
-                                              Item Color:
+                                              Color:
                                             </p>
                                             <p>{order.product_color}</p>
                                             {/* <p>{order.product_color}</p> */}
                                           </div>
                                           <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
                                             <p className="text-muted mb-0 small">
-                                              Payment Mode:
+                                              Size:
+                                            </p>
+                                            <p>{order.product_size}</p>
+                                            {/* <p>{order.product_color}</p> */}
+                                          </div>
+                                          <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
+                                            <p className="text-muted mb-0 small">
+                                              Payment:
                                             </p>
                                             <p>{order.payment_mode}</p>
                                           </div>
@@ -328,24 +335,25 @@ console.log("sorted data",sortedAndReversedData);
                                               <p className="fw-bold mb-0">
                                                 Order Details
                                               </p>
-                                              <p className="text-muted mb-0">
+                                              <p className="  mb-0">
                                                 <span className="fw-bold me-4">
-                                                  Total
+                                                  Total:
                                                 </span>
-                                                {totalPaid}
+                                                {totalPaid} /
                                               </p>
                                             </div>
 
                                             <div className="d-flex justify-content-between">
-                                              <p className="text-muted mb-0">
-                                                Invoice Date : {order.time}
-                                              </p>
+                                              <p className="  mb-0">
+                                                Invoice:</p>
                                             </div>
 
                                             <div className="d-flex justify-content-between mb-5">
-                                              <p className="text-muted mb-0">
-                                                Order ID : {order.order_id}
+                                              <p className="  mb-0">
+                                                Order ID : {order.order_id} 
                                               </p>
+                                              <p className="text-muted">Date  :{order.date}   </p> 
+                                              <p className="text-muted">Time: {order.time}</p>
                                             </div>
 
                                             {order.product_status.toLowerCase() ===
@@ -385,14 +393,7 @@ console.log("sorted data",sortedAndReversedData);
                                               </Link>
                                             )}
 
-                                            <Link
-                                              to="/"
-                                              className="btn btn-light border rounded-pill mx-1"
-                                              role="button"
-                                              aria-disabled=""
-                                            >
-                                              Feedback
-                                            </Link>
+                                           
                                             {formattedTime === "00:00:00" ? (
                                               <Link
                                                 to="/"
@@ -418,8 +419,17 @@ console.log("sorted data",sortedAndReversedData);
                                               role="button"
                                               aria-disabled=""
                                             >
-                                              Review
+                                              Replace
                                             </Link>
+                                            <Link
+                                              to="/contact"
+                                              className="btn btn-light border rounded-pill mx-1"
+                                              role="button"
+                                              aria-disabled=""
+                                            >
+                                              ! Report
+                                            </Link>
+                                             
                                           </div>
 
                                           <div
@@ -429,12 +439,13 @@ console.log("sorted data",sortedAndReversedData);
                                               borderRadius: "50px",
                                             }}
                                           >
-                                            <h5 className="d-flex align-items-center justify-content-end text-dark text-uppercase mb-0">
+                                            <h5 className="d-flex align-items-center justify-content-center text-dark text-uppercase mb-0">
                                               Total paid:{" "}
                                               <span className="h2 mb-0 ms-2">
                                                 {totalPaid} RS
                                               </span>
                                             </h5>
+                                           
                                           </div>
                                         </div>
                                       </div>

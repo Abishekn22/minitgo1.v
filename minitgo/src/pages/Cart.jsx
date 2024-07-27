@@ -90,7 +90,7 @@ function productSizeSelection() {
         notificationShown = true; // Set the flag to true
         // Add a delay before showing the toast notification
         setTimeout(() => {
-          toast.error(`Please select the size for product with name: ${cart_item.product_title}`);
+          toast.error(`Please select the size for: ${cart_item.product_title}`);
         }, 100); // 500 milliseconds = 0.5 seconds
         break; // Exit the loop after showing the notification
       } else if (sizes.length === 2) {

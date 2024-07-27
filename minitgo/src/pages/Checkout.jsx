@@ -33,7 +33,7 @@ export const Checkout = () => {
   console.log("parsedSignInData", parsedSignInData);
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.items);
-  const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
+  const [paymentMethod, setPaymentMethod] = useState("COD");
   const [selectedAddress, setSelectedAddress] = useState({
     type: "Home Address",
     location: `${parsedSignInData ? parsedSignInData.address : ""}`,
@@ -120,6 +120,7 @@ export const Checkout = () => {
           item.product_color3 ||
           item.product_color4,
         product_price: item.product_price,
+        product_title: item.product_title,
         product_image:
           item.product_image1 ||
           item.product_image2 ||
