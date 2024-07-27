@@ -148,7 +148,7 @@ function LeftSection({ productId, scrollToReviews }) {
             <div className="d-flex">
               <div className="border rounded d-flex flex-column w-100 px-md-4 gap-2 px-1">
                 <div
-                  className="d-flex flex-row justify-content-between align-items-center pt-2"
+                  className="d-flex flex-row justify-content-between align-items-center "
                   style={{ height: "40px" }}
                 >
                   <div
@@ -160,7 +160,7 @@ function LeftSection({ productId, scrollToReviews }) {
                       {product.product_brand}
                     </div>
                   </div>
-                  <div className="d-flex gap-1 gap-md-4">
+                  {/* <div className="d-flex gap-1 gap-md-4">
                     <div
                       className="bg-body-secondary d-flex align-items-center justify-content-center rounded py-1"
                       style={{ width: "60px", fontSize: "12px" }}
@@ -179,15 +179,15 @@ function LeftSection({ productId, scrollToReviews }) {
                     >
                       Hoodies
                     </div>
-                  </div>
+                  </div> */}
                 </div>
-                <div
+                {/* <div
                   className="d-flex justify-content-between align-items-center border-top pt-2"
                   style={{ fontSize: "12px" }}
                 >
-                  {/* <p>100+ Positive Feedback</p> */}
+                  <p>100+ Positive Feedback</p>
                   <p>Missing Information</p>
-                </div>
+                </div> */}
               </div>
             </div>
             {/* <div
@@ -265,7 +265,7 @@ function LeftSection({ productId, scrollToReviews }) {
                 </div>
               </div>
             </div> */}
-            <div className="d-flex flex-column gap-1">
+            {/* <div className="d-flex flex-column gap-1">
               <h2 className="fs-4 text-start">Description</h2>
               <ul className="list-unstyled d-flex flex-column gap-1 fs-6">
                 <h1 className="fs-5 fw-medium">{product.product_name}</h1>
@@ -288,7 +288,7 @@ function LeftSection({ productId, scrollToReviews }) {
                   {product.product_discription}
                 </p>
               </ul>
-            </div>
+            </div> */}
           </section>
         )
       )}
