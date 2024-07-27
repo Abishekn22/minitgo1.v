@@ -63,7 +63,7 @@ console.log("sorted data",sortedAndReversedData);
           const sortedOrders = response.data.data.sort(
             (a, b) => new Date(b.time) - new Date(a.time)
           );
-          setOrderData(sortedOrders.reverse());
+          setOrderData(sortedOrders);
         } else {
           console.error("Expected an array but got:", response.data.data);
         }
