@@ -201,6 +201,7 @@ function RightSection({ productId }) {
                               : "bg-body-secondary"
                           }`}
                           onClick={() => handleSizeClick(size)}
+                          style={{ width: "50px", height: "30px" }}
                         >
                           {size}
                         </button>

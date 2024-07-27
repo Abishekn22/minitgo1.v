@@ -181,13 +181,13 @@ function LeftSection({ productId, scrollToReviews }) {
                     </div>
                   </div> */}
                 </div>
-                {/* <div
+                <div
                   className="d-flex justify-content-between align-items-center border-top pt-2"
                   style={{ fontSize: "12px" }}
                 >
                   <p>100+ Positive Feedback</p>
                   <p>Missing Information</p>
-                </div> */}
+                </div>
               </div>
             </div>
             {/* <div

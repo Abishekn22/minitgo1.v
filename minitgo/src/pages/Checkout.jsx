@@ -106,7 +106,7 @@ export const Checkout = () => {
         payment_mode: paymentMethod,
         transition_id: "1452",
         payment_status: paymentMethod,
-        product_size:item.product_size,
+        product_size: item.product_size,
         cid: item.cid,
         client_name: item.client_name,
         client_coordinates: item.lat + "." + item.log,
@@ -162,8 +162,7 @@ export const Checkout = () => {
       }, 2000);
     } else {
       alert("Failed to place order. Please try again.");
-      window.location.reload()
-      
+      window.location.reload();
     }
     setConfirmingOrder(false);
   };
@@ -211,7 +210,7 @@ export const Checkout = () => {
             hideProgressBar: true,
           });
           setLoading(false); // Set loading state to false after fetching
-          setIsLocationFetched(true)
+          setIsLocationFetched(true);
         },
         (err) => {
           setLoading(false); // Set loading state to false on error
@@ -381,16 +380,27 @@ export const Checkout = () => {
                             </div>
                           </div>
                           <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                          <p className="mb-1">
-                            <strong>{cart_item.client_name}</strong>
-                          </p>
-                          <p className="mb-1">Material: {cart_item.material}</p>
-                          <p className="mb-1">Color: {cart_item.product_color1}</p>
-                          <p className="mb-1">Size: {cart_item.product_size}</p>
-                          <p className="mb-1">Price: {cart_item.product_price}</p>
-                          <p className="mb-1">Category: {cart_item.category}</p>
-                          <p className="line-clamp-1 mb-0 ">Description: {cart_item.product_discription
-                          }</p>
+                            <p className="mb-1">
+                              <strong>{cart_item.client_name}</strong>
+                            </p>
+                            <p className="mb-1">
+                              Material: {cart_item.material}
+                            </p>
+                            <p className="mb-1">
+                              Color: {cart_item.product_color1}
+                            </p>
+                            <p className="mb-1">
+                              Size: {cart_item.product_size}
+                            </p>
+                            <p className="mb-1">
+                              Price: {cart_item.product_price}
+                            </p>
+                            <p className="mb-1">
+                              Category: {cart_item.category}
+                            </p>
+                            <p className="line-clamp-1 mb-0 ">
+                              Description: {cart_item.product_discription}
+                            </p>
                             <div
                               className="mt-1 line-clamp-1"
                               style={{ textAlign: "justify" }}
@@ -624,7 +634,7 @@ export const Checkout = () => {
                             {loading ? "Fetching..." : "Use Current Address"}
                           </button>
                           {loading || !isLocationFetched ? (
-                            ""// Or display a loading indicator
+                            "" // Or display a loading indicator
                           ) : (
                             <iframe
                               id="map"
@@ -636,7 +646,6 @@ export const Checkout = () => {
                               referrerPolicy="no-referrer-when-downgrade"
                               src={mapUrl}
                             />
-                            
                           )}
                         </div>
                         <div>
@@ -746,7 +755,16 @@ export const Checkout = () => {
                                 />
                                 <div className="d-flex flex-column">
                                   <h5>{item.client_name}</h5>
-                                  <p className="fs-5">{item.product_price}₹</p>
+                                  <p className="fs-5 mb-0">{item.product_price}₹</p>
+                                  <p className="fs-5 mb-0">{item.category}</p>
+                                  <p className="fs-5 mb-0">{item.material}</p>
+                                  <p className="fs-5 mb-0">{item.product_color1}</p>
+
+                                  <div className="d-flex justify-content-between flex-wrap">
+                                    <p className="fs-6 fw-light">
+                                      Size: {item.product_size}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             ))}

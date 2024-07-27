@@ -18,6 +18,33 @@ const OrdersPage = () => {
   const signInData = localStorage.getItem("user");
   const parsedSignInData = signInData ? JSON.parse(signInData) : null;
 
+  // // testing
+  function sortAndReverseByDateTime(arr) {
+    // First, sort the array by date and time
+    arr.sort((a, b) => {
+        const dateTimeA = new Date(a.datetime);
+        const dateTimeB = new Date(b.datetime);
+        
+        return dateTimeA - dateTimeB;
+    });
+
+    // Then, reverse the sorted array
+    return arr.reverse();
+}
+
+// Example usage:
+const data = [
+    { name: "Event 1", datetime: "2024-07-29T22:30:00" },
+    { name: "Event 1", datetime: "2024-07-27T14:30:00" },
+    { name: "Event 2", datetime: "2024-07-25T09:15:00" },
+    { name: "Event 2", datetime: "2024-07-28T09:15:00" },
+    { name: "Event 3", datetime: "2024-07-26T12:00:00" }
+];
+
+const sortedAndReversedData = sortAndReverseByDateTime(data);
+console.log("sorted data",sortedAndReversedData);
+
+
   // Function to fetch and sort order data
   const fetchData = () => {
     if (!parsedSignInData) {
@@ -26,6 +53,7 @@ const OrdersPage = () => {
     }
 
     const postData = { user_id: parsedSignInData.userId };
+    /////test
 
     axios.post("https://minitgo.com/api/user_orders.php", postData)
       .then((response) => {
@@ -35,7 +63,7 @@ const OrdersPage = () => {
           const sortedOrders = response.data.data.sort(
             (a, b) => new Date(b.time) - new Date(a.time)
           );
-          setOrderData(sortedOrders);
+          setOrderData(sortedOrders.reverse());
         } else {
           console.error("Expected an array but got:", response.data.data);
         }
@@ -221,14 +249,14 @@ const OrdersPage = () => {
                                               Item Name:
                                             </p>
                                             <p>{order.product_name}</p>
-                                            <p>{order.product_name}</p>
+                                            {/* <p>{order.product_name}</p> */}
                                           </div>
                                           <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
                                             <p className="text-muted mb-0 small">
                                               Item Color:
                                             </p>
                                             <p>{order.product_color}</p>
-                                            <p>{order.product_color}</p>
+                                            {/* <p>{order.product_color}</p> */}
                                           </div>
                                           <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
                                             <p className="text-muted mb-0 small">
