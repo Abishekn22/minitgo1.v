@@ -129,13 +129,19 @@ function RightSection({ productId }) {
                 <div className="d-flex flex-column gap-1 pt-2">
                   {/* <h2 className="fw-semibold fs-5 text-start">{product.product_title} | Material: {product.material} | Color: {product.product_color1}</h2> */}
                   <h2 className="fs-5 text-start">
-  <span className="fw-semibold">{product.product_title}</span> | 
-  <span className="fw-bold">Material:</span> {product.material} | 
-  <span className="fw-bold">Color:</span> {product.product_color1}
-</h2>
+                    <span className="fw-semibold">{product.product_title}</span>{" "}
+                    |
+                    <span className="fw-semibold">
+                      {" "}
+                      {product.product_title}
+                    </span>{" "}
+                    |<span className="fw-bold"> Material:</span>{" "}
+                    {product.material} |<span className="fw-bold"> Color:</span>{" "}
+                    {product.product_color1}
+                  </h2>
                   <p className="fw-bold fs-3">
-                  <sup>&#x20B9;</sup> {product.product_price}
-                </p>
+                    <sup>&#x20B9;</sup> {product.product_price}
+                  </p>
                   <div
                     className="d-flex gap-3 mx-1 mx-md-0"
                     style={{ height: "60px" }}
@@ -170,34 +176,35 @@ function RightSection({ productId }) {
                   </div>
                 </div>
                 {product.product_size && (
-  <div className="d-grid gap-1">
-    <h2 className="fw-semibold fs-5 text-start">Select Size</h2>
-    <div
-      className="d-grid gap-4"
-      style={{
-        fontSize: "12px",
-        gridTemplateColumns: "repeat(auto-fit, minmax(35px, 1fr))",
-      }}
-    >
-      {["M", "S", "L", "XL", "2XL"].map((size) => (
-        <button
-          key={size}
-          className={`border py-1 px-1 rounded text-center ${
-            product.product_size.includes(size)
-              ? product.product_size === size
-                ? "bg-primary text-white"
-                : "bg-body-secondary"
-              : "disabled bg-light"
-          }`}
-          onClick={() => handleSizeClick(size)}
-          disabled={!product.product_size.includes(size)}
-        >
-          {size}
-        </button>
-      ))}
-    </div>
-  </div>
-)}
+                  <div className="d-grid gap-1">
+                    <h2 className="fw-semibold fs-5 text-start">Select Size</h2>
+                    <div
+                      className="d-grid gap-4"
+                      style={{
+                        fontSize: "12px",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, minmax(35px, 1fr))",
+                      }}
+                    >
+                      {["M", "S", "L", "XL", "2XL"].map((size) => (
+                        <button
+                          key={size}
+                          className={`border py-1 px-1 rounded text-center ${
+                            product.product_size.includes(size)
+                              ? product.product_size === size
+                                ? "bg-primary text-white"
+                                : "bg-body-secondary"
+                              : "disabled bg-light"
+                          }`}
+                          onClick={() => handleSizeClick(size)}
+                          disabled={!product.product_size.includes(size)}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="d-flex flex-column gap-1">
                   <div className="d-flex flex-column flex-md-row justify-content-between">
@@ -210,8 +217,8 @@ function RightSection({ productId }) {
                   </p>
                   <h2 className="fs-4 text-start">Description</h2>
                   <p className="fs-6 line-clamp-2 fw-light">
-                  {product.product_discription}
-                </p>
+                    {product.product_discription}
+                  </p>
                 </div>
                 <div className="d-flex gap-3 pb-1">
                   <button
