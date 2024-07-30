@@ -43,7 +43,7 @@ const HomeProducts = () => {
 
   useEffect(() => {
     // Extracting image URLs from products data and updating the images state
-    const productImages = filteredProducts.map((product) => ({
+    const productImages = filteredProducts?.map((product) => ({
       id: product.product_id,
       images: [
         product.product_image1,
@@ -394,7 +394,7 @@ const HomeProducts = () => {
                   </div>
                 ))
               )  : (
-                filteredProducts?.map((product, index) => (
+                filteredProducts?.slice(0, 16).map((product, index) => (
                   <div
                     key={index}
                     className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 "

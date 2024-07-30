@@ -10,6 +10,8 @@ import Mystate from "./components/context/MyState.jsx";
 // import LoadingSpinner from "./components/LoadingSpinner";
 import './App.css';
 import LoadingSpinner from "./components/spiner/LoadingSpinner.jsx";
+import DistanceCalculator from "./components/DistanceCalculator.jsx";
+
 
 const Home = lazy(() => import("./pages/Home"));
 const Notfound = lazy(() => import("./pages/Notfound"));
@@ -109,6 +111,7 @@ const App = () => {
           <Route exact path="/cdashboard" element={<Clientdashboard />} />
           <Route exact path="/increase" element={<BecomePartner />} />
           <Route exact path="/email" element={<Emailcheck />} />
+          <Route exact path="/DistanceCalculator" element={<DistanceCalculator />} />
           
         </Routes>
       </Suspense>

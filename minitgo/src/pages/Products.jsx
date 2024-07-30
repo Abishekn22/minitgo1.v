@@ -273,7 +273,7 @@ const HomeProducts = () => {
         const normalizedProductTitle = product.product_title
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
-          const productName = product.product_name || "";
+          const productName = product.product_title || "";
         const normalizedProductName = productName
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
@@ -455,7 +455,7 @@ const HomeProducts = () => {
                   No Products Found
                 </div>
               ) : (
-                filteredProducts.slice(0, 8).map((product, index) => (
+                filteredProducts.map((product, index) => (
                   <div key={index} className="col-6 col-sm-3 py-2">
                     <div className="product-card">
                       <div
@@ -542,12 +542,12 @@ const HomeProducts = () => {
                           }}
                         >
                           {windowWidth <= 1024
-  ? product.product_name && product.product_name.length > 15
-    ? product.product_name.substring(0, 15) + "..."
-    : product.product_name
-  : product.product_name && product.product_name.length > 23
-  ? product.product_name.substring(0, 23) + "..."
-  : product.product_name}
+  ? product.product_title && product.product_title.length > 15
+    ? product.product_title.substring(0, 15) + "..."
+    : product.product_title
+  : product.product_title && product.product_title.length > 23
+  ? product.product_title.substring(0, 23) + "..."
+  : product.product_title}
                         </a>
 
                         <h5 className="mt-1">
