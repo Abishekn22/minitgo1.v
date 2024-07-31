@@ -20,6 +20,8 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [addresss, setAddresss] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [timer, setTimer] = useState(60);
   const [sendOTPagain, setSendOTPagain] = useState(false);
   const [buttonText, setButtonText] = useState("Use Current Location");
@@ -38,7 +40,7 @@ function SignUp() {
 
   const { showModal, setShowModal } = context;
   // const otpRefs = useRef([]);
-// otp send on email
+  // otp send on email
 
   useEffect(() => {
     let intervalId;
@@ -62,62 +64,62 @@ function SignUp() {
     };
   }, [showOTP, sendOTPagain]);
   const [emailData, setEmailData] = useState({
-    from: 'minitgo@minitgo.com', // Initialize with an empty string or default if needed
-    to: '',
-    subject: '',
-    text: ''
+    from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
+    to: "",
+    subject: "",
+    text: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEmailData({
       ...emailData,
-      [name]: value
+      [name]: value,
     });
   };
-  
-  
-  
+
   async function handleOTP(OTP) {
-    
     setTimer(60);
     setShowOTP(true);
     setSendOTPagain(true);
     setOTPExpiry(false);
     // const emailData={
-      //   from: 'minitgo@minitgo.com', 
-      //   to: `${email}`,
-      //   subject: 'OTP',
-      //   text: `${OTP}`
-      // }
-      // console.log(emailData);
-      // try {
-        //   const response = await axios.post('http://localhost:3001/send-email', emailData);
-        //   console.log(response.status);
-        //   if (response.status === 200) {
-          //     toast.success("Message successfully sent", {
-            //       autoClose: 1000,
-            //       hideProgressBar: true,
-            //       onClose: () => {
-              //         // navigate('/'); // Navigate to home page and refresh
-              //       }
-              //     });
-              //   }
-              // } catch (error) {
-                //   alert('Error sending email: ' + error.message);
-                // }
-                console.log("emaildata_to",emailData.to);
-                const otp = generateOTP();
-                setOTP(otp)
+    //   from: 'minitgo@minitgo.com',
+    //   to: `${email}`,
+    //   subject: 'OTP',
+    //   text: `${OTP}`
+    // }
+    // console.log(emailData);
+    // try {
+    //   const response = await axios.post('http://localhost:3001/send-email', emailData);
+    //   console.log(response.status);
+    //   if (response.status === 200) {
+    //     toast.success("Message successfully sent", {
+    //       autoClose: 1000,
+    //       hideProgressBar: true,
+    //       onClose: () => {
+    //         // navigate('/'); // Navigate to home page and refresh
+    //       }
+    //     });
+    //   }
+    // } catch (error) {
+    //   alert('Error sending email: ' + error.message);
+    // }
+    console.log("emaildata_to", emailData.to);
+    const otp = generateOTP();
+    setOTP(otp);
     const emailDataWithPhoneAndOTP = {
       ...emailData,
-      to:`${emailData.to}`,
+      to: `${emailData.to}`,
       subject: `OTP: ${otp}`,
-      text: `OTP: ${otp}`
+      text: `OTP: ${otp}`,
     };
 
-    console.log("emaildatawith phone and otp",emailDataWithPhoneAndOTP);
+    console.log("emaildatawith phone and otp", emailDataWithPhoneAndOTP);
     try {
-      const response = await axios.post('http://localhost:3001/send-email', emailDataWithPhoneAndOTP);
+      const response = await axios.post(
+        "http://localhost:3001/send-email",
+        emailDataWithPhoneAndOTP
+      );
       console.log(response.status);
       if (response.status === 200) {
         toast.success("Message successfully sent", {
@@ -125,16 +127,13 @@ function SignUp() {
           hideProgressBar: true,
           onClose: () => {
             // navigate('/'); // Navigate to home page and refresh
-          }
+          },
         });
       }
     } catch (error) {
-      alert('Error sending email: ' + error.message);
+      alert("Error sending email: " + error.message);
     }
-
   }
-
- 
 
   function handleSendOTPAgain() {
     setSendOTPagain(true);
@@ -148,7 +147,7 @@ function SignUp() {
   }
 
   function sendOTPtoEmail(OTP) {
-    console.log("otp",OTP);
+    console.log("otp", OTP);
     if (OTP) {
       handleOTP(OTP);
     }
@@ -188,7 +187,7 @@ function SignUp() {
               email: credentials.email,
               address: credentials.Address,
               officeAddress: credentials.office_address,
-              user_coordinates:credentials.lat + "." + credentials.log,
+              user_coordinates: credentials.lat + "." + credentials.log,
               // lat: location.lat,
               // log: location.log,
             };
@@ -241,13 +240,19 @@ function SignUp() {
         hideProgressBar: true,
       });
       return;
-    } else if (!emailPattern.test(emailData.to)) {
+    } 
+    else if (!emailPattern.test(emailData.to)) {
       toast.error("Please enter a valid email", {
         autoClose: 1000,
         hideProgressBar: true,
       });
       return;
-    } else if (password.length < 8 || password.length > 12) {
+    } 
+    else if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    else if (password.length < 8 || password.length > 12) {
       toast.error("Password must be between 8 and 12 characters long", {
         autoClose: 1000,
         hideProgressBar: true,
@@ -260,7 +265,9 @@ function SignUp() {
           if (response.data && response.data.length > 0) {
             const allUsers = response.data;
 
-            const foundUser = allUsers.find((user) => user.email === emailData.to);
+            const foundUser = allUsers.find(
+              (user) => user.email === emailData.to
+            );
             const foundUserByPhone = allUsers.find(
               (user) => user.phone_number === phoneNumber
             );
@@ -306,15 +313,12 @@ function SignUp() {
   //generating the otp
 
   function generateOTP() {
-    
     const otp = Math.floor(100000 + Math.random() * 900000);
     // setOTP(otp)
     console.log("GENERATED OTP:", otp);
-   
 
     return otp.toString();
   }
-
 
   const handleUseCurrentLocation = () => {
     setButtonText("Fetching current location...");
@@ -330,7 +334,7 @@ function SignUp() {
             autoClose: 1000,
             hideProgressBar: true,
           });
-          setIsLocationFetched(true)
+          setIsLocationFetched(true);
         },
         (err) => {
           setError(err.message);
@@ -350,7 +354,7 @@ function SignUp() {
     }
     console.log(location);
   };
-  console.log("creditials",credentials);
+  console.log("creditials", credentials);
   return (
     <>
       {showOTP ? (
@@ -616,14 +620,10 @@ function SignUp() {
                   placeholder="Email"
                   // className="form-control mb-2"
                   className=" w-100 px-4 mb-3 rounded rounded-pill"
-                  name="to" value={emailData.to} onChange={handleChange} required
-                />
-                <Form.Control
-                  type="text"
-                  placeholder="Address"
-                  className=" w-100 px-4 mb-3 rounded rounded-pill"
-                  value={addresss}
-                  onChange={(e) => setAddresss(e.target.value)}
+                  name="to"
+                  value={emailData.to}
+                  onChange={handleChange}
+                  required
                 />
                 <Form.Control
                   type="password"
@@ -631,6 +631,20 @@ function SignUp() {
                   className=" w-100 px-4 mb-3 rounded rounded-pill"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                />
+                <Form.Control
+                placeholder="Confirm Password"
+                className="w-100 px-4 mb-3 rounded rounded-pill"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <Form.Control
+                  type="text"
+                  placeholder="Address"
+                  className=" w-100 px-4 mb-3 rounded rounded-pill"
+                  value={addresss}
+                  onChange={(e) => setAddresss(e.target.value)}
                 />
               </Form>
               <Button variant="secondary" onClick={handleUseCurrentLocation}>
@@ -641,7 +655,7 @@ function SignUp() {
                 variant="success"
                 className="my-2"
                 onClick={handleRegister}
-                disabled={!isLocationFetched} 
+                disabled={!isLocationFetched}
               >
                 Continue
               </Button>
