@@ -38,6 +38,12 @@ export const Checkout = () => {
     type: "Home Address",
     location: `${parsedSignInData ? parsedSignInData.address : ""}`,
   });
+  const [houseNumber, setHouseNumber] = useState("");
+  const [street, setStreet] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [locality, setLocality] = useState("");
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [additionalFields, setAdditionalFields] = useState({
     // Define additional fields here
@@ -177,13 +183,55 @@ export const Checkout = () => {
   //   // Set the src attribute of the iframe
   //   document.getElementById("map").src = mapUrl;
   // }, []);
+  const fetchAddress = async (lat, lng) => {
+    const apiKey = 'cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb';
+  const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+
+  try {
+    const response = await fetch(url);
+
+    const data = await response.json();
+    console.log("data details",data);
+
+    if (data && data.response && data.response.features && data.response.features.length > 0) {
+      for (let i = 0; i < data.response.features.length; i++) {
+        const address = data.response.features[i].properties;
+        if (address.postcode || address.housenumber) {
+          return {
+            name: address.label || '',
+            houseNumber: address.housenumber || '',
+            street: address.street || '',
+            pincode: address.postalcode,
+            country: address.country || '',
+            region: address.region || '',
+            locality: address.locality || ''
+          };
+        }
+      }
+      // If no postal code found in any features, return the first feature's address
+      const address = data.response.features[0].properties;
+      return {
+        name: address.label || '',
+        houseNumber: address.housenumber || '',
+        street: address.street || '',
+        pincode: address.postalcode || '',
+        country: address.country || '',
+        region: address.region || '',
+        locality: address.locality || ''
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching address:', error);
+  }
+  return null;
+  };
 
   const handleUseCurrentLocation = () => {
     setLoading(true); // Set loading state to true when fetching starts
     // setButtonText("Fetching current location...");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async(position) => {
           const newLocation = {
             lat: position.coords.latitude,
             log: position.coords.longitude,
@@ -205,6 +253,14 @@ export const Checkout = () => {
             lat: `${newLocation.lat}`,
             log: `${newLocation.log}`,
           });
+          const fetchedAddress = await fetchAddress(newLocation.lat, newLocation.log);
+          console.log("fetcth data ",fetchedAddress);
+        if (fetchedAddress) {
+          
+          
+          
+          setNewAddress(`${fetchedAddress.name}${fetchedAddress.locality}${fetchedAddress.pincode}${fetchedAddress.region}`)
+        }
 
           toast.success("Location fetched successfully", {
             autoClose: 1000,
@@ -653,7 +709,7 @@ export const Checkout = () => {
                           )}
                         </div>
                         <div>
-                          <div className=" mt-3 mb-4 d-flex gap-5 items-center justify-center">
+                          {/* <div className=" mt-3 mb-4 d-flex gap-5 items-center justify-center">
                             <button
                               type="button"
                               className="mb-0 fw-semibold btn btn-primary"
@@ -661,8 +717,8 @@ export const Checkout = () => {
                             >
                               Add Address
                             </button>
-                          </div>
-                          {newAddressInputVisible && (
+                          </div> */}
+                          
                             <div className="d-flex flex-row pb-3">
                               <div className="d-flex align-items-center pe-2">
                                 <input
@@ -682,7 +738,7 @@ export const Checkout = () => {
                                 </button>
                               </div>
                             </div>
-                          )}
+                        
                           {address && (
                             <div className="d-flex mt-3 ">
                               <h6>{selectedAddress.type}:</h6>

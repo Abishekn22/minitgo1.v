@@ -16,6 +16,12 @@ function SignUp() {
   const [location, setLocation] = useState({ lat: null, log: null });
 
   const [fullName, setFullName] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [street, setStreet] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [locality, setLocality] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [addresss, setAddresss] = useState("");
@@ -41,6 +47,41 @@ function SignUp() {
   const { showModal, setShowModal } = context;
   // const otpRefs = useRef([]);
   // otp send on email
+
+  // Function to fetch address using Geocodify API
+  const fetchAddress = async (lat, lng) => {
+    const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+    const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+
+    try {
+      const response = await axios.get(url);
+      console.log("response", response);
+      const data = response.data;
+      console.log("address details", data);
+
+      if (
+        data &&
+        data.response &&
+        data.response.features &&
+        data.response.features.length > 0
+      ) {
+        const address = data.response.features[0].properties;
+        console.log(address);
+        return {
+          name: address.label || "",
+          houseNumber: address.house_number || "",
+          street: address.street || "",
+          pincode: address.postcode || "",
+          country: address.country || "",
+          region: address.region || "",
+          locality: address.locality || "",
+        };
+      }
+    } catch (error) {
+      console.error("Error fetching address:", error);
+    }
+    return null;
+  };
 
   useEffect(() => {
     let intervalId;
@@ -188,7 +229,8 @@ function SignUp() {
               address: credentials.Address,
               officeAddress: credentials.office_address,
               user_coordinates: credentials.lat + "." + credentials.log,
-              // lat: location.lat,
+              // user_coordinates: `${credentials.coordinates.latitude},${credentials.coordinates.longitude}`,
+              // // lat: location.lat,
               // log: location.log,
             };
             console.log("userdata", userData);
@@ -215,6 +257,59 @@ function SignUp() {
       });
     }
   }
+  // function verifySentOTP() {
+  //   const otpInputs = document.querySelectorAll(".otp-input");
+  //   let enteredOTP = "";
+
+  //   otpInputs.forEach((input) => {
+  //     enteredOTP += input.value;
+  //   });
+
+  //   if (OTPExpiry) {
+  //     toast.error("OTP expired. Please request a new OTP.", {
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //     return;
+  //   } else if (enteredOTP === OTP) {
+  //     axios.post("https://minitgo.com/api/user_reg.php", JSON.stringify(credentials))
+  //       .then((response) => {
+  //         console.log("RESPONSE", response);
+  //         const responseData = response.data.message;
+  //         if (responseData === "Data inserted successfully.") {
+  //           const userData = {
+  //             userId: credentials.id,
+  //             fullName: credentials.full_name,
+  //             phoneNumber: credentials.phone_number,
+  //             email: credentials.email,
+  //             address: credentials.address,
+  //             officeAddress: credentials.office_address,
+  //             user_coordinates: `${credentials.coordinates.latitude},${credentials.coordinates.longitude}`,
+  //           };
+  //           console.log("userdata", userData);
+  //           localStorage.setItem("user", JSON.stringify(userData));
+  //           setShowOTP(false);
+  //           setShowSignUpModal(false);
+  //           setShowModal(false);
+  //           toast.success("User registered successfully", {
+  //             autoClose: 1000,
+  //             hideProgressBar: true,
+  //           });
+  //         } else {
+  //           console.error("Registration failed: No user data returned.");
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Registration failed:", error);
+  //       });
+  //     navigate("/");
+  //   } else {
+  //     toast.error("Invalid OTP. Please try again.", {
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //   }
+  // }
 
   function handleRegister(e) {
     e.preventDefault();
@@ -240,14 +335,14 @@ function SignUp() {
         hideProgressBar: true,
       });
       return;
-    } 
+    }
     else if (!emailPattern.test(emailData.to)) {
       toast.error("Please enter a valid email", {
         autoClose: 1000,
         hideProgressBar: true,
       });
       return;
-    } 
+    }
     else if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
@@ -310,6 +405,114 @@ function SignUp() {
         });
     }
   }
+  // function handleRegister(e) {
+  //   e.preventDefault();
+  //   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   const phonePattern = /^[0-9]{10}$/;
+
+  //   if (
+  //     fullName === "" ||
+  //     phoneNumber === "" ||
+  //     emailData.to === "" ||
+  //     addresss === "" ||
+  //     password === ""
+  //   ) {
+  //     toast.error("All fields are required", {
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //     return;
+  //   } else if (!phonePattern.test(phoneNumber)) {
+  //     toast.error("Please enter a valid phone number", {
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //     return;
+  //   } else if (!emailPattern.test(emailData.to)) {
+  //     toast.error("Please enter a valid email", {
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //     return;
+  //   } else if (password !== confirmPassword) {
+  //     toast.error("Passwords do not match!");
+  //     return;
+  //   } else if (password.length < 8 || password.length > 12) {
+  //     toast.error("Password must be between 8 and 12 characters long", {
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //     return;
+  //   } else {
+  //     axios
+  //       .get("https://minitgo.com/api/fetch_login.php")
+  //       .then((response) => {
+  //         if (response.data && response.data.length > 0) {
+  //           const allUsers = response.data;
+  //           const foundUser = allUsers.find(
+  //             (user) => user.email === emailData.to
+  //           );
+  //           const foundUserByPhone = allUsers.find(
+  //             (user) => user.phone_number === phoneNumber
+  //           );
+
+  //           if (foundUser) {
+  //             toast.error("Email already exists", {
+  //               autoClose: 1000,
+  //               hideProgressBar: true,
+  //             });
+  //             return;
+  //           }
+  //           if (foundUserByPhone) {
+  //             toast.error("Phone number already exists", {
+  //               autoClose: 1000,
+  //               hideProgressBar: true,
+  //             });
+  //             return;
+  //           }
+  //         }
+
+  //         const addressData = {
+  //           address: {
+  //             name: "address",
+  //             houseNumber: "houseNumber",
+  //             street: "street",
+  //             pincode: "pincode",
+  //             country: "country",
+  //             region: "region",
+  //             locality: "locality",
+  //           },
+  //           coordinates: {
+  //             latitude: location.lat,
+  //             longitude: location.log,
+  //           },
+  //         };
+
+  //         const data = {
+  //           ...addressData,
+  //           full_name: fullName,
+  //           phone_number: phoneNumber,
+  //           Address: addresss,
+  //           office_address: addresss,
+  //           email: emailData.to,
+  //           password: password,
+  //           // landmark: "Near Central Park",
+  //         };
+
+  //         setCredentials(data);
+  //         console.log("Credentials:", data);
+
+  //         const OTPvalue = generateOTP();
+  //         setOTP(OTPvalue);
+  //         sendOTPtoEmail(OTPvalue);
+  //         setShowOTP(true);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Failed to fetch user information:", error);
+  //       });
+  //   }
+  // }
+
   //generating the otp
 
   function generateOTP() {
@@ -324,16 +527,25 @@ function SignUp() {
     setButtonText("Fetching current location...");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            log: position.coords.longitude,
-          });
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ lat: latitude, log: longitude });
           setButtonText("Location fetched successfully");
           toast.success("Location fetched successfully", {
             autoClose: 1000,
             hideProgressBar: true,
           });
+
+          const fetchedAddress = await fetchAddress(latitude, longitude);
+          if (fetchedAddress) {
+            setStreet(fetchedAddress.name);
+            setAddresss(`${fetchedAddress.name} `);
+            setPincode(fetchedAddress.pincode);
+            setCountry(fetchedAddress.country);
+            setRegion(fetchedAddress.region);
+            setLocality(fetchedAddress.locality);
+          }
+
           setIsLocationFetched(true);
         },
         (err) => {
@@ -354,6 +566,7 @@ function SignUp() {
     }
     console.log(location);
   };
+
   console.log("creditials", credentials);
   return (
     <>
@@ -633,8 +846,8 @@ function SignUp() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Form.Control
-                placeholder="Confirm Password"
-                className="w-100 px-4 mb-3 rounded rounded-pill"
+                  placeholder="Confirm Password"
+                  className="w-100 px-4 mb-3 rounded rounded-pill"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

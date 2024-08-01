@@ -45,6 +45,7 @@ function Client_register() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [locationsnackbarOpen, setLocationSnackbarOpen] = useState(false);
   const [locationsnackbarmessage, setLocationSnackbarmessage] = useState(false);
+  
   const [OTP, setOTP] = useState("");
   const [isValid, setIsValid] = useState(true);
   const handleChange = (e) => {
@@ -113,10 +114,52 @@ function Client_register() {
 
     return otp.toString();
   }
+  const fetchAddress = async (lat, lng) => {
+    const apiKey = 'cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb';
+  const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+
+  try {
+    const response = await fetch(url);
+
+    const data = await response.json();
+    console.log("data details",data);
+
+    if (data && data.response && data.response.features && data.response.features.length > 0) {
+      for (let i = 0; i < data.response.features.length; i++) {
+        const address = data.response.features[i].properties;
+        if (address.postcode || address.housenumber) {
+          return {
+            name: address.label || '',
+            houseNumber: address.housenumber || '',
+            street: address.street || '',
+            pincode: address.postalcode,
+            country: address.country || '',
+            region: address.region || '',
+            locality: address.locality || ''
+          };
+        }
+      }
+      // If no postal code found in any features, return the first feature's address
+      const address = data.response.features[0].properties;
+      return {
+        name: address.label || '',
+        houseNumber: address.housenumber || '',
+        street: address.street || '',
+        pincode: address.postalcode || '',
+        country: address.country || '',
+        region: address.region || '',
+        locality: address.locality || ''
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching address:', error);
+  }
+  return null;
+  };
   const handleUseCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+       async (position) => {
           const { latitude, longitude } = position.coords;
           ``;
 
@@ -129,9 +172,21 @@ function Client_register() {
           // Open the URL in a new tab or window
           //window.open(googleMapsUrl, '_blank');
           setCoordinates({ latitude, longitude });
-
           setLocationSnackbarmessage("location has been updated");
           setLocationSnackbarOpen(true);
+          const fetchedAddress = await fetchAddress(latitude, longitude);
+          console.log("fetcth data ",fetchedAddress);
+        if (fetchedAddress) {
+          setCity(fetchedAddress.name);
+          setTownDistrict(fetchedAddress.locality)
+          // setAddresss(`${fetchedAddress.name} ${fetchedAddress.street}`);
+          setPincode(fetchedAddress.pincode);
+          // setCountry(fetchedAddress.country);
+          setState(fetchedAddress.region);
+          // setLocality(fetchedAddress.locality);
+        }
+
+         
         },
         (error) => {
           console.log("Geolocation error:", error);
