@@ -28,7 +28,7 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(150);
   const [sendOTPagain, setSendOTPagain] = useState(false);
   const [buttonText, setButtonText] = useState("Use Current Location");
 
@@ -93,7 +93,7 @@ function SignUp() {
             clearInterval(intervalId);
             setSendOTPagain(false);
             setOTPExpiry(true);
-            return 60;
+            return 150;
           }
           return prevTimer - 1;
         });
@@ -104,6 +104,11 @@ function SignUp() {
       clearInterval(intervalId);
     };
   }, [showOTP, sendOTPagain]);
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
   const [emailData, setEmailData] = useState({
     from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
     to: "",
@@ -119,32 +124,12 @@ function SignUp() {
   };
 
   async function handleOTP(OTP) {
-    setTimer(60);
+    setTimer(150);
     setShowOTP(true);
     setSendOTPagain(true);
     setOTPExpiry(false);
-    // const emailData={
-    //   from: 'minitgo@minitgo.com',
-    //   to: `${email}`,
-    //   subject: 'OTP',
-    //   text: `${OTP}`
-    // }
-    // console.log(emailData);
-    // try {
-    //   const response = await axios.post('http://localhost:3001/send-email', emailData);
-    //   console.log(response.status);
-    //   if (response.status === 200) {
-    //     toast.success("Message successfully sent", {
-    //       autoClose: 1000,
-    //       hideProgressBar: true,
-    //       onClose: () => {
-    //         // navigate('/'); // Navigate to home page and refresh
-    //       }
-    //     });
-    //   }
-    // } catch (error) {
-    //   alert('Error sending email: ' + error.message);
-    // }
+    
+    
     console.log("emaildata_to", emailData.to);
     const otp = generateOTP();
     setOTP(otp);
@@ -257,59 +242,7 @@ function SignUp() {
       });
     }
   }
-  // function verifySentOTP() {
-  //   const otpInputs = document.querySelectorAll(".otp-input");
-  //   let enteredOTP = "";
-
-  //   otpInputs.forEach((input) => {
-  //     enteredOTP += input.value;
-  //   });
-
-  //   if (OTPExpiry) {
-  //     toast.error("OTP expired. Please request a new OTP.", {
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //     });
-  //     return;
-  //   } else if (enteredOTP === OTP) {
-  //     axios.post("https://minitgo.com/api/user_reg.php", JSON.stringify(credentials))
-  //       .then((response) => {
-  //         console.log("RESPONSE", response);
-  //         const responseData = response.data.message;
-  //         if (responseData === "Data inserted successfully.") {
-  //           const userData = {
-  //             userId: credentials.id,
-  //             fullName: credentials.full_name,
-  //             phoneNumber: credentials.phone_number,
-  //             email: credentials.email,
-  //             address: credentials.address,
-  //             officeAddress: credentials.office_address,
-  //             user_coordinates: `${credentials.coordinates.latitude},${credentials.coordinates.longitude}`,
-  //           };
-  //           console.log("userdata", userData);
-  //           localStorage.setItem("user", JSON.stringify(userData));
-  //           setShowOTP(false);
-  //           setShowSignUpModal(false);
-  //           setShowModal(false);
-  //           toast.success("User registered successfully", {
-  //             autoClose: 1000,
-  //             hideProgressBar: true,
-  //           });
-  //         } else {
-  //           console.error("Registration failed: No user data returned.");
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Registration failed:", error);
-  //       });
-  //     navigate("/");
-  //   } else {
-  //     toast.error("Invalid OTP. Please try again.", {
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //     });
-  //   }
-  // }
+  
 
   function handleRegister(e) {
     e.preventDefault();
@@ -405,115 +338,7 @@ function SignUp() {
         });
     }
   }
-  // function handleRegister(e) {
-  //   e.preventDefault();
-  //   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  //   const phonePattern = /^[0-9]{10}$/;
-
-  //   if (
-  //     fullName === "" ||
-  //     phoneNumber === "" ||
-  //     emailData.to === "" ||
-  //     addresss === "" ||
-  //     password === ""
-  //   ) {
-  //     toast.error("All fields are required", {
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //     });
-  //     return;
-  //   } else if (!phonePattern.test(phoneNumber)) {
-  //     toast.error("Please enter a valid phone number", {
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //     });
-  //     return;
-  //   } else if (!emailPattern.test(emailData.to)) {
-  //     toast.error("Please enter a valid email", {
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //     });
-  //     return;
-  //   } else if (password !== confirmPassword) {
-  //     toast.error("Passwords do not match!");
-  //     return;
-  //   } else if (password.length < 8 || password.length > 12) {
-  //     toast.error("Password must be between 8 and 12 characters long", {
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //     });
-  //     return;
-  //   } else {
-  //     axios
-  //       .get("https://minitgo.com/api/fetch_login.php")
-  //       .then((response) => {
-  //         if (response.data && response.data.length > 0) {
-  //           const allUsers = response.data;
-  //           const foundUser = allUsers.find(
-  //             (user) => user.email === emailData.to
-  //           );
-  //           const foundUserByPhone = allUsers.find(
-  //             (user) => user.phone_number === phoneNumber
-  //           );
-
-  //           if (foundUser) {
-  //             toast.error("Email already exists", {
-  //               autoClose: 1000,
-  //               hideProgressBar: true,
-  //             });
-  //             return;
-  //           }
-  //           if (foundUserByPhone) {
-  //             toast.error("Phone number already exists", {
-  //               autoClose: 1000,
-  //               hideProgressBar: true,
-  //             });
-  //             return;
-  //           }
-  //         }
-
-  //         const addressData = {
-  //           address: {
-  //             name: "address",
-  //             houseNumber: "houseNumber",
-  //             street: "street",
-  //             pincode: "pincode",
-  //             country: "country",
-  //             region: "region",
-  //             locality: "locality",
-  //           },
-  //           coordinates: {
-  //             latitude: location.lat,
-  //             longitude: location.log,
-  //           },
-  //         };
-
-  //         const data = {
-  //           ...addressData,
-  //           full_name: fullName,
-  //           phone_number: phoneNumber,
-  //           Address: addresss,
-  //           office_address: addresss,
-  //           email: emailData.to,
-  //           password: password,
-  //           // landmark: "Near Central Park",
-  //         };
-
-  //         setCredentials(data);
-  //         console.log("Credentials:", data);
-
-  //         const OTPvalue = generateOTP();
-  //         setOTP(OTPvalue);
-  //         sendOTPtoEmail(OTPvalue);
-  //         setShowOTP(true);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Failed to fetch user information:", error);
-  //       });
-  //   }
-  // }
-
-  //generating the otp
+  
 
   function generateOTP() {
     const otp = Math.floor(100000 + Math.random() * 900000);
@@ -747,7 +572,7 @@ function SignUp() {
               Verify
             </button>
             <div>
-              <div className=" w-75 text-center fs-3">00:{timer}</div>
+              <div className=" w-75 text-center fs-3">{formatTime(timer)}</div>
             </div>
 
             <div className="mt-2  ">
@@ -756,7 +581,7 @@ function SignUp() {
               </div>
             </div>
 
-            {timer === 60 && (
+            {timer === 150 && (
               <div className=" text-center ">
                 <p
                   className="underline"

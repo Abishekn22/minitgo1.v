@@ -183,7 +183,7 @@ function RightSection({ productId }) {
                 </div>
                 {productSizes.length > 0 && (
                   <div className="d-grid gap-1">
-                    <h2 className="fw-semibold fs-5 text-start">Select Size</h2>
+                    <h2 className="fw-semibold fs-5 text-start">Available Size</h2>
                     <div
                       className="d-grid gap-4"
                       style={{
