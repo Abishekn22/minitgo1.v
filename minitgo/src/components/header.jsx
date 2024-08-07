@@ -560,17 +560,14 @@ function Header() {
                 </svg>
                 <div
                   className="temperature-display"
-                  style={{ position: "absolute" ,top:"13px" ,fontSize:"10px"}}
+                  style={{ position: "absolute" ,top:"11px" ,fontSize:"9px"}}
                 >
                   {formattedWeatherData}&deg;C
-                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"15px",left:"-22px" ,fontSize:"14px" ,display:"flex" ,alignItems:"center"}}>
+                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"11px",left:"-22px" ,fontSize:"9px" ,display:"flex" ,alignItems:"center"}}>
                 <FaLocationDot className=""
                 style={{color:"black",width:"15px"}} />
                   
-        <div>
-          <p>Address: {parsedSignInData.address}</p>
-          {/* Other data fields */}
-        </div>
+       Hyderabad
       </h6>
         
       ) : ""}
@@ -952,14 +949,11 @@ function Header() {
                   style={{ position: "absolute" ,top:"4px" ,fontSize:"12px"}}
                 >
                   {formattedWeatherData}&deg;C
-                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"15px",left:"-22px" ,fontSize:"14px" ,display:"flex" ,alignItems:"center"}}>
+                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"15px",left:"-22px" ,fontSize:"11px" ,display:"flex" ,alignItems:"center"}}>
                 <FaLocationDot className=""
                 style={{color:"black",width:"15px"}} />
                   
-        <div>
-          <p>Address: {parsedSignInData.address}</p>
-          {/* Other data fields */}
-        </div>
+        Hyderabad
       </h6>
         
       ) : ""}

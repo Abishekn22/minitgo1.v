@@ -86,21 +86,26 @@ function productSizeSelection() {
 
     for (let cart_item of cartData) {
       const sizes = cart_item.product_size;
-      if (sizes.length > 2 && !notificationShown) {
+
+      // Check if sizes is null
+      if (sizes === null && !notificationShown) {
         notificationShown = true; // Set the flag to true
         // Add a delay before showing the toast notification
         setTimeout(() => {
-          toast.error(`Please select the size for: ${cart_item.product_title}`);
-        }, 100); // 500 milliseconds = 0.5 seconds
+          toast.error(`No sizes available for: ${cart_item.product_title}`);
+        }, 100); // 100 milliseconds = 0.1 seconds
         break; // Exit the loop after showing the notification
-      } else if (sizes.length === 2) {
+      } else if (Array.isArray(sizes) && sizes.length === 1) {
         console.log(sizes[0], "Single size selected");
+      } else if (Array.isArray(sizes) && sizes.length > 1) {
+        console.log(sizes.join(', '), "Multiple sizes available");
       }
     }
   } else {
     console.log("cartData is not an array");
   }
 }
+
 
  
  

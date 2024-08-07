@@ -7,11 +7,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Emailcheck from "./components/Emailcheck.jsx";
 import Mystate from "./components/context/MyState.jsx";
-// import LoadingSpinner from "./components/LoadingSpinner";
 import './App.css';
 import LoadingSpinner from "./components/spiner/LoadingSpinner.jsx";
 import DistanceCalculator from "./components/DistanceCalculator.jsx";
-
+import LocationModal from "./components/LocationModal.jsx";
 
 const Home = lazy(() => import("./pages/Home"));
 const Notfound = lazy(() => import("./pages/Notfound"));
@@ -45,6 +44,7 @@ const Catlog = lazy(() => import("./components/catlog.jsx"));
 
 const App = () => {
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const location = useLocation();
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
@@ -68,9 +68,17 @@ const App = () => {
     // Simulate a network request
     const timer = setTimeout(() => {
       setLoading(false);
+      setShowModal(true);
     }, 2000); // 2 seconds delay
 
-    return () => clearTimeout(timer);
+    const modalTimer = setTimeout(() => {
+      setShowModal(false);
+    }, 7000); // 5 seconds after modal is shown
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(modalTimer);
+    };
   }, []);
 
   if (loading) {
@@ -79,8 +87,9 @@ const App = () => {
 
   return (
     <Mystate>
+      <LocationModal show={showModal} handleClose={() => setShowModal(false)} />
       <Suspense fallback={<LoadingSpinner />}>
-      {showHeader() && <Header />}
+        {showHeader() && <Header />}
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
@@ -112,7 +121,6 @@ const App = () => {
           <Route exact path="/increase" element={<BecomePartner />} />
           <Route exact path="/email" element={<Emailcheck />} />
           <Route exact path="/DistanceCalculator" element={<DistanceCalculator />} />
-          
         </Routes>
       </Suspense>
       <ToastContainer />
@@ -122,4 +130,3 @@ const App = () => {
 };
 
 export default App;
-

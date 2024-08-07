@@ -215,7 +215,7 @@ function RightSection({ productId }) {
                           onClick={() => handleColorClick(color)}
                           style={{ width: "50px", height: "30px" }}
                         >
-                          {color}
+                          {color.toUpperCase()}
                         </button>
                       ))}
                     </div>
