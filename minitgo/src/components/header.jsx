@@ -563,6 +563,17 @@ function Header() {
                   style={{ position: "absolute" ,top:"13px" ,fontSize:"10px"}}
                 >
                   {formattedWeatherData}&deg;C
+                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"15px",left:"-22px" ,fontSize:"14px" ,display:"flex" ,alignItems:"center"}}>
+                <FaLocationDot className=""
+                style={{color:"black",width:"15px"}} />
+                  
+        <div>
+          <p>Address: {parsedSignInData.address}</p>
+          {/* Other data fields */}
+        </div>
+      </h6>
+        
+      ) : ""}
                 </div>
               </div>
 
@@ -938,9 +949,20 @@ function Header() {
                 </svg>
                 <div
                   className="temperature-display"
-                  style={{ position: "absolute" ,top:"4px" ,fontSize:"15px"}}
+                  style={{ position: "absolute" ,top:"4px" ,fontSize:"12px"}}
                 >
                   {formattedWeatherData}&deg;C
+                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"15px",left:"-22px" ,fontSize:"14px" ,display:"flex" ,alignItems:"center"}}>
+                <FaLocationDot className=""
+                style={{color:"black",width:"15px"}} />
+                  
+        <div>
+          <p>Address: {parsedSignInData.address}</p>
+          {/* Other data fields */}
+        </div>
+      </h6>
+        
+      ) : ""}
                 </div>
               </div>
               {/* <TemperatureRegulator/> */}

@@ -195,9 +195,9 @@ function ProductCard({ product, index }) {
                 product.product_discription
               )}
             </div>
-            <div className="product-rating text-warning">
+            {/* <div className="product-rating text-warning">
               Rating: {loading ? <Skeleton width={50} /> : <StarRatings rating={product.product_ratings} />}
-            </div>
+            </div> */}
             <p className="product-distance text-secondary">
               {loading ? <Skeleton width={100} /> : `Distance: ${product.distance}km away.`}
             </p>

@@ -4,6 +4,7 @@ import RightSection from "../components/ProductInfo/RightSection";
 import { useParams } from "react-router-dom";
 import BestSeller from "../components/ProductInfo/BestSeller";
 import Recommendations from "../components/ProductInfo/Recommendations";
+import Banner from "../components/banner";
 
 function ProductInfo() {
   const { id } = useParams();
@@ -62,6 +63,8 @@ function ProductInfo() {
             <RightSection productId={id} />
           </div>
         </div>
+        <br></br>
+        <br></br>
 
         <div className="container w-100 px-md-4">
           <div className="row py-2 px-md-4">
@@ -149,6 +152,7 @@ function ProductInfo() {
           </div> */}
         </div>
       </div>
+      <Banner/>
     </main>
   );
 }

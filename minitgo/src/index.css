@@ -1859,3 +1859,24 @@ button:hover {
   margin-top: 8.5rem !important;
  }
 }
+.download-btn {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-google {
+  background-color: #34a853;
+}
+
+.btn-apple {
+  background-color: #000000;
+}
+
+.download-btn i {
+  margin-right: 0.5rem;
+}

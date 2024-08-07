@@ -28,6 +28,7 @@ function RightSection({ productId }) {
 
   const { handleImageClick } = useContext(myContext);
   const [productSizes, setProductSizes] = useState([]);
+  const [productColors, setProductColors] = useState([]);
 
   useEffect(() => {
     axios
@@ -50,9 +51,13 @@ function RightSection({ productId }) {
       if (fProduct.product_size) {
         setProductSizes(fProduct.product_size.split(','));
       }
+      if (fProduct.product_color1) {
+        setProductColors(fProduct.product_color1.split(','));
+      }
     }
   }, [id, products]);
   console.log("product size",productSizes);
+  console.log("product color", productColors);
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
@@ -72,6 +77,13 @@ function RightSection({ productId }) {
     setProduct((prevProduct) => ({
       ...prevProduct,
       product_size: size,
+    }));
+    console.log(product);
+  };
+  const handleColorClick = (color) => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      product_color1: color,
     }));
     console.log(product);
   };
@@ -181,6 +193,34 @@ function RightSection({ productId }) {
                     )}
                   </div>
                 </div>
+                {productColors.length > 0 && (
+                  <div className="d-grid gap-1">
+                    <h2 className="fw-semibold fs-5 text-start">Available Colors</h2>
+                    <div
+                      className="d-grid gap-4"
+                      style={{
+                        fontSize: "12px",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, minmax(35px, 1fr))",
+                      }}
+                    >
+                      {productColors.map((color) => (
+                        <button
+                          key={color}
+                          className={`border py-1 px-1 rounded text-center ${
+                            product.product_color1 === color
+                              ? "bg-primary text-white"
+                              : "bg-body-secondary"
+                          }`}
+                          onClick={() => handleColorClick(color)}
+                          style={{ width: "50px", height: "30px" }}
+                        >
+                          {color}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {productSizes.length > 0 && (
                   <div className="d-grid gap-1">
                     <h2 className="fw-semibold fs-5 text-start">Available Size</h2>

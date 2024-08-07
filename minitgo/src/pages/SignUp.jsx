@@ -611,6 +611,7 @@ function SignUp() {
               style={{ width: "9.5rem" }}
               title="Google Play"
             >
+              <i className="fab fa-google-play" style={{ marginRight: "0.5rem" }}></i>
               Google Play
             </a>
             <a
@@ -724,7 +725,7 @@ function SignUp() {
             </div>
             <div
               style={{ backgroundColor: "#e3e3e3" }}
-              className="d-flex flex-column justify-content-center align-items-center px-3 py-5"
+              className="d-flex flex-column justify-content-center align-items-center px-3 py-5 gap-2"
             >
               <h1 className="fs-5 text-center mb-5">
                 Our app will be launching soon.
@@ -733,17 +734,19 @@ function SignUp() {
               <a
                 className="download-btn btn-google"
                 href="#"
-                style={{ width: "9.5rem" }}
+                style={{ width: "9.5rem", display: "flex", alignItems: "center", justifyContent: "center" }}
                 title="Google Play"
               >
+                 <i className="fab fa-google-play" style={{ marginRight: "0.5rem" }}></i>
                 Google Play
               </a>
               <a
                 className="download-btn btn-apple"
                 href="#"
-                style={{ width: "9.5rem" }}
+                style={{ width: "9.5rem", display: "flex", alignItems: "center", justifyContent: "center" }}
                 title="App Store"
               >
+                <i className="fab fa-apple" style={{ marginRight: "0.5rem" }}></i>
                 App Store
               </a>
             </div>

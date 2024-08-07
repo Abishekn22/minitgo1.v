@@ -588,9 +588,9 @@ const calculateDistance = (startLat, startLng, destLat, destLng) => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-1">
-                          <div className="product-rating text-warning d-flex ">
+                          {/* <div className="product-rating text-warning d-flex ">
                             <StarRatings rating={product.product_ratings} />
-                          </div>
+                          </div> */}
                           {userCords && (
                             <div className="product-distance text-secondary ">
                               {product.distance ||
