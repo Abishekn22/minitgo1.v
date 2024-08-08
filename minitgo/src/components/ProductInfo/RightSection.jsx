@@ -29,6 +29,8 @@ function RightSection({ productId }) {
   const { handleImageClick } = useContext(myContext);
   const [productSizes, setProductSizes] = useState([]);
   const [productColors, setProductColors] = useState([]);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
 
   useEffect(() => {
     axios
@@ -49,10 +51,14 @@ function RightSection({ productId }) {
       setProduct(fProduct);
       // Parse the product_size string into an array
       if (fProduct.product_size) {
-        setProductSizes(fProduct.product_size.split(','));
+        const sizes = fProduct.product_size.split(',');
+        setProductSizes(sizes);
+        setSelectedSize(sizes[0]);
       }
       if (fProduct.product_color1) {
-        setProductColors(fProduct.product_color1.split(','));
+        const colors = fProduct.product_color1.split(',');
+        setProductColors(colors);
+        setSelectedColor(colors[0]);
       }
     }
   }, [id, products]);
@@ -61,8 +67,13 @@ function RightSection({ productId }) {
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
-    console.log("pro", product);
-    dispatch(addToCart(product));
+    const selectedProduct = {
+      ...product,
+      product_size: selectedSize,
+      product_color1: selectedColor,
+    };
+    console.log("pro", selectedProduct);
+    dispatch(addToCart(selectedProduct));
     toast.success("Item added to cart!", {
       position: "top-right",
       autoClose: 2000,
@@ -74,18 +85,11 @@ function RightSection({ productId }) {
     });
   };
   const handleSizeClick = (size) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      product_size: size,
-    }));
-    console.log(product);
+    setSelectedSize(size);
   };
+
   const handleColorClick = (color) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      product_color1: color,
-    }));
-    console.log(product);
+    setSelectedColor(color);
   };
 
   console.log("products send ", product);

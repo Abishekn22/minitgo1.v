@@ -64,6 +64,9 @@ export default function Catlog() {
       location.pathname === "/partner" ||
       location.pathname === "/contact" ||
       location.pathname === "/help" ||
+      location.pathname === "/checkout" ||
+      location.pathname === "/cart" ||
+      // location.pathname === `/:${id}` ||
       location.pathname === "/blog" 
     );
   };

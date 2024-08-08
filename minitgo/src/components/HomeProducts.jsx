@@ -59,8 +59,12 @@ const HomeProducts = () => {
   }, [filteredProducts]);
   // code start by ganesh
   const handleAddToCart = (product, index) => {
+    const size=product.product_size.split(',')
+    const color=product.product_color1.split(',')    
     const productWithCoordinates = {
       ...product,
+      product_size: size[0],
+      product_color1:color[0],
       coordinates,
     };
     

@@ -57,6 +57,7 @@ const ProductsPage = () => {
   };
 
   const handleAddToCart = (productId) => {
+    
     // Handle add to cart functionality for the selected product
     const updatedCartItems = [...cartItems, productId];
     setCartItems(updatedCartItems);

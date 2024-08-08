@@ -18,7 +18,15 @@ export default function Carousel() {
   const { products, snackbarOpen } = context;
 
   const handleAddToCart = (product, index) => {
-    dispatch(addToCart(product));
+    const size=product.product_size.split(',')
+    const color=product.product_color1.split(',')    
+    const productWithCoordinates = {
+      ...product,
+      product_size: size[0],
+      product_color1:color[0],
+      // coordinates,
+    };
+    dispatch(addToCart(productWithCoordinates));
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
 
     // Wait for 1 second, then hide snackbar
