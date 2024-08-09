@@ -242,9 +242,27 @@ function SignUp() {
       });
     }
   }
+  const validatePhoneNumber = async (phoneNumber) => {
+    console.log("phonenumber",phoneNumber);
+    
+    const apiKey = "mk4lOodP2Byatm9gbqYnqFubzMQU6ImE";
+    const url = `https://www.ipqualityscore.com/api/json/phone/${apiKey}/+91${phoneNumber}`;
+    const url1 = `https://www.ipqualityscore.com/api/json/phone/mk4lOodP2Byatm9gbqYnqFubzMQU6ImE/+91${phoneNumber}`;
   
+    try {
+      const response = await axios.get(url1);
+      const data = response.data;
+      console.log("phonenumber check",response);
+      
+  
+      return data.valid; // Returns true if the phone number is valid, false otherwise
+    } catch (error) {
+      console.error("Error validating phone number:", error);
+      return false; // Assume the number is invalid if an error occurs
+    }
+  };
 
-  function handleRegister(e) {
+  async function handleRegister (e) {
     e.preventDefault();
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -263,6 +281,7 @@ function SignUp() {
       });
       return;
     } else if (!phonePattern.test(phoneNumber)) {
+      
       toast.error("Please enter a valid phone number", {
         autoClose: 1000,
         hideProgressBar: true,
@@ -286,7 +305,17 @@ function SignUp() {
         hideProgressBar: true,
       });
       return;
-    } else {
+    } 
+
+    const isPhoneNumberValid = await validatePhoneNumber(phoneNumber);
+    if (!isPhoneNumberValid) {
+      toast.error("Invalid phone number. Please enter a valid phone number.", {
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+    
       axios
         .get("https://minitgo.com/api/fetch_login.php")
         .then((response) => {
@@ -336,7 +365,8 @@ function SignUp() {
         .catch((error) => {
           console.error("Failed to fetch user information:", error);
         });
-    }
+      
+    
   }
   
 

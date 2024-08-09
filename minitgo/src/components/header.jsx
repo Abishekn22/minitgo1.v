@@ -72,11 +72,15 @@ function Header() {
   const [pincode, setPincode] = useState("");
   const [townDistrict, setTownDistrict] = useState("");
   const [state, setState] = useState("");
+  const navigate =useNavigate()
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
   console.log("parsedSignInData", parsedSignInData);
   const [activeLink, setActiveLink] = useState("/");
 
+  const fetchLocation = () => {
+  navigate('/profile');
+  }
   const handleClick = (path) => {
     setActiveLink(path);
     // Close offcanvas menu or other actions
@@ -87,7 +91,7 @@ function Header() {
     setShowSnackbar(false);
   };
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const totalQuantity = useSelector(selectTotalQuantity);
   const [loginModal, setLoginModal] = useState(false);
 
@@ -1197,7 +1201,7 @@ function Header() {
               }}
             >
               <FaMapMarkerAlt className="text-red-500 " />
-              <span>User address</span>
+              <span>{parsedSignInData.address}</span>
             </div>
             <button
               style={{
@@ -1206,6 +1210,7 @@ function Header() {
                 borderRadius: "20px",
               }}
               className=" text-pink-600 px-3 py-1 rounded-md"
+              onClick={fetchLocation}
             >
               + Address
             </button>
