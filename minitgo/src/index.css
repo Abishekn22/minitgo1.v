@@ -1904,3 +1904,20 @@ button:hover {
   border-radius: 8px;
   text-align: center;
 }
+.sidebarlink {
+  transition: background-color 0.3s ease;
+}
+
+.sidebarlink:hover {
+  background-color: black;
+  color: white; /* Optional: Change text color to white when hovering */
+}
+.offcanvas-custom {
+  background-color: black;
+}
+.active-link {
+  background-color: #f5f2e1; /* Background color for active link */
+  border: 2px solid #E4AAAA; /* Border color and width for active link */
+  border-radius: 10px; /* Border radius for rounded corners */
+}
+

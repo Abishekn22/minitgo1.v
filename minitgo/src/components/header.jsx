@@ -2,8 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaLocationDot, FaResearchgate, FaSearchengin } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
+import {
+  FaHome,
+  FaInfoCircle,
+  FaListAlt,
+  FaBoxOpen,
+  FaPhoneAlt,
+  FaSearch,
+  FaHandshake,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
 
 import Form from "react-bootstrap/Form";
 import Navbar from "react-bootstrap/Navbar";
@@ -50,6 +61,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import { PiHandshakeBold } from "react-icons/pi";
 import location from "../assets/redDot.png";
 import "./header.css";
+import "../index.css";
 import ResetPassword from "./ResetPassword.jsx";
 import { toast } from "react-toastify";
 import TemperatureRegulator from "./TemperatureRegulator.jsx";
@@ -63,7 +75,7 @@ function Header() {
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
   console.log("parsedSignInData", parsedSignInData);
- 
+
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
   };
@@ -198,7 +210,7 @@ function Header() {
         const normalizedProductTitle = product.product_title
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
-          const productName = product.product_name || "";
+        const productName = product.product_name || "";
         const normalizedProductName = productName
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
@@ -293,7 +305,6 @@ function Header() {
   }
   const [temperature, setTemperature] = useState(null);
   const circleRef = useRef(null);
-  
 
   const radius = 90;
   const circumference = Math.PI * radius;
@@ -361,11 +372,18 @@ function Header() {
         alignItems: "center",
         justifyContent: "center",
         gap: "5px",
-      
       }}
     >
       {/* <BiLogIn /> */}
-      <BiUser size={20} color="black" style={{backgroundColor:"white",padding:"0.2rem",borderRadius:"50%"}} />
+      <BiUser
+        size={20}
+        color="black"
+        style={{
+          backgroundColor: "white",
+          padding: "0.2rem",
+          borderRadius: "50%",
+        }}
+      />
       Signin
     </span>
   );
@@ -445,31 +463,33 @@ function Header() {
                   </div>
                 </div>
               )} */}
-                 {
-                parsedSignInData ? (
-                  <span onClick={() => setShowLeftSideOffcanvas(true)}>
-                    <div className="intial-profile">
-                      {getInitial(fullName)}
+              {parsedSignInData ? (
+                <span onClick={() => setShowLeftSideOffcanvas(true)}>
+                  <div className="intial-profile">{getInitial(fullName)}</div>
+                </span>
+              ) : (
+                <div className="h-100 w-100">
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    onClick={() => setShowLeftSideOffcanvas(true)}
+                  >
+                    <div className="user-profile">
+                      {/* <img className="img-fluid mb-1 p-1" src={User} alt="user" style={{ width: "28px" }} /> */}
+                      <i
+                        className="bi bi-person p-1"
+                        style={{ fontSize: "22px" }}
+                      ></i>
                     </div>
-                  </span>
 
-                ) : (
-                  <div className="h-100 w-100">
-                    <div className="d-flex justify-content-center align-items-center" onClick={() => setShowLeftSideOffcanvas(true)}>
-                      <div className="user-profile">
-
-                        {/* <img className="img-fluid mb-1 p-1" src={User} alt="user" style={{ width: "28px" }} /> */}
-                        <i className="bi bi-person p-1" style={{fontSize:"22px"}}></i>
-                      </div>
-
-
-                      <span className="mt-1" style={{ fontSize: "0.8rem",paddingLeft:"4px" }}>Sign In</span>
-                    </div>
+                    <span
+                      className="mt-1"
+                      style={{ fontSize: "0.8rem", paddingLeft: "4px" }}
+                    >
+                      Sign In
+                    </span>
                   </div>
-
-                )
-              }
-
+                </div>
+              )}
             </div>
 
             {/* </div> */}
@@ -523,56 +543,67 @@ function Header() {
               </div>
             </div> */}
             <div className="regulator-container pt-2 ">
-                <svg
-                  width="70"
-                  height="40"
-                  viewBox="0 0 200 170"
-                  className="circular-slider pt-1"
-                  // onClick={handleSliderChange}
-                  
-                >
-                  <path
-                    d={`M 10,100 A ${radius},${radius} 0 0,1 190,100`}
-                    fill="transparent"
-                    //   stroke="#DDDDDD"
-                    stroke="white"
-                    strokeWidth="15"
-                  />
-                  <path
-                    ref={circleRef}
-                    d={`M 10,100 A ${radius},${radius} 0 0,1 190,100`}
-                    fill="transparent"
-                    //   stroke="#FF4B4B"
-                    strokeWidth="8"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={
-                      circumference - (temperature / 100) * circumference
-                    }
-                  />
-                  <circle
-                    cx={100 + radius * Math.cos((temperature / 100) * Math.PI)}
-                    cy={100 - radius * Math.sin((temperature / 100) * Math.PI)}
-                    r="10"
-                    fill="black"
-                    stroke="black"
-                    strokeWidth="2"
-                  />
-                </svg>
-                <div
-                  className="temperature-display"
-                  style={{ position: "absolute" ,top:"11px" ,fontSize:"9px"}}
-                >
-                  {formattedWeatherData}&deg;C
-                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"11px",left:"-22px" ,fontSize:"9px" ,display:"flex" ,alignItems:"center"}}>
-                <FaLocationDot className=""
-                style={{color:"black",width:"15px"}} />
-                  
-       Hyderabad
-      </h6>
-        
-      ) : ""}
-                </div>
+              <svg
+                width="70"
+                height="40"
+                viewBox="0 0 200 170"
+                className="circular-slider pt-1"
+                // onClick={handleSliderChange}
+              >
+                <path
+                  d={`M 10,100 A ${radius},${radius} 0 0,1 190,100`}
+                  fill="transparent"
+                  //   stroke="#DDDDDD"
+                  stroke="white"
+                  strokeWidth="15"
+                />
+                <path
+                  ref={circleRef}
+                  d={`M 10,100 A ${radius},${radius} 0 0,1 190,100`}
+                  fill="transparent"
+                  //   stroke="#FF4B4B"
+                  strokeWidth="8"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={
+                    circumference - (temperature / 100) * circumference
+                  }
+                />
+                <circle
+                  cx={100 + radius * Math.cos((temperature / 100) * Math.PI)}
+                  cy={100 - radius * Math.sin((temperature / 100) * Math.PI)}
+                  r="10"
+                  fill="black"
+                  stroke="black"
+                  strokeWidth="2"
+                />
+              </svg>
+              <div
+                className="temperature-display"
+                style={{ position: "absolute", top: "11px", fontSize: "9px" }}
+              >
+                {formattedWeatherData}&deg;C
+                {parsedSignInData ? (
+                  <h6
+                    style={{
+                      position: "absolute",
+                      top: "11px",
+                      left: "-22px",
+                      fontSize: "9px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FaLocationDot
+                      className=""
+                      style={{ color: "black", width: "15px" }}
+                    />
+                    Hyderabad
+                  </h6>
+                ) : (
+                  ""
+                )}
               </div>
+            </div>
 
             {/* cart button */}
             {/* <Link to="/cart" className="px-2" style={{ color: "#000" }}> */}
@@ -626,7 +657,7 @@ function Header() {
                   className="   position-absolute text-center "
                   id="cartNo"
                   style={{
-                    color:"black",
+                    color: "black",
                     width: "0.8rem",
                     top: "0px",
                     left: "13px",
@@ -646,7 +677,6 @@ function Header() {
               style={{ fontSize: "44px", paddingLeft: "5px", height: "35px" }}
             />
           </div>
-          
 
           <Navbar.Collapse id="responsive-navbar-nav ">
             <Nav className="me-auto  ">
@@ -724,6 +754,7 @@ function Header() {
               onChange={handleSearchInputChange}
               onKeyPress={handleKeyPress}
             />
+            
 
             <Form />
 
@@ -736,7 +767,7 @@ function Header() {
               variant="outline-success"
               onClick={handleGoButton}
             >
-              GO
+              Go
             </Button>
 
             <div
@@ -946,17 +977,29 @@ function Header() {
                 </svg>
                 <div
                   className="temperature-display"
-                  style={{ position: "absolute" ,top:"4px" ,fontSize:"12px"}}
+                  style={{ position: "absolute", top: "4px", fontSize: "12px" }}
                 >
                   {formattedWeatherData}&deg;C
-                  {parsedSignInData ? (<h6 style={{ position: "absolute" ,top:"15px",left:"-22px" ,fontSize:"11px" ,display:"flex" ,alignItems:"center"}}>
-                <FaLocationDot className=""
-                style={{color:"black",width:"15px"}} />
-                  
-        Hyderabad
-      </h6>
-        
-      ) : ""}
+                  {parsedSignInData ? (
+                    <h6
+                      style={{
+                        position: "absolute",
+                        top: "15px",
+                        left: "-22px",
+                        fontSize: "11px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FaLocationDot
+                        className=""
+                        style={{ color: "black", width: "15px" }}
+                      />
+                      Hyderabad
+                    </h6>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
               {/* <TemperatureRegulator/> */}
@@ -1032,7 +1075,7 @@ function Header() {
           className="p-0"
         >
           <Modal.Body
-            className="p-0 d-flex w-max flex-lg-row flex-column  "
+            className="p-0 d-flex w-max flex-lg-row flex-column   "
             style={{ minWidth: "10rem", backgroundColor: "#fff5f5" }}
           >
             <Modal.Header closeButton className="d-block d-lg-none" />
@@ -1071,255 +1114,283 @@ function Header() {
         show={showOffcanvas}
         onHide={() => setShowOffcanvas(false)}
         placement="end"
+        // className="bg-beige-100"
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             <img
               src="/src/components/images/minitgo.png"
               width={100}
-              // code start by ganesh
               height={30}
-              // code end by ganesh
             />
           </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
-          <div
-            className="d-flex flex-column justify-content-center align-items-center border rounded   my-2 "
-            style={{ height: "150px" }}
-          >
-            <img src="man-working.jpg" alt="IMG" className="w-100 h-100" />
+        <Offcanvas.Body className="py-0">
+          <div className="   px-0 rounded-md shadow-md mb-4" style={{display:"flex",alignItems:"center",justifyContent:"center",justifyContent:"space-between"}}>
+            <div className="flex items-center gap-1"
+            style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <FaMapMarkerAlt className="text-red-500 " />
+              <span>User address</span>
+            </div>
+            <button style={{backgroundColor:"#f4d9d8",border:"none",borderRadius:"20px"}} className=" text-pink-600 px-3 py-1 rounded-md">
+              + Address
+            </button>
           </div>
+          <div
+            className="d-flex flex-column justify-content-center align-items-center  my-2"
+            style={{ height: "150px", borderRadius: "15px" }}
+          >
+            <img
+              src="man-working.jpg"
+              alt="IMG"
+              className="w-100 h-100"
+              style={{ borderRadius: "12px" }}
+            />
+          </div>
+          <div
+            className="d-flex justify-content-center my-3 border py-1"
+            style={{ borderRadius: "15px", backgroundColor: "#f5f2e1" }}
+          >
+            <form className="w-100 bg-transparent" role="search">
+              <div className="input-group bg-transparent">
+                <span className="input-group-text  border-0 bg-transparent">
+                  <FaSearch />
+                </span>
+                <input
+                  className="form-control w-full border-0 bg-transparent px-0"
+                  type="search"
+                  placeholder="Search..."
+                  aria-label="Search"
+                  style={{
+                    boxShadow: "none", // Remove shadow if any
+                  }}
+                />
+              </div>
+            </form>
+          </div>
+          <div className="   px-2  rounded-md shadow-md mb-2" style={{display:"flex",alignItems:"center",justifyContent:"center",justifyContent:"space-between"}}>
+            <div className="flex items-center gap-1"
+            style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+              
+              <span>Menu</span>
+            </div>
+            <BsThreeDots style={{width:"50px",height:"40px"}} />
+          </div>
+
           {/* Sidebar content goes here */}
+          <Nav className="flex-column w-100">
+            <Link
+              to="/"
+              className=" sidebarlink py-3  fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <IoHome
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Home
+            </Link>
 
-          <Row className="py-1">
-            <Col className="col-6">
-              <Nav className="flex-column w-100">
-                <Link
-                  to="/"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <IoHome
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Home
-                </Link>
+            <Link
+              to="/about"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <FaCircleInfo
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              About
+            </Link>
 
-                <Link
-                  to="/about"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <FaCircleInfo
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  About
-                </Link>
+            <Link
+              to="/orders"
+              className="py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <FaListCheck
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Orders
+            </Link>
 
-                <Link
-                  to="/orders"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <FaListCheck
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Orders
-                </Link>
+            <Link
+              to="/products"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <FaBox
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Products
+            </Link>
 
-                <Link
-                  to="/products"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <FaBox
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Products
-                </Link>
+            <Link
+              to="/contact"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <MdContactSupport
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Contact Us
+            </Link>
+            <div className="   px-2  rounded-md shadow-md mb-2 mt-2" style={{display:"flex",alignItems:"center",justifyContent:"center",justifyContent:"space-between"}}>
+            <div className="flex items-center gap-1"
+            style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+              
+              <span style={{}}>Become Partner</span>
+            </div>
+            <BsThreeDots style={{width:"50px",height:"40px"}} />
+          </div>
 
-                <Link
-                  to="/contact"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <MdContactSupport
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Contact Us
-                </Link>
-              </Nav>
-            </Col>
-            <Col className="col-6">
-              <Nav className="flex-column w-100">
-                <Link
-                  to="/connect"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <FaLink
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Connect
-                </Link>
+            <Link
+              to="/connect"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <FaLink
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Connect
+            </Link>
 
-                {/* <Link
-                  to="/feedback"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                 >
-                  <FaCommentDots
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Feedback
-                </Link> */}
-                <Link
-                  to="/blog"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <FaRegNewspaper
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Blog
-                </Link>
+            <Link
+              to="/blog"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <FaRegNewspaper
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Blog
+            </Link>
 
-                <Link
-                  to="/updates"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <MdOutlineUpdate
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Updates
-                </Link>
+            <Link
+              to="/updates"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <MdOutlineUpdate
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Updates
+            </Link>
 
-                <Link
-                  to="/partner"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <PiHandshakeBold
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Become a Partner
-                </Link>
+            <Link
+              to="/partner"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <PiHandshakeBold
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Become a Partner
+            </Link>
 
-                <Link
-                  to="/help"
-                  className="border-bottom py-3 fw-semibold px-2"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  onClick={() => setShowOffcanvas(false)}
-                >
-                  <MdHelp
-                    className="me-3 "
-                    style={{
-                      width: "1.3rem",
-                      height: "1.3rem",
-                      color: "#E4AAAA",
-                    }}
-                  />
-                  Help
-                </Link>
-              </Nav>
-            </Col>
-          </Row>
+            <Link
+              to="/help"
+              className=" py-3 fw-semibold px-2"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              onClick={() => setShowOffcanvas(false)}
+            >
+              <MdHelp
+                className="me-3"
+                style={{
+                  width: "1.3rem",
+                  height: "1.3rem",
+                  color: "#E4AAAA",
+                }}
+              />
+              Help
+            </Link>
+          </Nav>
+          <br />
+        <br />
         </Offcanvas.Body>
+        <br />
       </Offcanvas>
 
       {/* this is left side */}
@@ -1327,6 +1398,7 @@ function Header() {
         show={showLeftSideOffcanvas}
         onHide={() => setShowLeftSideOffcanvas(false)}
         placement="start"
+        className="offcanvas-custom"
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
