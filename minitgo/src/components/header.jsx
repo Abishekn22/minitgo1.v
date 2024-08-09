@@ -75,6 +75,13 @@ function Header() {
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
   console.log("parsedSignInData", parsedSignInData);
+  const [activeLink, setActiveLink] = useState("/");
+
+  const handleClick = (path) => {
+    setActiveLink(path);
+    // Close offcanvas menu or other actions
+    setShowOffcanvas(false);
+  };
 
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
@@ -742,43 +749,48 @@ function Header() {
             </Nav>
 
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-      <Form.Group style={{ position: 'relative', width: '100%' ,margin: "0 -40px 0 32px"}}>
-        <FaSearch 
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '12px',
-            transform: 'translateY(-50%)',
-            color: 'gray',
-            pointerEvents: 'none', // Prevents the icon from blocking input interaction
-            zIndex: 1,
-            
-          }} 
-        />
-        <Form.Control
-          style={{ 
-            paddingLeft: '35px', // Adds padding to create space for the search icon
-            borderRadius: "13px",
-          }}
-          type="search"
-          placeholder="Search"
-          className="search-box"
-          aria-label="Search"
-          value={searchQuery}
-          onChange={handleSearchInputChange}
-          onKeyPress={handleKeyPress}
-        />
-      </Form.Group>
-      <Button
-        className="search-btn"
-        style={{ borderRadius: "13px", marginLeft: "16px" }}
-        variant="outline-success"
-        onClick={handleGoButton}
-      >
-        Go
-      </Button>
+            <Form.Group
+              style={{
+                position: "relative",
+                width: "100%",
+                margin: "0 -40px 0 32px",
+              }}
+            >
+              <FaSearch
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "12px",
+                  transform: "translateY(-50%)",
+                  color: "gray",
+                  pointerEvents: "none", // Prevents the icon from blocking input interaction
+                  zIndex: 1,
+                }}
+              />
+              <Form.Control
+                style={{
+                  paddingLeft: "35px", // Adds padding to create space for the search icon
+                  borderRadius: "13px",
+                }}
+                type="search"
+                placeholder="Search"
+                className="search-box"
+                aria-label="Search"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                onKeyPress={handleKeyPress}
+              />
+            </Form.Group>
+            <Button
+              className="search-btn"
+              style={{ borderRadius: "13px", marginLeft: "16px" }}
+              variant="outline-success"
+              onClick={handleGoButton}
+            >
+              Go
+            </Button>
 
-    {/* </div> */}
+            {/* </div> */}
 
             <div
               className="suggestion position-absolute"
@@ -1038,39 +1050,37 @@ function Header() {
             >
               Go
             </Button> */}
-            <Form.Group style={{ position: 'relative', width: '100%' }}>
-        <FaSearch 
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '12px',
-            transform: 'translateY(-50%)',
-            color: 'gray',
-            pointerEvents: 'none', // Prevents the icon from blocking input interaction
-            zIndex: 1,
-            
-          }} 
-        />
-        <Form.Control
-         type="search"
-         
-              placeholder="search"
-              className=" search-box  "
-              aria-label="Search"
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-              onKeyPress={handleKeyPress}
-              style={{ width: "100%",paddingLeft:"35px" }}
-        />
-      </Form.Group>
-      <Button
-        className="search-btn"
-        // style={{ borderRadius: "13px", marginLeft: "16px" }}
-        variant="outline-success"
-        onClick={handleGoButton}
-      >
-        Go
-      </Button>
+            <Form.Group style={{ position: "relative", width: "100%" }}>
+              <FaSearch
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "12px",
+                  transform: "translateY(-50%)",
+                  color: "gray",
+                  pointerEvents: "none", // Prevents the icon from blocking input interaction
+                  zIndex: 1,
+                }}
+              />
+              <Form.Control
+                type="search"
+                placeholder="search"
+                className=" search-box  "
+                aria-label="Search"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                onKeyPress={handleKeyPress}
+                style={{ width: "100%", paddingLeft: "35px" }}
+              />
+            </Form.Group>
+            <Button
+              className="search-btn"
+              // style={{ borderRadius: "13px", marginLeft: "16px" }}
+              variant="outline-success"
+              onClick={handleGoButton}
+            >
+              Go
+            </Button>
             <div
               className="suggestion position-absolute"
               style={{ width: "350px" }}
@@ -1169,13 +1179,34 @@ function Header() {
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="py-0">
-          <div className="   px-0 rounded-md shadow-md mb-4" style={{display:"flex",alignItems:"center",justifyContent:"center",justifyContent:"space-between"}}>
-            <div className="flex items-center gap-1"
-            style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div
+            className="   px-0 rounded-md shadow-md mb-4"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              className="flex items-center gap-1"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <FaMapMarkerAlt className="text-red-500 " />
               <span>User address</span>
             </div>
-            <button style={{backgroundColor:"#f4d9d8",border:"none",borderRadius:"20px"}} className=" text-pink-600 px-3 py-1 rounded-md">
+            <button
+              style={{
+                backgroundColor: "#f4d9d8",
+                border: "none",
+                borderRadius: "20px",
+              }}
+              className=" text-pink-600 px-3 py-1 rounded-md"
+            >
               + Address
             </button>
           </div>
@@ -1192,7 +1223,7 @@ function Header() {
           </div>
           <div
             className="d-flex justify-content-center my-3 border py-1"
-            style={{ borderRadius: "15px", backgroundColor: "#f5f2e1" }}
+            style={{ borderRadius: "15px", backgroundColor: "white" }}
           >
             <form className="w-100 bg-transparent" role="search">
               <div className="input-group bg-transparent">
@@ -1211,25 +1242,40 @@ function Header() {
               </div>
             </form>
           </div>
-          <div className="   px-2  rounded-md shadow-md mb-2" style={{display:"flex",alignItems:"center",justifyContent:"center",justifyContent:"space-between"}}>
-            <div className="flex items-center gap-1"
-            style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
-              
+          <div
+            className="px-2 rounded-md shadow-md mb-2"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              justifyContent: "space-between",
+            }}
+           >
+            <div
+              className="flex items-center gap-1"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <span>Menu</span>
             </div>
-            <BsThreeDots style={{width:"50px",height:"40px"}} />
+            <BsThreeDots style={{ width: "50px", height: "40px" }} />
           </div>
 
           {/* Sidebar content goes here */}
           <Nav className="flex-column w-100">
             <Link
               to="/"
-              className=" sidebarlink py-3  fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor: activeLink === "/" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/")}
             >
               <IoHome
                 className="me-3"
@@ -1244,12 +1290,15 @@ function Header() {
 
             <Link
               to="/about"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/about" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/about")}
             >
               <FaCircleInfo
                 className="me-3"
@@ -1268,8 +1317,11 @@ function Header() {
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/orders" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/orders")}
             >
               <FaListCheck
                 className="me-3"
@@ -1284,12 +1336,15 @@ function Header() {
 
             <Link
               to="/products"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/products" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/products")}
             >
               <FaBox
                 className="me-3"
@@ -1304,12 +1359,15 @@ function Header() {
 
             <Link
               to="/contact"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/contact" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/contact")}
             >
               <MdContactSupport
                 className="me-3"
@@ -1321,23 +1379,40 @@ function Header() {
               />
               Contact Us
             </Link>
-            <div className="   px-2  rounded-md shadow-md mb-2 mt-2" style={{display:"flex",alignItems:"center",justifyContent:"center",justifyContent:"space-between"}}>
-            <div className="flex items-center gap-1"
-            style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
-              
-              <span style={{}}>Become Partner</span>
+
+            <div
+              className="px-2 rounded-md shadow-md mb-2 mt-2"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                className="flex items-center gap-1"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <span>Become Partner</span>
+              </div>
+              <BsThreeDots style={{ width: "50px", height: "40px" }} />
             </div>
-            <BsThreeDots style={{width:"50px",height:"40px"}} />
-          </div>
 
             <Link
               to="/connect"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/connect" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/connect")}
             >
               <FaLink
                 className="me-3"
@@ -1352,12 +1427,15 @@ function Header() {
 
             <Link
               to="/blog"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/blog" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/blog")}
             >
               <FaRegNewspaper
                 className="me-3"
@@ -1372,12 +1450,15 @@ function Header() {
 
             <Link
               to="/updates"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/updates" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/updates")}
             >
               <MdOutlineUpdate
                 className="me-3"
@@ -1392,12 +1473,15 @@ function Header() {
 
             <Link
               to="/partner"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/partner" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/partner")}
             >
               <PiHandshakeBold
                 className="me-3"
@@ -1412,12 +1496,15 @@ function Header() {
 
             <Link
               to="/help"
-              className=" py-3 fw-semibold px-2"
+              className="py-3 fw-semibold px-2"
               style={{
                 textDecoration: "none",
                 color: "black",
+                backgroundColor:
+                  activeLink === "/help" ? "white" : "transparent",
+                borderRadius: "15px",
               }}
-              onClick={() => setShowOffcanvas(false)}
+              onClick={() => handleClick("/help")}
             >
               <MdHelp
                 className="me-3"
@@ -1431,9 +1518,9 @@ function Header() {
             </Link>
           </Nav>
           <br />
-        <br />
+          <br />
         </Offcanvas.Body>
-        <br />
+        <br   />
       </Offcanvas>
 
       {/* this is left side */}
@@ -1443,7 +1530,7 @@ function Header() {
         placement="start"
         className="offcanvas-custom"
       >
-        <Offcanvas.Header closeButton>
+        <Offcanvas.Header closeButton className="custom-offcanvas-header">
           <Offcanvas.Title>
             <img
               src="/src/components/images/minitgo.png"

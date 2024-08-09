@@ -1880,7 +1880,7 @@ button:hover {
 .download-btn i {
   margin-right: 0.5rem;
 }
-.modal-overlay {
+.modal-overlay1 {
   position: absolute;
   top: 0;
   left: 0;
@@ -1894,7 +1894,7 @@ button:hover {
   /* width: 200px; */
 }
 
-.modal-content {
+.modal-content1 {
   position: absolute;
   top: 1rem;
   left: 4rem;
@@ -1920,4 +1920,13 @@ button:hover {
   border: 2px solid #E4AAAA; /* Border color and width for active link */
   border-radius: 10px; /* Border radius for rounded corners */
 }
+.offcanvas-header {
+  background-color: #f5f2e1; /* Change this to your desired color */
+}
+.offcanvas-body{
+  background-color: #f5f2e1; /* Change this to your desired color */
 
+}
+.offcanvas{
+  background-color: #f5f2e1;
+}

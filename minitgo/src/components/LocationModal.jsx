@@ -8,8 +8,8 @@ const LocationModal = ({ show, handleClose, handleAllow, handleDeny }) => {
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay1">
+      <div className="modal-content1">
         <div style={{
             display: "flex",
             alignItems: "center",
