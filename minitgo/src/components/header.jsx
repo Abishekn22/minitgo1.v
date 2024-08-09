@@ -741,34 +741,44 @@ function Header() {
               </NavDropdown>
             </Nav>
 
-            <Form.Control
-              //sonali //updates
-              style={{ margin: "0 -40px 0 32px", borderRadius: "13px" }}
-              //orginal code
-              // style={{ margin: "0 0px 0 32px", }}
-              type="search"
-              placeholder="Search"
-              className=" search-box"
-              aria-label="Search"
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-              onKeyPress={handleKeyPress}
-            />
+            {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+      <Form.Group style={{ position: 'relative', width: '100%' ,margin: "0 -40px 0 32px"}}>
+        <FaSearch 
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '12px',
+            transform: 'translateY(-50%)',
+            color: 'gray',
+            pointerEvents: 'none', // Prevents the icon from blocking input interaction
+            zIndex: 1,
             
+          }} 
+        />
+        <Form.Control
+          style={{ 
+            paddingLeft: '35px', // Adds padding to create space for the search icon
+            borderRadius: "13px",
+          }}
+          type="search"
+          placeholder="Search"
+          className="search-box"
+          aria-label="Search"
+          value={searchQuery}
+          onChange={handleSearchInputChange}
+          onKeyPress={handleKeyPress}
+        />
+      </Form.Group>
+      <Button
+        className="search-btn"
+        style={{ borderRadius: "13px", marginLeft: "16px" }}
+        variant="outline-success"
+        onClick={handleGoButton}
+      >
+        Go
+      </Button>
 
-            <Form />
-
-            <Button
-              className=" search-btn  "
-              //sonali //updates
-              style={{ borderRadius: "13px" }}
-              // original
-              // style={{ margin: "0 0px 0 32px"}}
-              variant="outline-success"
-              onClick={handleGoButton}
-            >
-              Go
-            </Button>
+    {/* </div> */}
 
             <div
               className="suggestion position-absolute"
@@ -1008,7 +1018,7 @@ function Header() {
         </Container>
         <div className="mobile-menu-logo d-lg-none w-100  ">
           <div className="mobile-search mt-2 container">
-            <Form.Control
+            {/* <Form.Control
               type="search"
               placeholder="search"
               className=" search-box  "
@@ -1027,7 +1037,40 @@ function Header() {
               onClick={handleGoButton}
             >
               Go
-            </Button>
+            </Button> */}
+            <Form.Group style={{ position: 'relative', width: '100%' }}>
+        <FaSearch 
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '12px',
+            transform: 'translateY(-50%)',
+            color: 'gray',
+            pointerEvents: 'none', // Prevents the icon from blocking input interaction
+            zIndex: 1,
+            
+          }} 
+        />
+        <Form.Control
+         type="search"
+         
+              placeholder="search"
+              className=" search-box  "
+              aria-label="Search"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              onKeyPress={handleKeyPress}
+              style={{ width: "100%",paddingLeft:"35px" }}
+        />
+      </Form.Group>
+      <Button
+        className="search-btn"
+        // style={{ borderRadius: "13px", marginLeft: "16px" }}
+        variant="outline-success"
+        onClick={handleGoButton}
+      >
+        Go
+      </Button>
             <div
               className="suggestion position-absolute"
               style={{ width: "350px" }}
