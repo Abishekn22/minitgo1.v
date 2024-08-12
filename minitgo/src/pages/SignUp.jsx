@@ -45,6 +45,8 @@ function SignUp() {
   const context = useContext(myContext);
 
   const { showModal, setShowModal } = context;
+  const [isPhoneValid, setIsPhoneValid] = useState(null); // null, true (valid), or false (invalid)
+
   // const otpRefs = useRef([]);
   // otp send on email
 
@@ -107,7 +109,9 @@ function SignUp() {
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
   };
   const [emailData, setEmailData] = useState({
     from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
@@ -128,8 +132,7 @@ function SignUp() {
     setShowOTP(true);
     setSendOTPagain(true);
     setOTPExpiry(false);
-    
-    
+
     console.log("emaildata_to", emailData.to);
     const otp = generateOTP();
     setOTP(otp);
@@ -243,26 +246,20 @@ function SignUp() {
     }
   }
   const validatePhoneNumber = async (phoneNumber) => {
-    console.log("phonenumber",phoneNumber);
-    
-    const apiKey = "mk4lOodP2Byatm9gbqYnqFubzMQU6ImE";
-    const url = `https://www.ipqualityscore.com/api/json/phone/${apiKey}/+91${phoneNumber}`;
-    const url1 = `https://www.ipqualityscore.com/api/json/phone/mk4lOodP2Byatm9gbqYnqFubzMQU6ImE/+91${phoneNumber}`;
-  
     try {
-      const response = await axios.get(url1);
-      const data = response.data;
-      console.log("phonenumber check",response);
+      const response = await axios.get(`http://localhost:3001/validate-phone?phone=${phoneNumber}`);
+      const isValid = response.data.valid;
+      console.log(response);
       
-  
-      return data.valid; // Returns true if the phone number is valid, false otherwise
+      setIsPhoneValid(isValid);
     } catch (error) {
-      console.error("Error validating phone number:", error);
-      return false; // Assume the number is invalid if an error occurs
+      console.error('Error validating  number:', error);
+      setIsPhoneValid(false);
     }
   };
+  
 
-  async function handleRegister (e) {
+  async function handleRegister(e) {
     e.preventDefault();
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -281,41 +278,36 @@ function SignUp() {
       });
       return;
     } else if (!phonePattern.test(phoneNumber)) {
-      
       toast.error("Please enter a valid phone number", {
         autoClose: 1000,
         hideProgressBar: true,
       });
       return;
-    }
-    else if (!emailPattern.test(emailData.to)) {
+    } else if (!emailPattern.test(emailData.to)) {
       toast.error("Please enter a valid email", {
         autoClose: 1000,
         hideProgressBar: true,
       });
       return;
-    }
-    else if (password !== confirmPassword) {
+    } else if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
-    }
-    else if (password.length < 8 || password.length > 12) {
+    } else if (password.length < 8 || password.length > 12) {
       toast.error("Password must be between 8 and 12 characters long", {
         autoClose: 1000,
         hideProgressBar: true,
       });
       return;
-    } 
+    }
+    await validatePhoneNumber(phoneNumber);
 
-    const isPhoneNumberValid = await validatePhoneNumber(phoneNumber);
-    if (!isPhoneNumberValid) {
-      toast.error("Invalid phone number. Please enter a valid phone number.", {
+    if (isPhoneValid === false) {
+      toast.error("Invalid phone number", {
         autoClose: 1000,
         hideProgressBar: true,
       });
-      return;
-    }
-    
+      return; // Stop form submission if the phone number is invalid
+    } 
       axios
         .get("https://minitgo.com/api/fetch_login.php")
         .then((response) => {
@@ -365,10 +357,8 @@ function SignUp() {
         .catch((error) => {
           console.error("Failed to fetch user information:", error);
         });
-      
     
   }
-  
 
   function generateOTP() {
     const otp = Math.floor(100000 + Math.random() * 900000);
@@ -641,7 +631,10 @@ function SignUp() {
               style={{ width: "9.5rem" }}
               title="Google Play"
             >
-              <i className="fab fa-google-play" style={{ marginRight: "0.5rem" }}></i>
+              <i
+                className="fab fa-google-play"
+                style={{ marginRight: "0.5rem" }}
+              ></i>
               Google Play
             </a>
             <a
@@ -764,19 +757,35 @@ function SignUp() {
               <a
                 className="download-btn btn-google"
                 href="#"
-                style={{ width: "9.5rem", display: "flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  width: "9.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
                 title="Google Play"
               >
-                 <i className="fab fa-google-play" style={{ marginRight: "0.5rem" }}></i>
+                <i
+                  className="fab fa-google-play"
+                  style={{ marginRight: "0.5rem" }}
+                ></i>
                 Google Play
               </a>
               <a
                 className="download-btn btn-apple"
                 href="#"
-                style={{ width: "9.5rem", display: "flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  width: "9.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
                 title="App Store"
               >
-                <i className="fab fa-apple" style={{ marginRight: "0.5rem" }}></i>
+                <i
+                  className="fab fa-apple"
+                  style={{ marginRight: "0.5rem" }}
+                ></i>
                 App Store
               </a>
             </div>
