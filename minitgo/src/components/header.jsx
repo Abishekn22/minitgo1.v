@@ -1201,7 +1201,7 @@ function Header() {
               }}
             >
               <FaMapMarkerAlt className="text-red-500 " />
-              {/* <span>{parsedSignInData.address}</span> */}
+              {/* <span>{parsedSignInData.address ? parsedSignInData.address : ""}</span> */}
             </div>
             <button
               style={{

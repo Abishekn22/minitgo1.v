@@ -51,39 +51,84 @@ function SignUp() {
   // otp send on email
 
   // Function to fetch address using Geocodify API
+  // const fetchAddress = async (lat, lng) => {
+  //   const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+  //   const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+
+  //   try {
+  //     const response = await axios.get(url);
+  //     console.log("response", response);
+  //     const data = response.data;
+  //     console.log("address details", data);
+
+  //     if (
+  //       data &&
+  //       data.response &&
+  //       data.response.features &&
+  //       data.response.features.length > 0
+  //     ) {
+  //       const address = data.response.features[0].properties;
+  //       console.log(address);
+  //       return {
+  //         name: address.label || "",
+  //         houseNumber: address.house_number || "",
+  //         street: address.street || "",
+  //         pincode: address.postalcode || "",
+  //         country: address.country || "",
+  //         region: address.region || "",
+  //         locality: address.locality || "",
+  //         // nagh
+  //       };
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching address:", error);
+  //   }
+  //   return null;
+  // };
   const fetchAddress = async (lat, lng) => {
     const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
     const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
-
+  
     try {
       const response = await axios.get(url);
       console.log("response", response);
       const data = response.data;
       console.log("address details", data);
-
+  
       if (
         data &&
         data.response &&
         data.response.features &&
         data.response.features.length > 0
       ) {
-        const address = data.response.features[0].properties;
-        console.log(address);
-        return {
-          name: address.label || "",
-          houseNumber: address.house_number || "",
-          street: address.street || "",
-          pincode: address.postcode || "",
-          country: address.country || "",
-          region: address.region || "",
-          locality: address.locality || "",
-        };
+        // Loop through each feature in the array
+        for (const feature of data.response.features) {
+          const address = feature.properties;
+  
+          if (address.postalcode) {
+            console.log("Postal code found:", address.postalcode);
+            return {
+              name: address.name || "",
+              houseNumber: address.house_number || "",
+              neighbourhood: address.neighbourhood || "",
+              street: address.street || "",
+              pincode: address.postalcode || "",
+              country: address.country || "",
+              county: address.county || "",
+              region: address.region || "",
+              locality: address.locality || "",
+            };
+          }
+        }
+  
+        console.log("No postal code found in any of the address objects.");
       }
     } catch (error) {
       console.error("Error fetching address:", error);
     }
     return null;
   };
+  
 
   useEffect(() => {
     let intervalId;
@@ -384,8 +429,8 @@ function SignUp() {
           const fetchedAddress = await fetchAddress(latitude, longitude);
           if (fetchedAddress) {
             setStreet(fetchedAddress.name);
-            setAddresss(`${fetchedAddress.name} `);
-            setPincode(fetchedAddress.pincode);
+            setAddresss(`${fetchedAddress.name},${fetchedAddress.neighbourhood},${fetchedAddress.county},${fetchedAddress.pincode},${fetchedAddress.region},${fetchedAddress.country} `);
+            setPincode(fetchedAddress.postalcode);
             setCountry(fetchedAddress.country);
             setRegion(fetchedAddress.region);
             setLocality(fetchedAddress.locality);
