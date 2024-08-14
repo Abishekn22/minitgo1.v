@@ -34,7 +34,9 @@ function Client_register() {
   const [shop, setShop] = useState("");
   const [upi, setUpi] = useState("");
   const [profilepic, setProfilepic] = useState("");
-  const [coordinates, setCoordinates] = useState("");
+  // const [coordinates, setCoordinates] = useState(null);
+  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
+
   const [agreement, setAgrement] = useState("");
   const [ifsc, setIfsc] = useState("");
   const [accountName, setAccountName] = useState("");
@@ -45,7 +47,7 @@ function Client_register() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [locationsnackbarOpen, setLocationSnackbarOpen] = useState(false);
   const [locationsnackbarmessage, setLocationSnackbarmessage] = useState(false);
-  
+
   const [OTP, setOTP] = useState("");
   const [isValid, setIsValid] = useState(true);
   const handleChange = (e) => {
@@ -115,51 +117,56 @@ function Client_register() {
     return otp.toString();
   }
   const fetchAddress = async (lat, lng) => {
-    const apiKey = 'cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb';
-  const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+    const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+    const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
 
-  try {
-    const response = await fetch(url);
+    try {
+      const response = await fetch(url);
 
-    const data = await response.json();
-    console.log("data details",data);
+      const data = await response.json();
+      console.log("data details", data);
 
-    if (data && data.response && data.response.features && data.response.features.length > 0) {
-      for (let i = 0; i < data.response.features.length; i++) {
-        const address = data.response.features[i].properties;
-        if (address.postcode || address.housenumber) {
-          return {
-            name: address.label || '',
-            houseNumber: address.housenumber || '',
-            street: address.street || '',
-            pincode: address.postalcode,
-            country: address.country || '',
-            region: address.region || '',
-            locality: address.locality || ''
-          };
+      if (
+        data &&
+        data.response &&
+        data.response.features &&
+        data.response.features.length > 0
+      ) {
+        for (let i = 0; i < data.response.features.length; i++) {
+          const address = data.response.features[i].properties;
+          if (address.postcode || address.housenumber) {
+            return {
+              name: address.label || "",
+              houseNumber: address.housenumber || "",
+              street: address.street || "",
+              pincode: address.postalcode,
+              country: address.country || "",
+              region: address.region || "",
+              locality: address.locality || "",
+            };
+          }
         }
+        // If no postal code found in any features, return the first feature's address
+        const address = data.response.features[0].properties;
+        return {
+          name: address.label || "",
+          houseNumber: address.housenumber || "",
+          street: address.street || "",
+          pincode: address.postalcode || "",
+          country: address.country || "",
+          region: address.region || "",
+          locality: address.locality || "",
+        };
       }
-      // If no postal code found in any features, return the first feature's address
-      const address = data.response.features[0].properties;
-      return {
-        name: address.label || '',
-        houseNumber: address.housenumber || '',
-        street: address.street || '',
-        pincode: address.postalcode || '',
-        country: address.country || '',
-        region: address.region || '',
-        locality: address.locality || ''
-      };
+    } catch (error) {
+      console.error("Error fetching address:", error);
     }
-  } catch (error) {
-    console.error('Error fetching address:', error);
-  }
-  return null;
+    return null;
   };
   const handleUseCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-       async (position) => {
+        async (position) => {
           const { latitude, longitude } = position.coords;
           ``;
 
@@ -175,18 +182,16 @@ function Client_register() {
           setLocationSnackbarmessage("location has been updated");
           setLocationSnackbarOpen(true);
           const fetchedAddress = await fetchAddress(latitude, longitude);
-          console.log("fetcth data ",fetchedAddress);
-        if (fetchedAddress) {
-          setCity(fetchedAddress.name);
-          setTownDistrict(fetchedAddress.locality)
-          // setAddresss(`${fetchedAddress.name} ${fetchedAddress.street}`);
-          setPincode(fetchedAddress.pincode);
-          // setCountry(fetchedAddress.country);
-          setState(fetchedAddress.region);
-          // setLocality(fetchedAddress.locality);
-        }
-
-         
+          console.log("fetcth data ", fetchedAddress);
+          if (fetchedAddress) {
+            setCity(fetchedAddress.name);
+            setTownDistrict(fetchedAddress.locality);
+            // setAddresss(`${fetchedAddress.name} ${fetchedAddress.street}`);
+            setPincode(fetchedAddress.pincode);
+            // setCountry(fetchedAddress.country);
+            setState(fetchedAddress.region);
+            // setLocality(fetchedAddress.locality);
+          }
         },
         (error) => {
           console.log("Geolocation error:", error);
@@ -385,6 +390,7 @@ function Client_register() {
     setGst(newGstNumber);
     validateAndAutoFillGST(newGstNumber);
   };
+  const isButtonDisabled = !coordinates.latitude || !coordinates.longitude;
 
   return (
     <>
@@ -577,8 +583,7 @@ function Client_register() {
                   <Button
                     variant="contained"
                     onClick={handleUseCurrentLocation}
-                    disabled={coordinates}
-                  >
+                                      >
                     Get Location
                   </Button>
                 </Col>
@@ -954,16 +959,16 @@ function Client_register() {
             </Row>
             <Row className="md-3 py-3">
               <Col>
-                <Button
-                  show={agreementstatus}
-                  variant="contained"
-                  disabled={!agreementstatus}
-                  disabled={!coordinates}
-                  endIcon={<IoMdSend />}
-                  type="submit"
-                >
-                  Register
-                </Button>
+                {agreementstatus && (
+                  <Button
+                    variant="contained"
+                    disabled={!coordinates } // Button will be disabled if coordinates are not set
+                    endIcon={<IoMdSend />}
+                    type="submit"
+                  >
+                    Register
+                  </Button>
+                )}
                 <a href="/signin" className="forgot-password-link  mx-3">
                   Back to login
                 </a>

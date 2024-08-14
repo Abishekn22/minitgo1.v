@@ -30,7 +30,7 @@ function BecomePartner() {
   
 
       <div className="container my-lg-3 border border-1 rounded-2 p-3 mb-5 bg-white rounded">
-        <nav class=" d-flex rounded-2 py-2 ">
+        <nav className=" d-flex rounded-2 py-2 ">
           <div className="container-fluid d-flex flex-row mr-5 ">
             <p
               className=" col md-4 my-2  fw-bold  "
@@ -111,11 +111,11 @@ function BecomePartner() {
         <div className="mt-4 ">
           <span className="fs-3">Why sell on Minitgo?</span>
         </div>
-        <div class="mt-3 mb-3">
-          <div class="container">
-            <div class="row justify-content-center gap-5">
+        <div className="mt-3 mb-3">
+          <div className="container">
+            <div className="row justify-content-center gap-5">
               <div
-                class="col-md-3 col-sm-6 card fs-4 text-white"
+                className="col-md-3 col-sm-6 card fs-4 text-white"
                 style={{
                   height: "250px",
                   backgroundColor: "rgb(235, 233, 205)",
@@ -125,20 +125,20 @@ function BecomePartner() {
                 }}
               >
                 <span
-                  class="fs-3 fw-bold"
+                  className="fs-3 fw-bold"
                   style={{ color: "rgb(238, 161, 135)" }}
                 >
                   Easy integration
                 </span>
-                <div class="mt-1">
-                  <span class="fw-bold fs-6 text-secondary">
+                <div className="mt-1">
+                  <span className="fw-bold fs-6 text-secondary">
                     You can seamlessly incorporate MinitGo's features into your
                     platform with ease.
                   </span>
                 </div>
               </div>
               <div
-                class="col-md-3 col-sm-6 card fs-4 text-white"
+                className="col-md-3 col-sm-6 card fs-4 text-white"
                 style={{
                   height: "250px",
                   backgroundColor: " rgb(235, 233, 205)",
@@ -148,20 +148,20 @@ function BecomePartner() {
                 }}
               >
                 <span
-                  class="fs-3 fw-bold"
+                  className="fs-3 fw-bold"
                   style={{ color: "rgb(238, 161, 135)" }}
                 >
                   Benefits of selling on MinitGo
                 </span>
-                <div class="mt-1">
-                  <span class="fw-bold fs-6 text-secondary">
+                <div className="mt-1">
+                  <span className="fw-bold fs-6 text-secondary">
                     Adding MinitGo to your product lineup diversifies your
                     offerings, potentially attracting new customers.
                   </span>
                 </div>
               </div>
               <div
-                class="col-md-3 col-sm-6 card fs-4 text-white"
+                className="col-md-3 col-sm-6 card fs-4 text-white"
                 style={{
                   height: "250px",
                   backgroundColor: "rgb(235, 233, 205)",
@@ -171,13 +171,13 @@ function BecomePartner() {
                 }}
               >
                 <span
-                  class="fs-3 fw-bold "
+                  className="fs-3 fw-bold "
                   style={{ color: "rgb(238, 161, 135)" }}
                 >
                   Fee and payments
                 </span>
-                <div class="mt-1">
-                  <span class="fw-bold fs-6 text-secondary">
+                <div className="mt-1">
+                  <span className="fw-bold fs-6 text-secondary">
                     Discover hassle-free payments with our flexible fee
                     structure. We offer transparent pricing and convenient
                     payment options.
@@ -186,10 +186,10 @@ function BecomePartner() {
               </div>
             </div>
 
-            <div class="row mt-5 mb-5 border-top pt-5">
-              <div class="col mt-1">
+            <div className="row mt-5 mb-5 border-top pt-5">
+              <div className="col mt-1">
                 <span
-                  class="fs-2"
+                  className="fs-2"
                   style={{ letterSpacing: "3px", wordSpacing: "3px" }}
                 >
                   From five members to fifteen, a little trust can go a long way

@@ -184,46 +184,51 @@ export const Checkout = () => {
   //   document.getElementById("map").src = mapUrl;
   // }, []);
   const fetchAddress = async (lat, lng) => {
-    const apiKey = 'cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb';
-  const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+    const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+    const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
 
-  try {
-    const response = await fetch(url);
+    try {
+      const response = await fetch(url);
 
-    const data = await response.json();
-    console.log("data details",data);
+      const data = await response.json();
+      console.log("data details", data);
 
-    if (data && data.response && data.response.features && data.response.features.length > 0) {
-      for (let i = 0; i < data.response.features.length; i++) {
-        const address = data.response.features[i].properties;
-        if (address.postcode || address.housenumber) {
-          return {
-            name: address.label || '',
-            houseNumber: address.housenumber || '',
-            street: address.street || '',
-            pincode: address.postalcode,
-            country: address.country || '',
-            region: address.region || '',
-            locality: address.locality || ''
-          };
+      if (
+        data &&
+        data.response &&
+        data.response.features &&
+        data.response.features.length > 0
+      ) {
+        for (let i = 0; i < data.response.features.length; i++) {
+          const address = data.response.features[i].properties;
+          if (address.postcode || address.housenumber) {
+            return {
+              name: address.label || "",
+              houseNumber: address.housenumber || "",
+              street: address.street || "",
+              pincode: address.postalcode,
+              country: address.country || "",
+              region: address.region || "",
+              locality: address.locality || "",
+            };
+          }
         }
+        // If no postal code found in any features, return the first feature's address
+        const address = data.response.features[0].properties;
+        return {
+          name: address.label || "",
+          houseNumber: address.housenumber || "",
+          street: address.street || "",
+          pincode: address.postalcode || "",
+          country: address.country || "",
+          region: address.region || "",
+          locality: address.locality || "",
+        };
       }
-      // If no postal code found in any features, return the first feature's address
-      const address = data.response.features[0].properties;
-      return {
-        name: address.label || '',
-        houseNumber: address.housenumber || '',
-        street: address.street || '',
-        pincode: address.postalcode || '',
-        country: address.country || '',
-        region: address.region || '',
-        locality: address.locality || ''
-      };
+    } catch (error) {
+      console.error("Error fetching address:", error);
     }
-  } catch (error) {
-    console.error('Error fetching address:', error);
-  }
-  return null;
+    return null;
   };
 
   const handleUseCurrentLocation = () => {
@@ -231,7 +236,7 @@ export const Checkout = () => {
     // setButtonText("Fetching current location...");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        async(position) => {
+        async (position) => {
           const newLocation = {
             lat: position.coords.latitude,
             log: position.coords.longitude,
@@ -253,14 +258,16 @@ export const Checkout = () => {
             lat: `${newLocation.lat}`,
             log: `${newLocation.log}`,
           });
-          const fetchedAddress = await fetchAddress(newLocation.lat, newLocation.log);
-          console.log("fetcth data ",fetchedAddress);
-        if (fetchedAddress) {
-          
-          
-          
-          setNewAddress(`${fetchedAddress.name}${fetchedAddress.locality}${fetchedAddress.pincode}${fetchedAddress.region}`)
-        }
+          const fetchedAddress = await fetchAddress(
+            newLocation.lat,
+            newLocation.log
+          );
+          console.log("fetcth data ", fetchedAddress);
+          if (fetchedAddress) {
+            setNewAddress(
+              `${fetchedAddress.name}${fetchedAddress.locality}${fetchedAddress.pincode}${fetchedAddress.region}`
+            );
+          }
 
           toast.success("Location fetched successfully", {
             autoClose: 1000,
@@ -437,9 +444,7 @@ export const Checkout = () => {
                             </div>
                           </div>
                           <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                          <p className="mb-1">
-                              <p>{cart_item.client_name}</p>
-                            </p>
+                            <p className="mb-1">{cart_item.client_name}</p>
                             <p className="mb-1">
                               <strong>{cart_item.product_title}</strong>
                             </p>
@@ -536,8 +541,8 @@ export const Checkout = () => {
                           to="/"
                           className="btn mx-1"
                           role="button"
-                          border
-                          border-dark
+                          // border
+                          // border-dark
                         >
                           Add payment card
                         </Link>
@@ -718,27 +723,27 @@ export const Checkout = () => {
                               Add Address
                             </button>
                           </div> */}
-                          
-                            <div className="d-flex flex-row pb-3">
-                              <div className="d-flex align-items-center pe-2">
-                                <input
-                                  type="text"
-                                  // className="form-control"
-                                  placeholder="Enter new address"
-                                  value={newAddress}
-                                  onChange={handleNewAddressInputChange}
-                                />
-                              </div>
-                              <div className="d-flex align-items-center">
-                                <button
-                                  className="btn btn-primary"
-                                  onClick={handleSaveNewAddress}
-                                >
-                                  Save
-                                </button>
-                              </div>
+
+                          <div className="d-flex flex-row pb-3">
+                            <div className="d-flex align-items-center pe-2">
+                              <input
+                                type="text"
+                                // className="form-control"
+                                placeholder="Enter new address"
+                                value={newAddress}
+                                onChange={handleNewAddressInputChange}
+                              />
                             </div>
-                        
+                            <div className="d-flex align-items-center">
+                              <button
+                                className="btn btn-primary"
+                                onClick={handleSaveNewAddress}
+                              >
+                                Save
+                              </button>
+                            </div>
+                          </div>
+
                           {address && (
                             <div className="d-flex mt-3 ">
                               <h6>{selectedAddress.type}:</h6>
@@ -816,10 +821,14 @@ export const Checkout = () => {
                                 <div className="d-flex flex-column">
                                   <p>{item.client_name}</p>
                                   <h5>{item.product_title}</h5>
-                                  <p className="fs-6 mb-0">{item.product_price}₹</p>
+                                  <p className="fs-6 mb-0">
+                                    {item.product_price}₹
+                                  </p>
                                   <p className="fs-6 mb-0">{item.category}</p>
                                   <p className="fs-6 mb-0">{item.material}</p>
-                                  <p className="fs-6 mb-0">{item.product_color1}</p>
+                                  <p className="fs-6 mb-0">
+                                    {item.product_color1}
+                                  </p>
 
                                   <div className="d-flex justify-content-between flex-wrap">
                                     <p className="fs-6 fw-light">

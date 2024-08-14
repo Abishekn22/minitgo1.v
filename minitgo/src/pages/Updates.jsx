@@ -37,7 +37,7 @@ function Updates() {
       {Array.isArray(blogs) &&
         blogs?.map((blog) => (
           <ListGroup key={blog.id} className=" shadow-lg ">
-            <ListGroup.Item clasName="">
+            <ListGroup.Item className="">
               <h4 className="text-center p-4 ">{blog.title}</h4>
             </ListGroup.Item>
             {blog.description_1?.length > 0 && (

@@ -132,24 +132,24 @@ function ProductCard({ product, index }) {
             </div>
             {loading ? (
               <Skeleton width={150} />
-            ) : (
-              <a
-                href={`/${product.product_id}`}
-                target="_blank"
-                style={{
-                  textDecoration: "none",
-                  color: "black",
-                }}
-                className="fw-semibold"
-              >
-                {windowWidth <= 1024
-  ? product.product_name && product.product_name.length > 15
-    ? product.product_name.substring(0, 15) + "..."
-    : product.product_name
-  : product.product_name && product.product_name.length > 23
-  ? product.product_name.substring(0, 23) + "..."
-  : product.product_name}
-              </a>
+            ) : ( ""
+  //             <a
+  //               href={`/${product.product_id}`}
+  //               target="_blank"
+  //               style={{
+  //                 textDecoration: "none",
+  //                 color: "black",
+  //               }}
+  //               className="fw-semibold"
+  //             >
+  //               {windowWidth <= 1024
+  // ? product.product_name && product.product_name.length > 15
+  //   ? product.product_name.substring(0, 15) + "..."
+  //   : product.product_name
+  // : product.product_name && product.product_name.length > 23
+  // ? product.product_name.substring(0, 23) + "..."
+  // : product.product_name}
+  //             </a>
             )}
 
             <div className="flex-container">

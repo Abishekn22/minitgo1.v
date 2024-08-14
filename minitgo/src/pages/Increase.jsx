@@ -198,7 +198,7 @@ const Increase = () => {
             received, we will deliver your products to the buyer and also manage
             customer queries. With FBM you will receive benefits like:
           </p>
-          <ui>
+          <ul>
             <li>Sellers with Elite Badge have up to 3X higher sales</li>
             <li>Increased chances of getting the Buybox</li>
             <li>
@@ -210,7 +210,7 @@ const Increase = () => {
               to have higher conversions
             </li>
             <li>Minitgo handles customer support and returns</li>
-          </ui>
+          </ul>
         </div>
       </div>
       <div
@@ -226,7 +226,7 @@ const Increase = () => {
             found by customers. You can start bidding from ₹1 and pay per click.
             With SP you will receive benefits like:
           </p>
-          <ui>
+          <ul>
             <li>
               Chance to get on page 1 of minitgo.com Search results thereby
               making your product gets high visibility
@@ -237,7 +237,7 @@ const Increase = () => {
             <li>
               Get SP credits worth 2000 free when you launch your business
             </li>
-          </ui>
+          </ul>
         </div>
       </div>
       <div
@@ -247,7 +247,7 @@ const Increase = () => {
         <h2 className="fw-bold fs-4"> Boost sales of your products</h2>
 
         <div className="d-flex flex-column gap-2">
-          <ui className="fs-6">
+          <ul className="fs-6">
             <li>
               Automate Pricing Set rules and automatically adjust the prices of
               your products and increase the chances of winning the Offer
@@ -261,7 +261,7 @@ const Increase = () => {
               Deals Boost sales with limited-period promotional offers on your
               products and appear on the Todays Deals page.
             </li>
-          </ui>
+          </ul>
         </div>
       </div>
       <div
@@ -293,7 +293,7 @@ const Increase = () => {
         </h2>
 
         <div className="d-flex flex-column gap-2">
-          <ui className="fs-6">
+          <ul className="fs-6">
             <li>
               Go Mobile with the Minitgo Seller App Use the Minitgo Seller App
               to manage your business on the go.
@@ -304,7 +304,7 @@ const Increase = () => {
             <li>Manage offers and returns</li>
             <li>{"Respond quickly to buyers' messages"}</li>
             <li>Get help and support at any time</li>
-          </ui>
+          </ul>
         </div>
       </div>
       <div

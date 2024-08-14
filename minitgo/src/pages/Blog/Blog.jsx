@@ -10,13 +10,15 @@ import img7 from '../../assets/best-deal3-removebg-preview.png'
 import img8 from '../../assets/A light blue skirt set with an A-line ankle-length (1).jpg'
 import img9 from '../../assets/The indian woman wearing a black dress is posing i.jpg'
 import img10 from '../../assets/happy alien. 25 year old male.jpg'
+import axios from 'axios';
+
 
 
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
 
-
+ 
     useEffect(() => {
         window.scrollTo(0, 0);
         const fetchBlogs = async () => {
@@ -170,13 +172,16 @@ const Blog = () => {
         </div>
     </div>
 </div>
-<style jsx>{`
+<style>
+    {`
     @media (max-width: 768px) {
         #foot {
-            margin-bottom:0 ;
+            margin-bottom: 0;
         }
     }
-`}</style>
+    `}
+</style>
+
 
                
 

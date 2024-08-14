@@ -198,269 +198,252 @@ console.log("sorted data",sortedAndReversedData);
             </section>
 
             {parsedSignInData.userId && (
-              <section
-                className="gradient-custom mb-5"
-                style={{ backgroundColor: "" }}
-              >
-                <div className="">
-                  <div className="d-flex gap-5 justify-content-start flex-wrap mx-2 mx-md-5">
-                    <div className="col-lg-8 col-xl-8 w-100">
-                      {Array.isArray(orderData) && orderData.length > 0
-                        ? orderData.map((order, index) => {
-                            const progress = getStatusProgress(
-                              order.product_status
-                            );
-                            const totalPaid =
-                              order.quantity * order.product_price;
-                            return (
-                              <>
+  <section
+    className="gradient-custom mb-5"
+    style={{ backgroundColor: "" }}
+  >
+    <div className="">
+      <div className="d-flex gap-5 justify-content-start flex-wrap mx-2 mx-md-5">
+        <div className="col-lg-8 col-xl-8 w-100">
+          {Array.isArray(orderData) && orderData.length > 0
+            ? orderData.map((order, index) => {
+                const progress = getStatusProgress(order.product_status);
+                const totalPaid = order.quantity * order.product_price;
+                return (
+                  
+                    <div
+                        key={order.oid}
+                      className={`card mt-2 ${
+                        order.product_status.toLowerCase() === "rejected"
+                        ? "card-disabled"
+                        : ""
+                      }`}
+                      style={{ borderRadius: "10px" }}
+                      >
+                      <div className="card-body"
+                      
+                       >
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                          <p
+                            className="lead fw-normal mb-0"
+                            style={{ color: "#d8dfab" }}
+                          >
+                            Receipt
+                          </p>
+                          <p className="small text-muted mb-0">
+                            Order ID : {order.order_id}
+                          </p>
+                        </div>
+                        <div className="card shadow-0 border">
+                          <div className="card-body">
+                            <div className="row">
+                              <div className="col-md-2">
+                                <img
+                                  src={order.product_image}
+                                  className="img-fluid"
+                                  alt="Product"
+                                />
+                              </div>
+                              <div className="col-md-2 text-center d-flex flex-column justify-content-center align-items-center">
+                                <p className="text-muted mb-0">
+                                  Name:
+                                </p>
+                                <p>{order.product_title}</p>
+                              </div>
+                              <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
+                                <p className="text-muted mb-0 small">
+                                  Color:
+                                </p>
+                                <p>{order.product_color}</p>
+                              </div>
+                              <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
+                                <p className="text-muted mb-0 small">
+                                  Size:
+                                </p>
+                                <p>{order.product_size}</p>
+                              </div>
+                              <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
+                                <p className="text-muted mb-0 small">
+                                  Payment:
+                                </p>
+                                <p>{order.payment_mode}</p>
+                              </div>
+                              <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <p className="text-muted mb-0 small">
+                                  Qty: {order.quantity}
+                                </p>
+                              </div>
+                              <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <p className="text-muted mb-0 small">
+                                  {order.product_price}
+                                </p>
+                              </div>
+                            </div>
+                            <hr
+                              className="mb-4"
+                              style={{
+                                backgroundColor: "#e0e0e0",
+                                opacity: 1,
+                              }}
+                            />
+                            <div className="row">
+                              <div className="col-md-2">
+                                <p className="text-muted small">
+                                  Track Order
+                                </p>
+                              </div>
+                              <div className="col-md-10">
                                 <div
-                                  className={`card mt-2 ${
-                                    order.product_status.toLowerCase() ===
-                                    "rejected"
-                                      ? "card-disabled"
-                                      : ""
-                                  }`}
-                                  style={{ borderRadius: "10px" }}
+                                  className="progress"
+                                  style={{
+                                    height: "6px",
+                                    borderRadius: "16px",
+                                  }}
                                 >
-                                  <div className="card-body">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                      <p
-                                        className="lead fw-normal mb-0"
-                                        style={{ color: "#d8dfab" }}
-                                      >
-                                        Receipt
-                                      </p>
-                                      <p className="small text-muted mb-0">
-                                        Order ID : {order.order_id}
-                                      </p>
-                                    </div>
-                                    <div className="card shadow-0 border">
-                                      <div className="card-body">
-                                        <div className="row">
-                                          <div className="col-md-2">
-                                            <img
-                                              src={order.product_image}
-                                              className="img-fluid"
-                                              alt="Product"
-                                            />
-                                          </div>
-                                          <div className="col-md-2 text-center d-flex flex-column justify-content-center align-items-center">
-                                            <p className="text-muted mb-0">
-                                              Name:
-                                            </p>
-                                            <p>{order.product_title}</p>
-                                            {/* <p>{order.product_name}</p> */}
-                                          </div>
-                                          <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
-                                            <p className="text-muted mb-0 small">
-                                              Color:
-                                            </p>
-                                            <p>{order.product_color}</p>
-                                            {/* <p>{order.product_color}</p> */}
-                                          </div>
-                                          <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
-                                            <p className="text-muted mb-0 small">
-                                              Size:
-                                            </p>
-                                            <p>{order.product_size}</p>
-                                            {/* <p>{order.product_color}</p> */}
-                                          </div>
-                                          <div className="col-md-2 text-center d-flex justify-content-center align-items-center flex-column">
-                                            <p className="text-muted mb-0 small">
-                                              Payment:
-                                            </p>
-                                            <p>{order.payment_mode}</p>
-                                          </div>
-                                          <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p className="text-muted mb-0 small">
-                                              Qty: {order.quantity}
-                                            </p>
-                                          </div>
-
-                                          <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p className="text-muted mb-0 small">
-                                              {order.product_price}
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <hr
-                                          className="mb-4"
-                                          style={{
-                                            backgroundColor: "#e0e0e0",
-                                            opacity: 1,
-                                          }}
-                                        />
-
-                                        <div className="row">
-                                          <div className="col-md-2">
-                                            <p className="text-muted small">
-                                              Track Order
-                                            </p>
-                                          </div>
-                                          <div className="col-md-10">
-                                            <div
-                                              className="progress"
-                                              style={{
-                                                height: "6px",
-                                                borderRadius: "16px",
-                                              }}
-                                            >
-                                              <div
-                                                className={`progress-bar ${
-                                                  progress.animate
-                                                    ? "progress-animated"
-                                                    : ""
-                                                }`}
-                                                role="progressbar"
-                                                style={{
-                                                  width: progress.width,
-                                                  borderRadius: "16px",
-                                                  backgroundColor: "#FFA500",
-                                                }}
-                                              ></div>
-                                            </div>
-
-                                            <div className="d-flex justify-content-between mb-1">
-                                              <p>{progress.message}</p>
-                                              {order.product_status.toLowerCase() ===
-                                              "delivered" ? (
-                                                <p>Delivered</p>
-                                              ) : (
-                                                ""
-                                              )}
-                                            </div>
-
-                                            <div className="d-flex justify-content-between pt-2">
-                                              <p className="fw-bold mb-0">
-                                                Order Details
-                                              </p>
-                                              <p className="  mb-0">
-                                                <span className="fw-bold me-4">
-                                                  Total:
-                                                </span>
-                                                {totalPaid} /
-                                              </p>
-                                            </div>
-
-                                            <div className="d-flex justify-content-between">
-                                              <p className="  mb-0">
-                                                Invoice:</p>
-                                            </div>
-
-                                            <div className="d-flex justify-content-between mb-5">
-                                              <p className="  mb-0">
-                                                Order ID : {order.order_id} 
-                                              </p>
-                                              <p className="text-muted">Date  :{order.date}   </p> 
-                                              <p className="text-muted">Time: {order.time}</p>
-                                            </div>
-
-                                            {order.product_status.toLowerCase() ===
-                                              "delivered" && (
-                                              <div className="timer d-flex justify-content-end flex-wrap">
-                                                <p className="fs-5">
-                                                  <FaRegClock
-                                                    style={{
-                                                      marginRight: "10px",
-                                                    }}
-                                                  />
-                                                  {formattedTime}
-                                                </p>
-                                              </div>
-                                            )}
-                                          </div>
-
-                                          <div className="d-flex flex-wrap align-items-center py-3">
-                                            {order.product_status.toLowerCase() ===
-                                            "delivered" ? (
-                                              <Link
-                                                to="/"
-                                                className="btn btn-disabled mx-1 disabled"
-                                                role="button"
-                                                aria-disabled=""
-                                              >
-                                                Cancel Order
-                                              </Link>
-                                            ) : (
-                                              <Link
-                                                to="/"
-                                                className="btn btn-primary mx-1"
-                                                role="button"
-                                                aria-disabled=""
-                                              >
-                                                Cancel Order
-                                              </Link>
-                                            )}
-
-                                           
-                                            {formattedTime === "00:00:00" ? (
-                                              <Link
-                                                to="/"
-                                                className="btn btn-light border rounded-pill mx-1 disabled"
-                                                role="button"
-                                                aria-disabled=""
-                                              >
-                                                Return
-                                              </Link>
-                                            ) : (
-                                              <Link
-                                                to="/"
-                                                className="btn btn-light border rounded-pill mx-1"
-                                                role="button"
-                                                aria-disabled=""
-                                              >
-                                                Return
-                                              </Link>
-                                            )}
-                                            <Link
-                                              to="/"
-                                              className="btn btn-light border rounded-pill mx-1"
-                                              role="button"
-                                              aria-disabled=""
-                                            >
-                                              Replace
-                                            </Link>
-                                            <Link
-                                              to="/contact"
-                                              className="btn btn-light border rounded-pill mx-1"
-                                              role="button"
-                                              aria-disabled=""
-                                            >
-                                              ! Report
-                                            </Link>
-                                             
-                                          </div>
-
-                                          <div
-                                            className="card-footer border-0 px-4 py-2"
-                                            style={{
-                                              backgroundColor: "#E4D6D2",
-                                              borderRadius: "50px",
-                                            }}
-                                          >
-                                            <h5 className="d-flex align-items-center justify-content-center text-dark text-uppercase mb-0">
-                                              Total paid:{" "}
-                                              <span className="h2 mb-0 ms-2">
-                                                {totalPaid} RS
-                                              </span>
-                                            </h5>
-                                           
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                  <div
+                                    className={`progress-bar ${
+                                      progress.animate
+                                        ? "progress-animated"
+                                        : ""
+                                    }`}
+                                    role="progressbar"
+                                    style={{
+                                      width: progress.width,
+                                      borderRadius: "16px",
+                                      backgroundColor: "#FFA500",
+                                    }}
+                                  ></div>
                                 </div>
-                              </>
-                            );
-                          })
-                        : null}
+                                <div className="d-flex justify-content-between mb-1">
+                                  <p>{progress.message}</p>
+                                  {order.product_status.toLowerCase() ===
+                                  "delivered" ? (
+                                    <p>Delivered</p>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <div className="d-flex justify-content-between pt-2">
+                                  <p className="fw-bold mb-0">
+                                    Order Details
+                                  </p>
+                                  <p className="mb-0">
+                                    <span className="fw-bold me-4">
+                                      Total:
+                                    </span>
+                                    {totalPaid} /
+                                  </p>
+                                </div>
+                                <div className="d-flex justify-content-between">
+                                  <p className="mb-0">
+                                    Invoice:
+                                  </p>
+                                </div>
+                                <div className="d-flex justify-content-between mb-5">
+                                  <p className="mb-0">
+                                    Order ID : {order.order_id}
+                                  </p>
+                                  <p className="text-muted">Date: {order.date}</p>
+                                  <p className="text-muted">Time: {order.time}</p>
+                                </div>
+                                {order.product_status.toLowerCase() === "delivered" && (
+                                  <div className="timer d-flex justify-content-end flex-wrap">
+                                    <p className="fs-5">
+                                      <FaRegClock
+                                        style={{
+                                          marginRight: "10px",
+                                        }}
+                                      />
+                                      {formattedTime}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="d-flex flex-wrap align-items-center py-3">
+                                {order.product_status.toLowerCase() === "delivered" ? (
+                                  <Link
+                                    to="/"
+                                    className="btn btn-disabled mx-1 disabled"
+                                    role="button"
+                                    aria-disabled=""
+                                  >
+                                    Cancel Order
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    to="/"
+                                    className="btn btn-primary mx-1"
+                                    role="button"
+                                    aria-disabled=""
+                                  >
+                                    Cancel Order
+                                  </Link>
+                                )}
+                                {formattedTime === "00:00:00" ? (
+                                  <Link
+                                    to="/"
+                                    className="btn btn-light border rounded-pill mx-1 disabled"
+                                    role="button"
+                                    aria-disabled=""
+                                  >
+                                    Return
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    to="/"
+                                    className="btn btn-light border rounded-pill mx-1"
+                                    role="button"
+                                    aria-disabled=""
+                                  >
+                                    Return
+                                  </Link>
+                                )}
+                                <Link
+                                  to="/"
+                                  className="btn btn-light border rounded-pill mx-1"
+                                  role="button"
+                                  aria-disabled=""
+                                >
+                                  Replace
+                                </Link>
+                                <Link
+                                  to="/contact"
+                                  className="btn btn-light border rounded-pill mx-1"
+                                  role="button"
+                                  aria-disabled=""
+                                >
+                                  ! Report
+                                </Link>
+                              </div>
+                              <div
+                                className="card-footer border-0 px-4 py-2"
+                                style={{
+                                  backgroundColor: "#E4D6D2",
+                                  borderRadius: "50px",
+                                }}
+                              >
+                                <h5 className="d-flex align-items-center justify-content-center text-dark text-uppercase mb-0">
+                                  Total paid:{" "}
+                                  <span className="h2 mb-0 ms-2">
+                                    {totalPaid} RS
+                                  </span>
+                                </h5>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </section>
-            )}
+                  
+                );
+              })
+            : null}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
           </div>
 
           <div

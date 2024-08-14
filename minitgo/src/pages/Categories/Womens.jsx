@@ -354,7 +354,7 @@ const Women = () => {
                             )}
                           </div>
                         </div>
-                        <a
+                        {/* <a
                           href={`/${product.product_id}`}
                           target="_blank"
                           style={{
@@ -370,7 +370,7 @@ const Women = () => {
   : product.product_name && product.product_name.length > 23
   ? product.product_name.substring(0, 23) + "..."
   : product.product_name}
-                        </a>
+                        </a> */}
                         {/* code start by ganesh */}
                         <div className="flex-container">
                           <h5 className="mt-1 flex-item">

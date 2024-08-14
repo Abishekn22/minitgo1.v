@@ -36,7 +36,6 @@ const HomeProducts = () => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000); // Adjust time as needed
-
     return () => clearTimeout(timer);
     
   }, [products]);
@@ -314,11 +313,11 @@ const HomeProducts = () => {
           </div>
 
           <div className="col-md-3 col-4 col-xl-3 d-lg-none p-0">
-            <div class="select-wrapper" id="distanceDropdownWrapper">
+            <div className="select-wrapper" id="distanceDropdownWrapper">
               <select
                 className="form-control rounded  "
                 id="distanceFilter"
-                onChange="{handleDistanceSelect}"
+                onChange={handleDistanceSelect}
               >
                 <option value="all" className="">
                   Distance
