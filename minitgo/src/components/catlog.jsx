@@ -15,8 +15,10 @@ import { CiLocationArrow1 } from "react-icons/ci";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function Catlog() {
+export default function Catlog({ latitude, longitude }) {
   const [mobileView, setMobileView] = useState(false);
   const totalQuantity = useSelector(selectTotalQuantity);
   const [addressDisplay, setAddressDisplay] = useState("");
@@ -27,6 +29,162 @@ export default function Catlog() {
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
   console.log("parsedSignInData", parsedSignInData);
+  const [street, setStreet] = useState('');
+  const [address, setAddress] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [country, setCountry] = useState('');
+  const [region, setRegion] = useState('');
+  const [locality, setLocality] = useState('');
+  // const fetchAddress = async (lat, lng) => {
+  //   const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+  //   const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+  
+  //   try {
+  //     const response = await axios.get(url);
+  //     console.log("response", response);
+  //     const data = response.data;
+  //     console.log("address details", data);
+  
+  //     if (
+  //       data &&
+  //       data.response &&
+  //       data.response.features &&
+  //       data.response.features.length > 0
+  //     ) {
+  //       // Loop through each feature in the array
+  //       for (const feature of data.response.features) {
+  //         const address = feature.properties;
+  
+  //         if (address.postalcode) {
+  //           console.log("Postal code found:", address.postalcode);
+  //           return {
+  //             name: address.name || "",
+  //             houseNumber: address.house_number || "",
+  //             neighbourhood: address.neighbourhood || "",
+  //             street: address.street || "",
+  //             pincode: address.postalcode || "",
+  //             country: address.country || "",
+  //             county: address.county || "",
+  //             region: address.region || "",
+  //             locality: address.locality || "",
+  //           };
+  //         }
+  //       }
+  
+  //       console.log("No postal code found in any of the address objects.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching address:", error);
+  //   }
+  //   return null;
+  // };
+  const fetchAreaData = async () => {
+    try {
+      const response = await axios.get("https://minitgo.com/api/areas.php");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching area data:", error);
+      return [];
+    }
+  };
+  const fetchAddress = async (lat, lng) => {
+    const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+    const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+  
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+  
+      if (data && data.response && data.response.features && data.response.features.length > 0) {
+        for (const feature of data.response.features) {
+          const address = feature.properties;
+  
+          if (address.postalcode) {
+            const fetchedAddress = {
+              name: address.name || "",
+              neighbourhood: address.neighbourhood || "",
+              street: address.street || "",
+              pincode: address.postalcode || "",
+              country: address.country || "",
+              county: address.county || "",
+              region: address.region || "",
+              locality: address.locality || "",
+            };
+
+            // Fetch area data and check availability
+            const areaData = await fetchAreaData();
+            const matchingArea = areaData.find(
+              (area) =>
+                area.pincode === fetchedAddress.pincode &&
+                area.colony.toLowerCase() === fetchedAddress.neighbourhood.toLowerCase()
+            );
+
+            if (matchingArea) {
+              toast.error("Minitgo is not available in this area.");
+            } else {
+              // Process the fetched address as needed
+              console.log("Fetched address:", fetchedAddress);
+            }
+
+            return fetchedAddress;
+          }
+        }
+      }
+  
+      console.log("No postal code found in any of the address objects.");
+    } catch (error) {
+      console.error("Error fetching address:", error);
+    }
+  
+    return null;
+  };
+
+  function truncateText(elementId, wordLimit = 2) {
+    console.log("truncateText called");
+    const element = address;
+    if (element) {
+      console.log("Element found:", element);
+      const text = element.innerText;
+      const words = text.split(" ");
+      console.log("words.length", words.length);
+  
+      if (words.length > wordLimit) {
+        console.log("if in");
+        const truncatedText = words.slice(0, wordLimit).join(" ") + "...";
+        // element.innerText = truncatedText;
+        setAddress(truncatedText)
+      }
+    } else {
+      console.log("Element not found:", elementId);
+    }
+  }
+  useEffect(() => {
+    truncateText("addressDisplay", 2); // Truncate to 2 words
+  }, [addressDisplay]);
+  useEffect(() => {
+    if (latitude && longitude ) {
+      const fetchAndSetAddress = async () => {
+        const fetchedAddress = await fetchAddress(latitude, longitude);
+        if (fetchedAddress) {
+          setStreet(fetchedAddress.name);
+          setAddress(`${fetchedAddress.name}, ${fetchedAddress.neighbourhood}, ${fetchedAddress.county}, ${fetchedAddress.pincode}, ${fetchedAddress.region}, ${fetchedAddress.country}`);
+          
+
+          setPincode(fetchedAddress.pincode);
+          setCountry(fetchedAddress.country);
+          setRegion(fetchedAddress.region);
+          setLocality(fetchedAddress.locality);
+          // setIsLocationFetched(true);
+          truncateText("addressDisplay", 2)
+        }
+      };
+
+      fetchAndSetAddress().catch((err) => {
+        // setError(err.message);
+        console.error('Failed to fetch location:', err.message);
+      });
+    }
+  }, [latitude, longitude]);
 
   const location = useLocation();
   const showFilter = () => {
@@ -67,7 +225,7 @@ export default function Catlog() {
       location.pathname === "/checkout" ||
       location.pathname === "/cart" ||
       // location.pathname === `/:${id}` ||
-      location.pathname === "/blog" 
+      location.pathname === "/blog"
     );
   };
 
@@ -122,12 +280,14 @@ export default function Catlog() {
             {/* code end by ganesh */}
             <div className="dropdown  rounded text-white">
               <p className="btn  m-0 " type="button">
-                <FaLocationDot className="fs-4 p-1 mb-1"
-                style={{color:"white"}} />
+                <FaLocationDot
+                  className="fs-4 p-1 mb-1"
+                  style={{ color: "white" }}
+                />
                 {/* <span > Delivery Address</span> */}
 
-                <span style={{ color: "#dfd7d7", fontSize: "16px" }}>
-                  {addressDisplay}
+                <span id="addressDisplay"  style={{ color: "#dfd7d7", fontSize: "16px" }}>
+                  {address}
                 </span>
               </p>
               {/* <ul className="dropdown-menu" aria-labelledby="locationDropdown">
@@ -150,7 +310,7 @@ export default function Catlog() {
             </div>
             {/* added [fontSize: "16px", textDecoration:"none" ,paddingTop:"2px",fontWeight:"bolder"] by sonali */}
             <Link
-              to={{ pathname: "/accessories", search: `?category=Accessories`, }}
+              to={{ pathname: "/accessories", search: `?category=Accessories` }}
               style={{
                 color: "#dfd7d7",
                 fontSize: "16px",
@@ -241,6 +401,7 @@ export default function Catlog() {
               {" "}
               <span className="mt-1 ">Offers</span>
             </Link>
+            
           </div>
 
           {/* Add the image and dropdown for mobile view */}
@@ -386,10 +547,12 @@ export default function Catlog() {
                 </h5>
                 <button
                   type="button"
-                 className="btn_inner"
+                  className="btn_inner"
                   data-bs-dismiss="modal"
                   aria-label="Close"
-                >Save</button>
+                >
+                  Save
+                </button>
               </div>
               <div className="modal-body">
                 <Filter mobileView={mobileView} />

@@ -96,12 +96,12 @@ function Header() {
   const [loginModal, setLoginModal] = useState(false);
 
   // State to manage the dropdown title
-  const location = (
+  const locations = (
     <>
       <CiLocationArrow1 /> Hyderabad
     </>
   );
-  const [dropdownTitle, setDropdownTitle] = useState(location);
+  const [dropdownTitle, setDropdownTitle] = useState(locations);
 
   // Function to handle the dropdown item click
   const handleDropdownItemClick = (option) => {
@@ -278,6 +278,46 @@ function Header() {
       setLoginModal(true);
     }
   }, [openLoginModal]);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  useEffect(() => {
+    // Function to request geolocation
+    const requestGeolocation = () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                setError('User denied the request for Geolocation.');
+                toast.error('For fastest delivery, please share your current location.');
+                break;
+              case error.POSITION_UNAVAILABLE:
+                setError('Location information is unavailable.');
+                break;
+              case error.TIMEOUT:
+                setError('The request to get user location timed out.');
+                break;
+              case error.UNKNOWN_ERROR:
+                setError('An unknown error occurred.');
+                break;
+              default:
+                setError('An unknown error occurred.');
+            }
+          }
+        );
+      } else {
+        setError('Geolocation is not supported by this browser.');
+      }
+    };
+
+    // Automatically request geolocation on component mount
+    requestGeolocation();
+  }, []);
 
   const handleUseCurrentLocation = () => {
     // Use browser geolocation API to get the current location
@@ -1119,7 +1159,7 @@ function Header() {
         </div>
       </Navbar>
 
-      <Catlog />
+      <Catlog  latitude={location.latitude} longitude={location.longitude}/>
 
       {showModal && (
         <Modal
