@@ -27,24 +27,33 @@ export default function Catlog({ latitude, longitude }) {
   const { products, addressStore, officeAddressStore, loginSuccess } = context;
   const [selectedAddress, setSelectedAddress] = useState(addressStore);
   const signInData = localStorage.getItem("user");
-  const parsedSignInData = JSON.parse(signInData);
+  const parsedSignInData = JSON.parse(signInData)|| {};
+  const fullAddress = parsedSignInData?.address || '';
+  const addressWords = fullAddress.split(``);
+  console.log("addresswords",addressWords);
+  
+  const truncatedAddress = `${addressWords.slice(0, 15).join('')}...`;
+
+  console.log(truncatedAddress);
+  
+
   console.log("parsedSignInData", parsedSignInData);
-  const [street, setStreet] = useState('');
-  const [address, setAddress] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [country, setCountry] = useState('');
-  const [region, setRegion] = useState('');
-  const [locality, setLocality] = useState('');
+  const [street, setStreet] = useState("");
+  const [address, setAddress] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [locality, setLocality] = useState("");
   // const fetchAddress = async (lat, lng) => {
   //   const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
   //   const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
-  
+
   //   try {
   //     const response = await axios.get(url);
   //     console.log("response", response);
   //     const data = response.data;
   //     console.log("address details", data);
-  
+
   //     if (
   //       data &&
   //       data.response &&
@@ -54,7 +63,7 @@ export default function Catlog({ latitude, longitude }) {
   //       // Loop through each feature in the array
   //       for (const feature of data.response.features) {
   //         const address = feature.properties;
-  
+
   //         if (address.postalcode) {
   //           console.log("Postal code found:", address.postalcode);
   //           return {
@@ -70,7 +79,7 @@ export default function Catlog({ latitude, longitude }) {
   //           };
   //         }
   //       }
-  
+
   //       console.log("No postal code found in any of the address objects.");
   //     }
   //   } catch (error) {
@@ -90,15 +99,20 @@ export default function Catlog({ latitude, longitude }) {
   const fetchAddress = async (lat, lng) => {
     const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
     const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
-  
+
     try {
       const response = await axios.get(url);
       const data = response.data;
-  
-      if (data && data.response && data.response.features && data.response.features.length > 0) {
+
+      if (
+        data &&
+        data.response &&
+        data.response.features &&
+        data.response.features.length > 0
+      ) {
         for (const feature of data.response.features) {
           const address = feature.properties;
-  
+
           if (address.postalcode) {
             const fetchedAddress = {
               name: address.name || "",
@@ -116,7 +130,8 @@ export default function Catlog({ latitude, longitude }) {
             const matchingArea = areaData.find(
               (area) =>
                 area.pincode === fetchedAddress.pincode &&
-                area.colony.toLowerCase() === fetchedAddress.neighbourhood.toLowerCase()
+                area.colony.toLowerCase() ===
+                  fetchedAddress.neighbourhood.toLowerCase()
             );
 
             if (matchingArea) {
@@ -130,58 +145,56 @@ export default function Catlog({ latitude, longitude }) {
           }
         }
       }
-  
+
       console.log("No postal code found in any of the address objects.");
     } catch (error) {
       console.error("Error fetching address:", error);
     }
-  
+
     return null;
   };
 
-  function truncateText(elementId, wordLimit = 2) {
-    console.log("truncateText called");
-    const element = address;
-    if (element) {
-      console.log("Element found:", element);
-      const text = element.innerText;
-      const words = text.split(" ");
-      console.log("words.length", words.length);
-  
-      if (words.length > wordLimit) {
-        console.log("if in");
-        const truncatedText = words.slice(0, wordLimit).join(" ") + "...";
-        // element.innerText = truncatedText;
-        setAddress(truncatedText)
-      }
-    } else {
-      console.log("Element not found:", elementId);
-    }
-  }
   useEffect(() => {
-    truncateText("addressDisplay", 2); // Truncate to 2 words
-  }, [addressDisplay]);
-  useEffect(() => {
-    if (latitude && longitude ) {
+    if (latitude && longitude) {
       const fetchAndSetAddress = async () => {
         const fetchedAddress = await fetchAddress(latitude, longitude);
         if (fetchedAddress) {
           setStreet(fetchedAddress.name);
-          setAddress(`${fetchedAddress.name}, ${fetchedAddress.neighbourhood}, ${fetchedAddress.county}, ${fetchedAddress.pincode}, ${fetchedAddress.region}, ${fetchedAddress.country}`);
+
+          // Concatenate the fetched address into a single string
+          const fullAddress = `${fetchedAddress.name}, ${fetchedAddress.neighbourhood}, ${fetchedAddress.county}, ${fetchedAddress.pincode}, ${fetchedAddress.region}, ${fetchedAddress.country}`;
+
+          // Split the full address into an array of words
+          const addressWords = fullAddress.split("");
+
+          // Get the first two words and set them as the address
+          const truncatedAddress = addressWords.slice(0, 15).join("") + "...";
+          console.log(truncatedAddress);
+          
+          // const storedUserData = JSON.parse(localStorage.getItem("user")) || {};
+
+          // Update only the address field
+          // storedUserData.address = truncatedAddress;
+
+          // Store the updated user data back in localStorage
+          // localStorage.setItem("user", JSON.stringify(storedUserData));
+          setAddress(truncatedAddress);
+          console.log(address);
           
 
+          // Set the other address components
           setPincode(fetchedAddress.pincode);
           setCountry(fetchedAddress.country);
           setRegion(fetchedAddress.region);
           setLocality(fetchedAddress.locality);
-          // setIsLocationFetched(true);
-          truncateText("addressDisplay", 2)
+
+          // Optionally, setIsLocationFetched(true) or truncateText("addressDisplay", 2)
         }
       };
 
       fetchAndSetAddress().catch((err) => {
-        // setError(err.message);
-        console.error('Failed to fetch location:', err.message);
+        console.error("Failed to fetch location:", err.message);
+        // Optionally, setError(err.message);
       });
     }
   }, [latitude, longitude]);
@@ -229,29 +242,6 @@ export default function Catlog({ latitude, longitude }) {
     );
   };
 
-  function truncateText(elementId, wordLimit) {
-    console.log("truncateText called");
-    const element = document.getElementById(elementId);
-    if (element) {
-      console.log("Element found:", element);
-      const text = element.innerText;
-      const words = text.split(" ");
-      console.log("words.length", words.length);
-
-      if (words.length >= 5) {
-        console.log("if in");
-        const truncatedText = words.slice(0, 4).join(" ") + "...";
-        element.innerText = truncatedText;
-      }
-    } else {
-      console.log("Element not found:", elementId);
-    }
-  }
-
-  useEffect(() => {
-    truncateText("addressDisplay", 4);
-  }, [addressDisplay]);
-
   // State to manage the dropdown title
   const locationHY = (
     <>
@@ -270,6 +260,7 @@ export default function Catlog({ latitude, longitude }) {
   const handleAddressTypeChange = (addressType) => {
     setSelectedAddress(addressType);
   };
+  const displayAddress = parsedSignInData?.address ? parsedSignInData.address : address;
 
   return (
     <>
@@ -286,9 +277,15 @@ export default function Catlog({ latitude, longitude }) {
                 />
                 {/* <span > Delivery Address</span> */}
 
-                <span id="addressDisplay"  style={{ color: "#dfd7d7", fontSize: "16px" }}>
-                  {address}
-                </span>
+                <span
+                  id="addressDisplay"
+                  style={{ color: "#dfd7d7", fontSize: "16px" }}
+                >
+                  {/* {parsedSignInData.Address} */}
+                  {/* {parsedSignInData?.address || address} */}
+                  {/* {truncatedAddress || address} */}
+                  {parsedSignInData?.address ? truncatedAddress : address}
+                  </span>
               </p>
               {/* <ul className="dropdown-menu" aria-labelledby="locationDropdown">
                 <li>
@@ -401,7 +398,6 @@ export default function Catlog({ latitude, longitude }) {
               {" "}
               <span className="mt-1 ">Offers</span>
             </Link>
-            
           </div>
 
           {/* Add the image and dropdown for mobile view */}

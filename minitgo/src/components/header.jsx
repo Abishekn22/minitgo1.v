@@ -289,12 +289,15 @@ function Header() {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
+            // window.location.reload();
           },
           (error) => {
             switch (error.code) {
               case error.PERMISSION_DENIED:
                 setError('User denied the request for Geolocation.');
                 toast.error('For fastest delivery, please share your current location.');
+                // setLocation(null)
+                setLocation({ latitude: null, longitude: null });
                 break;
               case error.POSITION_UNAVAILABLE:
                 setError('Location information is unavailable.');
@@ -319,36 +322,36 @@ function Header() {
     requestGeolocation();
   }, []);
 
-  const handleUseCurrentLocation = () => {
-    // Use browser geolocation API to get the current location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(
-              `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=AIzaSyCMG4GzxbEmqfSZ-uaDOhF55sgxi9sumc4`
-            ); // Replace 'YOUR_API_KEY' with your actual API key
-            const data = await response.json();
-            if (data.results.length > 0) {
-              const { components } = data.results[0];
-              setAddress(components.road || "");
-              setCity(
-                components.city || components.town || components.village || ""
-              );
-              setPincode(components.postcode || "");
-              setTownDistrict(components.town || components.district || "");
-              setState(components.state || "");
-            }
-          } catch (error) {}
-        },
-        (error) => {
-          return;
-        }
-      );
-    } else {
-    }
-  };
+  // const handleUseCurrentLocation = () => {
+  //   // Use browser geolocation API to get the current location
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       async (position) => {
+  //         const { latitude, longitude } = position.coords;
+  //         try {
+  //           const response = await fetch(
+  //             `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=AIzaSyCMG4GzxbEmqfSZ-uaDOhF55sgxi9sumc4`
+  //           ); // Replace 'YOUR_API_KEY' with your actual API key
+  //           const data = await response.json();
+  //           if (data.results.length > 0) {
+  //             const { components } = data.results[0];
+  //             setAddress(components.road || "");
+  //             setCity(
+  //               components.city || components.town || components.village || ""
+  //             );
+  //             setPincode(components.postcode || "");
+  //             setTownDistrict(components.town || components.district || "");
+  //             setState(components.state || "");
+  //           }
+  //         } catch (error) {}
+  //       },
+  //       (error) => {
+  //         return;
+  //       }
+  //     );
+  //   } else {
+  //   }
+  // };
 
   //code for location
   {

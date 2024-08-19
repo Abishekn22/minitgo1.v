@@ -762,7 +762,7 @@ function SignUp() {
                 variant="success"
                 className="my-2"
                 onClick={handleRegister}
-                disabled={!isLocationFetched}
+                // disabled={!isLocationFetched}
               >
                 Continue
               </Button>
