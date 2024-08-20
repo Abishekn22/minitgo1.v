@@ -259,7 +259,7 @@ function SignUp() {
               fullName: credentials.full_name,
               phoneNumber: credentials.phone_number,
               email: credentials.email,
-              address: credentials.Address,
+              Address: credentials.Address,
               officeAddress: credentials.office_address,
               user_coordinates: credentials.lat + "." + credentials.log,
               // user_coordinates: `${credentials.coordinates.latitude},${credentials.coordinates.longitude}`,

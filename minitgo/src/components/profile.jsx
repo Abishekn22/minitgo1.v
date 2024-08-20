@@ -60,6 +60,7 @@ const Profile = () => {
       try {
         const response = await fetch("https://minitgo.com/api/fetch_login.php");
         const results = await response.json();
+        console.log("results", results);
 
         const userId = JSON.parse(localStorage.getItem("user"))?.userId;
 
@@ -68,6 +69,7 @@ const Profile = () => {
           navigate("/", { state: { openLoginModal: true } });
         }
         setuserData(user);
+        console.log("userdata----", userData);
       } catch (error) {
         setError(error);
       }
@@ -75,11 +77,67 @@ const Profile = () => {
 
     fetchData();
   }, [navigate]);
+  const fetchAreaData = async () => {
+    try {
+      const response = await axios.get("https://minitgo.com/api/areas.php");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching area data:", error);
+      return [];
+    }
+  };
 
   // for update the data
   // Function to handle the API request
   const updateProfile = async () => {
+    // const areaData = await fetchAreaData();
+    // console.log("areadata", areaData);
+
+    // const matchingArea = areaData.find(
+    //   (area) => {
+    //     console.log(area.pincode);
+    //     console.log(area.colony);
+    //     const inputAddress = addressRef.current.value; // Get the input address value
+    //     const addressParts = inputAddress.split(",").map(part => part.trim());  // Split the address into words for matching
+    //     console.log("Address words:", addressParts);
+    //   }
+    //   // area.pincode === fetchedAddress.pincode &&
+    //   // area.colony.toLowerCase() === fetchedAddress.neighbourhood.toLowerCase()
+    //   // console.log(area.pincode);
+    // );
+
+    // if (matchingArea) {
+    //   toast.error("Minitgo is not available in this area.");
+    // } else {
+    //   // Process the fetched address as needed
+    //   // console.log("Fetched address:", fetchedAddress);
+    // }
+
     try {
+      const areaData = await fetchAreaData();
+      console.log("areadata", areaData);
+  
+      // Get the input address and split it by comma
+      const inputAddress = addressRef.current.value; // Get the input address value
+      const addressParts = inputAddress.split(",").map(part => part.trim()); // Split and trim parts
+      console.log("Address parts:", addressParts);
+  
+      // Check if any part of the address matches the area data
+      const matchingArea = areaData.find((area) => {
+        const pincodeMatch = addressParts.includes(area.pincode);
+        const colonyMatch = addressParts.some(part =>
+          part.toLowerCase() === area.colony.toLowerCase()
+        );
+        return pincodeMatch || colonyMatch;
+      });
+  
+      if (matchingArea) {
+        toast.error("Minitgo is not available in this area.");
+        return; // Exit the function if the area matches
+      } else {
+        // Process the fetched address if no matching area is found
+        console.log("Fetched address:", inputAddress);
+      }
       const response = await fetch("https://minitgo.com/api/update_user.php", {
         method: "POST",
         headers: {
@@ -88,9 +146,17 @@ const Profile = () => {
         body: JSON.stringify(userData), // Assuming data contains the updated profile information
       });
       const result = await response.json();
+      console.log("result", result);
+      if (result.status === true) {
+        localStorage.setItem("user", JSON.stringify(userData));
+        // Handle the response as needed
+        console.log("Profile updated successfully:", result);
+        toast.success(result.message);
+      } else {
+        console.error("Failed to update profile:", result.message);
+        toast.error(result.message);
+      }
       // Handle the response as needed
-      console.log("Profile updated successfully:", result);
-      toast.success(result.message);
     } catch (error) {
       setError(error);
       console.error("Error updating profile:", error);
@@ -133,7 +199,7 @@ const Profile = () => {
         // Handle coordinates if available
         // Example: "12.908139760299258.77.61097406490475"
         // Adjust the delimiter as needed based on actual format
-        const coordsArray = userCoordinates.split('.'); // Split by period (.)
+        const coordsArray = userCoordinates.split("."); // Split by period (.)
         if (coordsArray.length >= 2) {
           const lat = parseFloat(coordsArray[0]);
           const lon = parseFloat(coordsArray[1]);
@@ -159,7 +225,10 @@ const Profile = () => {
             lon: position.coords.longitude,
           };
           setCoordinates(currentCoordinates);
-          localStorage.setItem("coordinates", JSON.stringify(currentCoordinates));
+          localStorage.setItem(
+            "coordinates",
+            JSON.stringify(currentCoordinates)
+          );
         },
         (error) => {
           console.error("Error getting current position:", error);
@@ -169,14 +238,16 @@ const Profile = () => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
-  const mapUrl = coordinates.lat && coordinates.lon 
-  ? `https://www.google.com/maps?q=${coordinates.lat},${coordinates.lon}&z=15&output=embed` 
-  : '';
+  const mapUrl =
+    coordinates.lat && coordinates.lon
+      ? `https://www.google.com/maps?q=${coordinates.lat},${coordinates.lon}&z=15&output=embed`
+      : "";
   //for order section
   const [orderData, setOrderData] = useState([]);
   useEffect(() => {
     const fetchData = () => {
       const postData = { user_id: parsedSignInData.userId };
+      console.log("postdata", postData);
 
       axios
         .post("https://minitgo.com/api/user_orders.php", postData)
@@ -273,16 +344,15 @@ const Profile = () => {
     const otp = Math.floor(100000 + Math.random() * 900000);
     setOTP(otp);
     //
-    
+
     console.log("GENERATED OTP:", otp);
 
     return otp.toString();
   }
-  
 
   const resetPassword = async () => {
     handleShow();
-    let otp=generateOTP();
+    let otp = generateOTP();
     console.log(otp);
     const emailData = {
       from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
@@ -312,7 +382,7 @@ const Profile = () => {
     }
   };
   const [confirmOtp, setConfirmOtp] = useState("");
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     if (confirmOtp !== OTP.toString()) {
       toast.error("OTP does not match!");
       return;
@@ -387,23 +457,20 @@ const Profile = () => {
           >
             Your Orders
           </div>
-          <div
-            className={`custom-sidebar-item fs-5 bg-light `}
-            
-          >
+          <div className={`custom-sidebar-item fs-5 bg-light `}>
             {mapUrl && (
-        <iframe
-        // className="map"
-          id="map"
-          width="200px"
-          height="150"
-          style={{ border: 0 }}
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src={mapUrl}
-        />
-      )}
+              <iframe
+                // className="map"
+                id="map"
+                width="200px"
+                height="150"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                src={mapUrl}
+              />
+            )}
           </div>
         </div>
         {/* Hamburger menu for smaller screens */}
@@ -586,17 +653,17 @@ const Profile = () => {
                       }}
                     />
                     <div className="mt-2">
-                    <iframe
-        className="map1"
-          id="map"
-          width="200px"
-          height="150"
-          style={{ border: 0 }}
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src={mapUrl}
-        />
+                      <iframe
+                        className="map1"
+                        id="map"
+                        width="200px"
+                        height="150"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                        src={mapUrl}
+                      />
                     </div>
                     <div className="text-center">
                       <button

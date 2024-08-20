@@ -28,7 +28,7 @@ export default function Catlog({ latitude, longitude }) {
   const [selectedAddress, setSelectedAddress] = useState(addressStore);
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData)|| {};
-  const fullAddress = parsedSignInData?.address || '';
+  const fullAddress = parsedSignInData?.Address || '';
   const addressWords = fullAddress.split(``);
   console.log("addresswords",addressWords);
   
@@ -284,7 +284,7 @@ export default function Catlog({ latitude, longitude }) {
                   {/* {parsedSignInData.Address} */}
                   {/* {parsedSignInData?.address || address} */}
                   {/* {truncatedAddress || address} */}
-                  {parsedSignInData?.address ? truncatedAddress : address}
+                  {parsedSignInData?.Address ? truncatedAddress : address}
                   </span>
               </p>
               {/* <ul className="dropdown-menu" aria-labelledby="locationDropdown">
