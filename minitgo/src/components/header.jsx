@@ -68,6 +68,7 @@ import TemperatureRegulator from "./TemperatureRegulator.jsx";
 import axios from "axios";
 
 function Header() {
+  const hasShownToast = useRef(false);
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
@@ -353,14 +354,18 @@ function Header() {
                   
                   
                   
-                  area.pincode === fetchedAddress.pincode &&
-                  area.colony.toLowerCase() ===
-                  fetchedAddress.neighbourhood.toLowerCase()
+                  area.pincode === fetchedAddress.pincode 
+                  // area.colony.toLowerCase() ===
+                  // fetchedAddress.neighbourhood.toLowerCase()
                 
               );
 
               if (matchingArea) {
-                toast.error("Minitgo is not available in this area.");
+                if (!hasShownToast.current) {
+                  toast.error("Minitgo is not available in this area.");
+                  hasShownToast.current = true; // Mark that the toast has been shown
+                }
+                
               } else {
                 console.log("Fetched address:", fetchedAddress);
                 // You can process the address further here

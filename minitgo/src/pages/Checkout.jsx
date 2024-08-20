@@ -230,7 +230,15 @@ export const Checkout = () => {
     }
     return null;
   };
-
+  const fetchAreaData = async () => {
+    try {
+      const response = await axios.get("https://minitgo.com/api/areas.php");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching area data:", error);
+      return [];
+    }
+  };
   const handleUseCurrentLocation = () => {
     setLoading(true); // Set loading state to true when fetching starts
     // setButtonText("Fetching current location...");
@@ -262,12 +270,24 @@ export const Checkout = () => {
             newLocation.lat,
             newLocation.log
           );
-          console.log("fetcth data ", fetchedAddress);
-          if (fetchedAddress) {
-            setNewAddress(
-              `${fetchedAddress.name}${fetchedAddress.locality}${fetchedAddress.pincode}${fetchedAddress.region}`
+          const areaData = await fetchAreaData();
+            const matchingArea = areaData.find(
+              (area) =>
+                area.pincode === fetchedAddress.pincode 
+                // area.colony.toLowerCase() !==
+                //   fetchedAddress.neighbourhood.toLowerCase()
             );
-          }
+
+            if (matchingArea) {
+              toast.error("Minitgo is not available in this area.");
+            } else {
+              // Process the fetched address as needed
+              console.log("Fetched address:", fetchedAddress);
+              setNewAddress(
+                `${fetchedAddress.name}${fetchedAddress.locality}${fetchedAddress.pincode}${fetchedAddress.region}`
+              );
+            }
+          console.log("fetcth data ", fetchedAddress);
 
           toast.success("Location fetched successfully", {
             autoClose: 1000,

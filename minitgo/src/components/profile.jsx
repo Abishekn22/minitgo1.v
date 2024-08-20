@@ -125,14 +125,16 @@ const Profile = () => {
       // Check if any part of the address matches the area data
       const matchingArea = areaData.find((area) => {
         const pincodeMatch = addressParts.includes(area.pincode);
-        const colonyMatch = addressParts.some(part =>
-          part.toLowerCase() === area.colony.toLowerCase()
-        );
-        return pincodeMatch || colonyMatch;
+        // const colonyMatch = addressParts.some(part =>
+        //   part.toLowerCase() === area.colony.toLowerCase()
+        // );
+        return pincodeMatch ;
       });
   
       if (matchingArea) {
         toast.error("Minitgo is not available in this area.");
+        // console.log("Minitgo is not available in this area.");
+        
         return; // Exit the function if the area matches
       } else {
         // Process the fetched address if no matching area is found

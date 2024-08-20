@@ -129,13 +129,15 @@ export default function Catlog({ latitude, longitude }) {
             const areaData = await fetchAreaData();
             const matchingArea = areaData.find(
               (area) =>
-                area.pincode === fetchedAddress.pincode &&
-                area.colony.toLowerCase() ===
-                  fetchedAddress.neighbourhood.toLowerCase()
+                area.pincode === fetchedAddress.pincode 
+                // area.colony.toLowerCase() ===
+                //   fetchedAddress.neighbourhood.toLowerCase()
             );
 
             if (matchingArea) {
-              toast.error("Minitgo is not available in this area.");
+              // toast.error("Minitgo is not available in this area.");
+              console.log("Minitgo is not available in this area.");
+              
             } else {
               // Process the fetched address as needed
               console.log("Fetched address:", fetchedAddress);
