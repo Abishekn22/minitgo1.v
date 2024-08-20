@@ -65,6 +65,7 @@ import "../index.css";
 import ResetPassword from "./ResetPassword.jsx";
 import { toast } from "react-toastify";
 import TemperatureRegulator from "./TemperatureRegulator.jsx";
+import axios from "axios";
 
 function Header() {
   const [address, setAddress] = useState("");
@@ -72,15 +73,15 @@ function Header() {
   const [pincode, setPincode] = useState("");
   const [townDistrict, setTownDistrict] = useState("");
   const [state, setState] = useState("");
-  const navigate =useNavigate()
+  const navigate = useNavigate();
   const signInData = localStorage.getItem("user");
   const parsedSignInData = JSON.parse(signInData);
   console.log("parsedSignInData", parsedSignInData);
   const [activeLink, setActiveLink] = useState("/");
 
   const fetchLocation = () => {
-  navigate('/profile');
-  }
+    navigate("/profile");
+  };
   const handleClick = (path) => {
     setActiveLink(path);
     // Close offcanvas menu or other actions
@@ -279,48 +280,174 @@ function Header() {
     }
   }, [openLoginModal]);
   const [location, setLocation] = useState({ latitude: null, longitude: null });
+  // useEffect(() => {
+  //   // Function to request geolocation
+  //   const requestGeolocation = () => {
+  //     if ('geolocation' in navigator) {
+  //       navigator.geolocation.getCurrentPosition(
+  //         (position) => {
+  //           setLocation({
+  //             latitude: position.coords.latitude,
+  //             longitude: position.coords.longitude,
+  //           });
+  //           // window.location.reload();
+  //         },
+  //         (error) => {
+  //           switch (error.code) {
+  //             case error.PERMISSION_DENIED:
+  //               setError('User denied the request for Geolocation.');
+  //               toast.error('For fastest delivery, please share your current location.');
+  //               // setLocation(null)
+  //               setLocation({ latitude: null, longitude: null });
+  //               break;
+  //             case error.POSITION_UNAVAILABLE:
+  //               setError('Location information is unavailable.');
+  //               break;
+  //             case error.TIMEOUT:
+  //               setError('The request to get user location timed out.');
+  //               break;
+  //             case error.UNKNOWN_ERROR:
+  //               setError('An unknown error occurred.');
+  //               break;
+  //             default:
+  //               setError('An unknown error occurred.');
+  //           }
+  //         }
+  //       );
+  //     } else {
+  //       setError('Geolocation is not supported by this browser.');
+  //     }
+  //   };
+
+  //   // Automatically request geolocation on component mount
+  //   requestGeolocation();
+  // }, []);
+
   useEffect(() => {
     // Function to request geolocation
     const requestGeolocation = () => {
-      if ('geolocation' in navigator) {
+      if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-            // window.location.reload();
+          async (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            // setLocation({ latitude: lat, longitude: lng });
+            // const lat = 17.3964438; // Latitude for the test location
+            // const lng = 78.4485763; // Longitude for the test location
+
+            setLocation({ latitude: lat, longitude: lng });
+
+            // Fetch address and check area availability
+            const fetchedAddress = await fetchAddress(lat, lng);
+            console.log("fetchedAddrresss", fetchedAddress);
+
+            if (fetchedAddress) {
+              const areaData = await fetchAreaData();
+              console.log("areaaaa data", areaData);
+
+              const matchingArea = areaData.find(
+                (area) =>
+                  // console.log("area",area);
+                  // console.log("areapincode",area.pincode);
+                  // console.log("fetchedpincode",fetchedAddress.pincode);
+                  
+                  
+                  
+                  area.pincode === fetchedAddress.pincode &&
+                  area.colony.toLowerCase() ===
+                  fetchedAddress.neighbourhood.toLowerCase()
+                
+              );
+
+              if (matchingArea) {
+                toast.error("Minitgo is not available in this area.");
+              } else {
+                console.log("Fetched address:", fetchedAddress);
+                // You can process the address further here
+              }
+            }
           },
           (error) => {
             switch (error.code) {
               case error.PERMISSION_DENIED:
-                setError('User denied the request for Geolocation.');
-                toast.error('For fastest delivery, please share your current location.');
-                // setLocation(null)
+                setError("User denied the request for Geolocation.");
+                toast.error(
+                  "For fastest delivery, please share your current location."
+                );
                 setLocation({ latitude: null, longitude: null });
                 break;
               case error.POSITION_UNAVAILABLE:
-                setError('Location information is unavailable.');
+                setError("Location information is unavailable.");
                 break;
               case error.TIMEOUT:
-                setError('The request to get user location timed out.');
+                setError("The request to get user location timed out.");
                 break;
               case error.UNKNOWN_ERROR:
-                setError('An unknown error occurred.');
+                setError("An unknown error occurred.");
                 break;
               default:
-                setError('An unknown error occurred.');
+                setError("An unknown error occurred.");
             }
           }
         );
       } else {
-        setError('Geolocation is not supported by this browser.');
+        setError("Geolocation is not supported by this browser.");
       }
     };
 
-    // Automatically request geolocation on component mount
     requestGeolocation();
   }, []);
+  const fetchAreaData = async () => {
+    try {
+      const response = await axios.get("https://minitgo.com/api/areas.php");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching area data:", error);
+      return [];
+    }
+  };
+
+  const fetchAddress = async (lat, lng) => {
+    const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
+    const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
+
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+
+      if (
+        data &&
+        data.response &&
+        data.response.features &&
+        data.response.features.length > 0
+      ) {
+        for (const feature of data.response.features) {
+          const address = feature.properties;
+
+          if (address.postalcode) {
+            return {
+              name: address.name || "",
+              neighbourhood: address.neighbourhood || "",
+              street: address.street || "",
+              pincode: address.postalcode || "",
+              country: address.country || "",
+              county: address.county || "",
+              region: address.region || "",
+              locality: address.locality || "",
+            };
+          }
+        }
+      }
+
+      console.log("No postal code found in any of the address objects.");
+    } catch (error) {
+      console.error("Error fetching address:", error);
+    }
+
+    return null;
+  };
+
+  // return <div>Location Component</div>;
 
   // const handleUseCurrentLocation = () => {
   //   // Use browser geolocation API to get the current location
@@ -1162,7 +1289,7 @@ function Header() {
         </div>
       </Navbar>
 
-      <Catlog  latitude={location.latitude} longitude={location.longitude}/>
+      <Catlog latitude={location.latitude} longitude={location.longitude} />
 
       {showModal && (
         <Modal
@@ -1298,7 +1425,7 @@ function Header() {
               justifyContent: "center",
               justifyContent: "space-between",
             }}
-           >
+          >
             <div
               className="flex items-center gap-1"
               style={{
@@ -1568,7 +1695,7 @@ function Header() {
           <br />
           <br />
         </Offcanvas.Body>
-        <br   />
+        <br />
       </Offcanvas>
 
       {/* this is left side */}
