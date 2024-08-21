@@ -19,6 +19,9 @@ import { useLocation } from "react-router-dom";
 import { Col, Modal, Row } from "react-bootstrap";
 import Login from "../pages/Signin.jsx";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -451,6 +454,7 @@ const Cart = () => {
                     </li>
                   </ul>
                   {parsedSignInData && cartData?.length > 0 ? (
+                    <>
                     <Link to={isPincodeMatch ? "#" : "/checkout"} >
                     {/* // <Link to={"/checkout"}> */}
                       <button
@@ -461,6 +465,13 @@ const Cart = () => {
                         Go to checkout
                       </button>
                     </Link>
+                     {isPincodeMatch && (
+                      <p style={{ color: 'red', display: 'flex', alignItems: 'center' }}>
+                      <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: '8px' }} />
+                      Minitgo is not available in this area.
+                    </p>
+                    )}
+                    </>
                   ) : (
                     <>
                       {!parsedSignInData && (
@@ -472,8 +483,10 @@ const Cart = () => {
                             Login
                           </div>
                           <p>Please Login here</p>
+
                         </>
                       )}
+                     
                     </>
                   )}
                 </div>
