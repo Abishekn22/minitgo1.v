@@ -264,8 +264,24 @@ const Accessories = () => {
       );
     }
 
-    setFilteredProducts(filtered);
+    // setFilteredProducts(filtered);
+    const shuffledProducts = shuffleArray(filtered);
+    setFilteredProducts(shuffledProducts);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust time as needed
+
+    return () => clearTimeout(timer);
+
   }, [products, selectedPrice, accessoriesCategory,category]);
+
+function shuffleArray(array) {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 

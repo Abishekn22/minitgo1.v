@@ -212,8 +212,22 @@ const Women = () => {
       }
     }
 
-    setFilteredProducts(productsToFilter);
+    // setFilteredProducts(productsToFilter);
+    const shuffledProducts = shuffleArray(productsToFilter);
+    setFilteredProducts(shuffledProducts);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust time as needed
+
+    return () => clearTimeout(timer);
   }, [products, category, selectedPrice, offer]);
+  function shuffleArray(array) {
+    return array
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  }
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 

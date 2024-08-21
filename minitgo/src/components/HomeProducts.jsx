@@ -31,13 +31,29 @@ const HomeProducts = () => {
 
   const [distanceValue, setDistanceValue] = useState("all");
 
+  function shuffleArray(array) {
+    return array
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  }
+  // useEffect(() => {
+  //   setFilteredProducts(products);
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000); // Adjust time as needed
+  //   return () => clearTimeout(timer);
+    
+  // }, [products]);
   useEffect(() => {
-    setFilteredProducts(products);
+    const shuffledProducts = shuffleArray(products);
+    setFilteredProducts(shuffledProducts);
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000); // Adjust time as needed
+
     return () => clearTimeout(timer);
-    
   }, [products]);
 
   useEffect(() => {
