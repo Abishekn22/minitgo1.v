@@ -53,8 +53,21 @@ const ProductsPage = () => {
         product.name.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesFilter;
     });
-    setFilteredProducts(newFilteredProducts);
+    // setFilteredProducts(newFilteredProducts);
+    const shuffledProducts = shuffleArray(newFilteredProducts);
+    setFilteredProducts(shuffledProducts);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   };
+  function shuffleArray(array) {
+    return array
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  }
 
   const handleAddToCart = (productId) => {
     
