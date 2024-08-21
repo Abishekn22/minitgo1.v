@@ -5,8 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import myContext from "../components/context/MyContext";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   addQuantity,
   deleteQuantity,
@@ -18,6 +18,7 @@ import { selectTotalQuantity } from "../components/redux/Slices/CartSlice.js";
 import { useLocation } from "react-router-dom";
 import { Col, Modal, Row } from "react-bootstrap";
 import Login from "../pages/Signin.jsx";
+import axios from "axios";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -69,12 +70,12 @@ const Cart = () => {
     dispatch(deleteWishList({ product_id: productId }));
   };
   const handleAddToCart = (product, index) => {
-    const size=product.product_size.split(',')
-    const color=product.product_color1.split(',')    
+    const size = product.product_size.split(",");
+    const color = product.product_color1.split(",");
     const productWithCoordinates = {
       ...product,
       product_size: size[0],
-      product_color1:color[0],
+      product_color1: color[0],
       // coordinates,
     };
     dispatch(addToCart(productWithCoordinates));
@@ -86,38 +87,98 @@ const Cart = () => {
     }, 1000);
   };
 
+  // size validation
+  function productSizeSelection() {
+    handleCheckoutClick()
+    if (Array.isArray(cartData)) {
+      let notificationShown = false;
 
-// size validation
-function productSizeSelection() {
-  if (Array.isArray(cartData)) {
-    let notificationShown = false;
+      for (let cart_item of cartData) {
+        const sizes = cart_item.product_size;
 
-    for (let cart_item of cartData) {
-      const sizes = cart_item.product_size;
-
-      // Check if sizes is null
-      if (sizes === null && !notificationShown) {
-        notificationShown = true; // Set the flag to true
-        // Add a delay before showing the toast notification
-        setTimeout(() => {
-          toast.error(`No sizes available for: ${cart_item.product_title}`);
-        }, 100); // 100 milliseconds = 0.1 seconds
-        break; // Exit the loop after showing the notification
-      } else if (Array.isArray(sizes) && sizes.length === 1) {
-        console.log(sizes[0], "Single size selected");
-      } else if (Array.isArray(sizes) && sizes.length > 1) {
-        console.log(sizes.join(', '), "Multiple sizes available");
+        // Check if sizes is null
+        if (sizes === null && !notificationShown) {
+          notificationShown = true; // Set the flag to true
+          // Add a delay before showing the toast notification
+          setTimeout(() => {
+            toast.error(`No sizes available for: ${cart_item.product_title}`);
+          }, 100); // 100 milliseconds = 0.1 seconds
+          break; // Exit the loop after showing the notification
+        } else if (Array.isArray(sizes) && sizes.length === 1) {
+          console.log(sizes[0], "Single size selected");
+        } else if (Array.isArray(sizes) && sizes.length > 1) {
+          console.log(sizes.join(", "), "Multiple sizes available");
+        }
       }
+    } else {
+      console.log("cartData is not an array");
     }
-  } else {
-    console.log("cartData is not an array");
   }
-}
+  const fetchAreaData = async () => {
+    try {
+      const response = await axios.get("https://minitgo.com/api/areas.php");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching area data:", error);
+      return [];
+    }
+  };
+  const [isPincodeMatch, setIsPincodeMatch] = useState(false);
+  const checkPincode = async () => {
+    // Fetch the area data
+    const areaData = await fetchAreaData();
 
+    // Fetch the sign-in data from localStorage
+    const signInData = localStorage.getItem("user");
+    const parsedSignInData = JSON.parse(signInData);
+    console.log("here is the data ", parsedSignInData);
 
- 
- 
- 
+    // Check if sign-in data exists and if the address is available
+    if (parsedSignInData) {
+      const userAddress = parsedSignInData.Address;
+      console.log("useraddress", userAddress);
+
+      // Split the address into words and trim any whitespace
+      const addressWords = userAddress
+        .split(/[\s,]+/)
+        .map((word) => word.trim());
+
+      // Iterate through each word and check if it matches any pincode in the area data
+      let found = false;
+      for (const word of addressWords) {
+        const matchingArea = areaData.find((area) => area.pincode === word);
+
+        if (matchingArea) {
+          console.log("Found: Matching area found for pincode:", word);
+          // toast.warn("Minitgo is not available in this area.");
+          // toast.success(`Found: Area with pincode ${word} is available.`);
+          // setIsPincodeMatch(true);
+          setIsPincodeMatch(true);
+          found = true;
+          break; // Exit the loop once a match is found
+        }
+      }
+
+      if (!found) {
+        console.log("Not Found: No matching area found in the address.");
+        // toast.error("Not Found: No matching pincode found in the address.");
+      }
+    } else {
+      console.error("No address found in the user's sign-in data.");
+    }
+  };
+
+  // Example usage
+  checkPincode();
+  const handleCheckoutClick = (event) => {
+    if (isPincodeMatch) {
+      event.preventDefault(); // Prevent redirection
+      // toast.error("Minitgo is not available in this area.");
+      console.log("hiii");
+      
+    }
+  };
+
   return (
     <>
       <section className="h-100 gradient-custom">
@@ -348,9 +409,7 @@ function productSizeSelection() {
                                     </Link>
                                   </button> */}
                                   <button
-                                    onClick={() =>
-                                      handleAddToCart(prod, index)
-                                    }
+                                    onClick={() => handleAddToCart(prod, index)}
                                     className="btn btn-primary my-2  ms-2"
                                   >
                                     Add to cart
@@ -392,8 +451,13 @@ function productSizeSelection() {
                     </li>
                   </ul>
                   {parsedSignInData && cartData?.length > 0 ? (
-                    <Link to="/checkout">
-                      <button className="btn btn-lg btn-block btn-primary" onClick={productSizeSelection}>
+                    <Link to={isPincodeMatch ? "#" : "/checkout"} >
+                    {/* // <Link to={"/checkout"}> */}
+                      <button
+                        className="btn btn-lg btn-block btn-primary"
+                        onClick={productSizeSelection}
+                        disabled={isPincodeMatch}
+                      >
                         Go to checkout
                       </button>
                     </Link>

@@ -362,7 +362,7 @@ function Header() {
 
               if (matchingArea) {
                 if (!hasShownToast.current) {
-                  toast.error("Minitgo is not available in this area.");
+                  toast.warn("Minitgo is not available in this area.");
                   hasShownToast.current = true; // Mark that the toast has been shown
                 }
                 
