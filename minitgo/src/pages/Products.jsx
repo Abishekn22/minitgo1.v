@@ -397,10 +397,24 @@ const HomeProducts = () => {
           productsToFilter = filteredByOffer;
         }
 
-        setFilteredProducts(productsToFilter);
+        // setFilteredProducts(productsToFilter);
+        const shuffledProducts = shuffleArray(productsToFilter);
+    setFilteredProducts(shuffledProducts);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
       }
     } else {
-      setFilteredProducts(productsToFilter);
+      // setFilteredProducts(productsToFilter);
+      const shuffledProducts = shuffleArray(productsToFilter);
+    setFilteredProducts(shuffledProducts);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
       // setFilteredProducts([])
     }
     // return () => clearTimeout(timer);
@@ -412,6 +426,12 @@ const HomeProducts = () => {
     selectedCategory,
     selectedDistance,
   ]);
+  function shuffleArray(array) {
+    return array
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  }
   console.log(products);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
