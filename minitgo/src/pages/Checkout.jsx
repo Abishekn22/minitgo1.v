@@ -939,7 +939,7 @@ export const Checkout = () => {
                   <div className="border-top px-2 mx-2"></div>
                   <div className="p-2 d-flex pt-3">
                     <div className="col-8">Total TAX Amount</div>
-                    <div className="ms-auto">50 RS</div>
+                    <div className="ms-auto">30 RS</div>
                   </div>
                   <div className="p-2 d-flex">
                     <div className="col-8">Discount</div>
@@ -949,7 +949,7 @@ export const Checkout = () => {
                   <div className="p-2 d-flex pt-3">
                     <div className="col-8">shipping</div>
                     <div className="ms-auto">
-                      <b>100 RS</b>
+                      <b>70 RS</b>
                     </div>
                   </div>
 
