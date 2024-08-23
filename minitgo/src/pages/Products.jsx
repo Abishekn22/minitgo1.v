@@ -7,8 +7,8 @@ import StarRatings from "../components/ProductInfo/StarRatings.jsx";
 import cartIcon from "../assets/cart-icon.svg";
 import { useContext } from "react";
 import myContext from "../components/context/MyContext.js";
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import {
   addToCart,
   showSnackbar,
@@ -55,12 +55,12 @@ const HomeProducts = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const handleAddToCart = (product, index) => {
-    const size=product.product_size.split(',')
-    const color=product.product_color1.split(',')    
+    const size = product.product_size.split(",");
+    const color = product.product_color1.split(",");
     const productWithCoordinates = {
       ...product,
       product_size: size[0],
-      product_color1:color[0],
+      product_color1: color[0],
       // coordinates,
     };
     dispatch(addToCart(productWithCoordinates));
@@ -141,7 +141,6 @@ const HomeProducts = () => {
     setTimeout(() => setLoading(false), 2000);
     // setLoading(true)
     // Adjust time as needed
-
 
     // Apply price filtering
     let productsToFilter = products;
@@ -281,7 +280,7 @@ const HomeProducts = () => {
         const normalizedProductTitle = product.product_title
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
-          const productName = product.product_title || "";
+        const productName = product.product_title || "";
         const normalizedProductName = productName
           .toLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, "");
@@ -303,12 +302,12 @@ const HomeProducts = () => {
           normalizedClientName.includes(normalizedQuery)
         );
       });
-      console.log("filtered productspage ",filtered);
+      console.log("filtered productspage ", filtered);
       if (filtered.length > 0) {
         setFilteredProducts(filtered);
         const timer = setTimeout(() => {
           setLoading(false);
-        }, 2000); 
+        }, 2000);
         return () => clearTimeout(timer);
       } else {
         productsToFilter = products;
@@ -399,22 +398,22 @@ const HomeProducts = () => {
 
         // setFilteredProducts(productsToFilter);
         const shuffledProducts = shuffleArray(productsToFilter);
-    setFilteredProducts(shuffledProducts);
+        setFilteredProducts(shuffledProducts);
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+        return () => clearTimeout(timer);
       }
     } else {
       // setFilteredProducts(productsToFilter);
       const shuffledProducts = shuffleArray(productsToFilter);
-    setFilteredProducts(shuffledProducts);
+      setFilteredProducts(shuffledProducts);
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
       // setFilteredProducts([])
     }
     // return () => clearTimeout(timer);
@@ -428,7 +427,7 @@ const HomeProducts = () => {
   ]);
   function shuffleArray(array) {
     return array
-      .map(value => ({ value, sort: Math.random() }))
+      .map((value) => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value);
   }
@@ -461,8 +460,7 @@ const HomeProducts = () => {
 
           <div className="col-md-10">
             <div className="row">
-              {
-              loading ? (
+              {loading ? (
                 Array.from({ length: 8 }).map((_, index) => (
                   <div
                     key={index}
@@ -475,7 +473,7 @@ const HomeProducts = () => {
                     <Skeleton height={20} width="30%" />
                   </div>
                 ))
-              ) :filteredProducts?.length === 0 ? (
+              ) : filteredProducts?.length === 0 ? (
                 <div
                   className="col-12 py-2 text-center fs-4 fw-semibold"
                   id="sections"
@@ -539,29 +537,37 @@ const HomeProducts = () => {
 
                       <div className="product-content d-flex flex-column gap-1 pt-3  px-1 pb-3  ">
                         <div
-                          className=""
-                          style={{
-                            height: "40px",
-                            fontSize: "14px",
-                            gap: "2px",
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
+                        style={{ fontSize: "14px" }}
+                            className="d-flex justify-content-between"
+                          // className=""
+                          // style={{
+                          //   height: "40px",
+                          //   fontSize: "14px",
+                          //   gap: "2px",
+                          //   display: "flex",
+                          //   justifyContent: "space-between",
+                          // }}
                         >
-                          <div className="text-sm line-clamp-1">
-                            {" "}
-                            {product.category}
-                          </div>
+                          <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <span className="">{product.client_name}</span>
+                              <span style={{ color: "orange" }}>36 min</span>
+                            </div>
                           {isNewProduct(product.date) && (
                             <span className="ms-4" style={{ color: "#ffc107" }}>
                               New
                             </span>
                           )}
-                          <div className="line-clamp-1">
-                            {product.client_name}
-                          </div>
+                          
                         </div>
-                        <a
+                        {/* <a
                           href={`/${product.product_id}`}
                           target="_blank"
                           style={{
@@ -570,15 +576,70 @@ const HomeProducts = () => {
                           }}
                         >
                           {windowWidth <= 1024
-  ? product.product_title && product.product_title.length > 15
-    ? product.product_title.substring(0, 15) + "..."
-    : product.product_title
-  : product.product_title && product.product_title.length > 23
-  ? product.product_title.substring(0, 23) + "..."
-  : product.product_title}
-                        </a>
+                            ? product.product_title &&
+                              product.product_title.length > 15
+                              ? product.product_title.substring(0, 15) + "..."
+                              : product.product_title
+                            : product.product_title &&
+                              product.product_title.length > 23
+                            ? product.product_title.substring(0, 23) + "..."
+                            : product.product_title}
+                        </a> */}
+                        <a
+                            href={`/${product.product_id}`}
+                            target="_blank"
+                            style={{
+                              textDecoration: "none",
+                              color: "black",
+                            }}
+                            className="fw-semibold"
+                          >
+                            {windowWidth <= 1024
+                              ? product.product_name &&
+                                product.product_name.length > 15
+                                ? product.product_name.substring(0, 15) + "..."
+                                : product.product_name
+                              : product.product_name &&
+                                product.product_name.length > 23
+                              ? product.product_name.substring(0, 23) + "..."
+                              : product.product_name}
+                          </a>
+                        <div className="flex-container ">
+                            <h6 className="fs-9 text-start">
+                              <span className="fw-semibold">
+                                {product.product_title}
+                              </span>{" "}
+                              
+                              |<span className="fw-bold"> Color:</span>{" "}
+                              {product.product_color1} {" "}| 
+                              <span className="fw-bold">{" "}
+                                {product.material}
+                              </span>{" "}
+                            </h6>
+                              
+                            <h5 className="mt-1 flext-item  " style={{fontSize:"1rem"}}>
+                              ₹{product.product_price}
+                              <span className="text-decoration-line-through text-muted  fw-light" style={{fontSize:"0.813rem"}}>
+                                599
+                              </span>
+                              <span
+                                className="text-muted"
+                                style={{
+                                  fontSize: "10px",
+                                }}
+                              >
+                                {" "}
+                                {/* {product.product_stock} */}
+                              </span>
+                            </h5>
+                            {/* code end by ganesh */}
+                            <div>
+                              <span className=" fw-bold" style={{fontSize:"0.875rem"}}>Available size:</span>{" "}
+                              <span className="px-1" style={{backgroundColor:"#d9725f",fontSize:"0.875rem"}}>{product.product_size}</span>
+                            </div>
+                          </div>
 
-                        <h5 className="mt-1">
+                        {/* <h5 className="mt-1">
                           <sup>&#x20B9;</sup>
                           {product.product_price}
                           <span className="text-decoration-line-through text-muted fs-6 fw-light">
@@ -591,8 +652,8 @@ const HomeProducts = () => {
                             {" "}
                             {product.product_stock}
                           </span>
-                        </h5>
-
+                        </h5> */}
+{/* 
                         <div className="d-flex flex-column flex-sm-row justify-content-between ">
                           <h6>
                             Size: <span>{product.product_size}</span>
@@ -600,22 +661,22 @@ const HomeProducts = () => {
                           <h6 className="">
                             Color: <span>{product.product_color1}</span>
                           </h6>
-                        </div>
+                        </div> */}
 
-                        <div className="clamped-text">
+                        {/* <div className="clamped-text">
                           {product.product_discription.length > 40
                             ? product.product_discription.slice(0, 40) + "..."
                             : product.product_discription}
-                        </div>
+                        </div> */}
 
                         {/* <div className="product-rating text-warning d-flex ">
                           Rating:{" "}
                           <StarRatings rating={product.product_ratings} />
                         </div> */}
-                        <div className="product-distance text-secondary ">
+                        {/* <div className="product-distance text-secondary ">
                           Distance: {product.distance}km away.
-                        </div>
-                        {cart.snackbar.open &&
+                        </div> */}
+                        {/* {cart.snackbar.open &&
                           cart.snackbar.index === index && (
                             <div
                               style={{ fontSize: "12px" }}
@@ -623,11 +684,17 @@ const HomeProducts = () => {
                             >
                               {cart.snackbar.message}
                             </div>
-                          )}
+                          )} */}
                       </div>
 
                       {/* Buttons */}
                       <div className="cart-btn px-1">
+                      <button
+                          className="btn btn-primary my-2  ms-2 px-2 "
+                          onClick={() => handleAddToCart(product, index)}
+                        >
+                          Add to cart
+                        </button>
                         <button
                           className={`btn ${
                             wishlistClicked[index]
@@ -639,12 +706,7 @@ const HomeProducts = () => {
                         >
                           ❤
                         </button>
-                        <button
-                          className="btn btn-primary my-2  ms-2 px-2 "
-                          onClick={() => handleAddToCart(product, index)}
-                        >
-                          Add to cart
-                        </button>
+                        
                         {/* <button className="btn btn-primary my-2  ms-2 ">
                           <Link
                             to="/checkout"
@@ -660,7 +722,7 @@ const HomeProducts = () => {
               )}
             </div>
           </div>
-          <Slider/>
+          <Slider />
         </div>
       </div>
       <br></br>

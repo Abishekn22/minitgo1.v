@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { BiSolidCategory } from "react-icons/bi";
 import { FaLocationDot } from "react-icons/fa6";
 
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import $ from "jquery"; // Import jQuery
 import myContext from "./context/MyContext";
@@ -33,7 +33,7 @@ const HomeProducts = () => {
 
   function shuffleArray(array) {
     return array
-      .map(value => ({ value, sort: Math.random() }))
+      .map((value) => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value);
   }
@@ -43,7 +43,7 @@ const HomeProducts = () => {
   //     setLoading(false);
   //   }, 2000); // Adjust time as needed
   //   return () => clearTimeout(timer);
-    
+
   // }, [products]);
   useEffect(() => {
     const shuffledProducts = shuffleArray(products);
@@ -55,6 +55,7 @@ const HomeProducts = () => {
 
     return () => clearTimeout(timer);
   }, [products]);
+  console.log("products", products);
 
   useEffect(() => {
     // Extracting image URLs from products data and updating the images state
@@ -74,23 +75,23 @@ const HomeProducts = () => {
   }, [filteredProducts]);
   // code start by ganesh
   const handleAddToCart = (product, index) => {
-    const size=product.product_size.split(',')
-    const color=product.product_color1.split(',')    
+    const size = product.product_size.split(",");
+    const color = product.product_color1.split(",");
     const productWithCoordinates = {
       ...product,
       product_size: size[0],
-      product_color1:color[0],
+      product_color1: color[0],
       coordinates,
     };
-    
+
     console.log("Product to add: ", product);
     console.log("Coordinates: ", coordinates);
     console.log("Product with coordinates: ", productWithCoordinates);
-  
+
     // alert("Adding product to cart");
     dispatch(addToCart(productWithCoordinates));
     console.log("Product added to cart", productWithCoordinates);
-  
+
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
     setTimeout(() => {
       dispatch(hideSnackbar());
@@ -399,283 +400,248 @@ const HomeProducts = () => {
           <div className="col-md-10 p-2">
             {/* row remove */}
             <div className="row">
-              {loading ? (
-                Array.from({ length: 8 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2"
-                  >
-                    <Skeleton height={200} />
-                    <Skeleton height={20} width="80%" />
-                    <Skeleton height={20} width="60%" />
-                    <Skeleton height={20} width="40%" />
-                    <Skeleton height={20} width="30%" />
-                  </div>
-                ))
-              )  : (
-                filteredProducts?.slice(0, 16).map((product, index) => (
-                  <div
-                    key={index}
-                    className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 "
-                    id="sections"
-                  >
-                    <div className="product-card ">
-                      {/* original code */}
-                      {/* <div className="product-image " > */}
-                      {/* change done by sonali */}
-                      <div
-                        className="product-image "
-                        style={{ position: "relative" }}
-                      >
+              {loading
+                ? Array.from({ length: 8 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2"
+                    >
+                      <Skeleton height={200} />
+                      <Skeleton height={20} width="80%" />
+                      <Skeleton height={20} width="60%" />
+                      <Skeleton height={20} width="40%" />
+                      <Skeleton height={20} width="30%" />
+                    </div>
+                  ))
+                : filteredProducts?.slice(0, 16).map((product, index) => (
+                    <div
+                      key={index}
+                      className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 "
+                      id="sections"
+                    >
+                      <div className="product-card ">
+                        {/* original code */}
+                        {/* <div className="product-image " > */}
+                        {/* change done by sonali */}
                         <div
-                          id={`carouselExampleIndicators${index}`}
-                          className=" carousel slide v w-100  rounded-2"
-                          data-bs-ride="carousel"
-                          //
-                          style={{ height: "100%" }}
+                          className="product-image "
+                          style={{ position: "relative" }}
                         >
-                          <div className="carousel-inner rounded   h-100">
-                            {images[index]?.images.map((img, imgIndex) => (
-                              <div
-                                key={imgIndex}
-                                className={` h-100  carousel-item${
-                                  imgIndex === 0 ? " active" : ""
-                                }`}
-                              >
-                                <a
-                                  href={`/${product.pid}`}
-                                  target="_blank"
-                                  style={{
-                                    textDecoration: "none",
-                                    color: "black",
-                                  }}
+                          <div
+                            id={`carouselExampleIndicators${index}`}
+                            className=" carousel slide v w-100  rounded-2"
+                            data-bs-ride="carousel"
+                            //
+                            style={{ height: "100%" }}
+                          >
+                            <div className="carousel-inner rounded   h-100">
+                              {images[index]?.images.map((img, imgIndex) => (
+                                <div
+                                  key={imgIndex}
+                                  className={` h-100  carousel-item${
+                                    imgIndex === 0 ? " active" : ""
+                                  }`}
                                 >
-                                  <img
-                                    className="d-block w-100"
-                                    src={img}
-                                    alt={`Slide ${imgIndex}`}
-                                  />
-                                </a>
-                              </div>
-                            ))}
+                                  <a
+                                    href={`/${product.pid}`}
+                                    target="_blank"
+                                    style={{
+                                      textDecoration: "none",
+                                      color: "black",
+                                    }}
+                                  >
+                                    <img
+                                      className="d-block w-100"
+                                      src={img}
+                                      alt={`Slide ${imgIndex}`}
+                                    />
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                            <button
+                              className="carousel-control-prev   rounded-circle p-2  bg-secondary"
+                              type="button"
+                              data-bs-target={`#carouselExampleIndicators${index}`}
+                              data-bs-slide="prev"
+                              style={{
+                                height: "29px",
+                                top: "50%",
+                                width: "29px",
+                                zIndex: "0",
+                              }}
+                            >
+                              <span
+                                className="carousel-control-prev-icon"
+                                aria-hidden="true"
+                              ></span>
+                              <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button
+                              className="carousel-control-next  rounded-circle p-2  bg-secondary "
+                              type="button"
+                              data-bs-target={`#carouselExampleIndicators${index}`}
+                              data-bs-slide="next"
+                              style={{
+                                height: "29px",
+                                top: "50%",
+                                width: "29px",
+                                zIndex: "0",
+                              }}
+                            >
+                              <span
+                                className="carousel-control-next-icon"
+                                aria-hidden="true"
+                              ></span>
+                              <span className="visually-hidden">Next</span>
+                            </button>
                           </div>
-                          <button
-                            className="carousel-control-prev   rounded-circle p-2  bg-secondary"
-                            type="button"
-                            data-bs-target={`#carouselExampleIndicators${index}`}
-                            data-bs-slide="prev"
-                            style={{
-                              height: "29px",
-                              top: "50%",
-                              width: "29px",
-                              zIndex: "0",
-                            }}
-                          >
-                            <span
-                              className="carousel-control-prev-icon"
-                              aria-hidden="true"
-                            ></span>
-                            <span className="visually-hidden">Previous</span>
-                          </button>
-                          <button
-                            className="carousel-control-next  rounded-circle p-2  bg-secondary "
-                            type="button"
-                            data-bs-target={`#carouselExampleIndicators${index}`}
-                            data-bs-slide="next"
-                            style={{
-                              height: "29px",
-                              top: "50%",
-                              width: "29px",
-                              zIndex: "0",
-                            }}
-                          >
-                            <span
-                              className="carousel-control-next-icon"
-                              aria-hidden="true"
-                            ></span>
-                            <span className="visually-hidden">Next</span>
-                          </button>
-                        </div>
-                        {/* Code change start by isha */}
-                        {/* <div
+                          {/* Code change start by isha */}
+                          {/* <div
                           className={`offer-tag bg-warning rounded-pill text-center p-1 text-light ${product.offers === "0" && "invisible"
                             }`}
                         > */}
-                        {/* original code */}
-                        {/* <div
+                          {/* original code */}
+                          {/* <div
                           className={`offer-tag bg-warning rounded-pill text-center p-1 text-light mt-2
                            ${product.offers === "0" && "invisible"}`}
                         > */}
-                        {/* changes done by sonali */}
-                        {/* update code for responsive offer section by ganesh */}
-                        <div>
-                          <div
-                            className="offer-tag text-center p-1 text-bold mt-2"
-                            style={{
-                              position: "absolute",
-                              bottom: "15px",
-                              right: "10px",
-                              fontSize: "0.8rem",
-                              padding: "1rem",
-                              textDecorationColor: "HighlightText",
-                              border: "2px solid",
-                              borderRadius: "50px",
-                              fontWeight: "bold",
-                              backgroundColor:
-                                product.offers === "0" ? "" : "#e8d9b7",
-                              opacity: product.offers === "0" ? 0 : 0.5,
-                            }}
-                          >
-                            {product.offers === "0"
-                              ? "No Offer"
-                              : `${product.offers}% Off`}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="product-content d-flex flex-column gap-1 pt-3  px-2">
-                        <div
-                          style={{ fontSize: "14px" }}
-                          className="d-flex justify-content-between"
-                        >
-                          <span>{product.category}</span>
+                          {/* changes done by sonali */}
+                          {/* update code for responsive offer section by ganesh */}
                           <div>
-                            {isNewProduct(product.date) && (
-                              <span
-                                className="btn  btn-secondary p-0 px-1"
-                                style={{ color: "#ffc107", fontSize: "14px" }}
-                              >
-                                New
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <a
-                          href={`/${product.product_id}`}
-                          target="_blank"
-                          style={{
-                            textDecoration: "none",
-                            color: "black",
-                          }}
-                          className="fw-semibold"
-                        >
-                         {windowWidth <= 1024
-  ? product.product_name && product.product_name.length > 15
-    ? product.product_name.substring(0, 15) + "..."
-    : product.product_name
-  : product.product_name && product.product_name.length > 23
-  ? product.product_name.substring(0, 23) + "..."
-  : product.product_name}
-                        </a>
-                        {/* code start by ganesh */}
-                        <div className="flex-container ">
-                          <h5 className="mt-1 flext-item  ">
-                            ₹{product.product_price}
-                            <span className="text-decoration-line-through text-muted fs-6 fw-light">
-                              599
-                            </span>
-                            <span
-                              className="text-muted"
+                            <div
+                              className="offer-tag text-center p-1 text-bold mt-2"
                               style={{
-                                fontSize: "13px",
+                                position: "absolute",
+                                bottom: "15px",
+                                right: "10px",
+                                fontSize: "0.8rem",
+                                padding: "1rem",
+                                textDecorationColor: "HighlightText",
+                                border: "2px solid",
+                                borderRadius: "50px",
+                                fontWeight: "bold",
+                                backgroundColor:
+                                  product.offers === "0" ? "" : "#e8d9b7",
+                                opacity: product.offers === "0" ? 0 : 0.5,
                               }}
                             >
-                              {" "}
-                              {product.product_stock}
-                            </span>
-                          </h5>
-                          {/* code end by ganesh */}
-                          <div>
-                            <span className="fw-semibold">Size:</span>{" "}
-                            <span>{product.product_size}</span>
-                          </div>
-                        </div>
-
-                        <div
-                          className="d-flex justify-content-between "
-                          style={{ fontSize: "14px" }}
-                        >
-                          <div>
-                            <span className="fw-semibold"></span>{" "}
-                            <span>{product.material}</span>
-                          </div>
-                          <div className="">
-                            <span className="fw-semibold">Color:</span>{" "}
-                            <span>{product.product_color1}</span>
-                          </div>
-                        </div>
-                        {/* code start by ganesh */}
-                        <div
-                          className="mt-1 clamped-text"
-                          style={{ textAlign: "justify" }}
-                        >
-                          {/* code end by ganesh */}
-                          {windowWidth <= 576
-                            ? product.product_discription.length > 20
-                              ? product.product_discription.substring(0, 19) +
-                                "..."
-                              : product.product_discription
-                            : product.product_discription.length > 50
-                            ? product.product_discription.slice(0, 45) + "..."
-                            : product.product_discription}
-
-                          {/* {product.product_discription.length > 50
-                              ? product.product_discription.slice(0, 45) + "..."
-                              : product.product_discription} */}
-                        </div>
-
-                        <div className="d-flex justify-content-between mt-1">
-                          {/* <div className="product-rating text-warning d-flex ">
-                            <StarRatings rating={product.product_ratings} />
-                          </div> */}
-                          {userCords && (
-                            <div className="product-distance text-secondary ">
-                              {product.distance ||
-                                calculateDistance(
-                                  ...userCords,
-                                  product.lat,
-                                  product.log
-                                )}
-                              km away.
+                              {product.offers === "0"
+                                ? "No Offer"
+                                : `${product.offers}% Off`}
                             </div>
-                          )}
+                          </div>
                         </div>
 
-                        {cart.snackbar.open &&
-                          cart.snackbar.index === index && (
+                        <div className="product-content d-flex flex-column gap-1 pt-3  px-2">
+                          <div
+                            style={{ fontSize: "14px" }}
+                            className="d-flex justify-content-between"
+                           >
                             <div
-                              style={{ fontSize: "12px" }}
-                              className="border text-center rounded w-75 mx-auto"
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                justifyContent: "space-between",
+                              }}
                             >
-                              {cart.snackbar.message}
+                              <span>{product.client_name}</span>
+                              <span style={{ color: "orange" }}>36 min</span>
                             </div>
-                          )}
-                      </div>
+                            <div>
+                              {isNewProduct(product.date) && (
+                                <span
+                                  className="btn  btn-secondary p-0 px-1"
+                                  style={{ color: "#ffc107", fontSize: "14px" }}
+                                >
+                                  New
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <a
+                            href={`/${product.product_id}`}
+                            target="_blank"
+                            style={{
+                              textDecoration: "none",
+                              color: "black",
+                            }}
+                            className="fw-semibold"
+                          >
+                            {windowWidth <= 1024
+                              ? product.product_name &&
+                                product.product_name.length > 15
+                                ? product.product_name.substring(0, 15) + "..."
+                                : product.product_name
+                              : product.product_name &&
+                                product.product_name.length > 23
+                              ? product.product_name.substring(0, 23) + "..."
+                              : product.product_name}
+                          </a>
+                          {/* code start by ganesh */}
+                          <div className="flex-container ">
+                            <h6 className="fs-9 text-start">
+                              <span className="fw-semibold">
+                                {product.product_title}
+                              </span>{" "}
+                              
+                              |<span className="fw-bold"> Color:</span>{" "}
+                              {product.product_color1} {" "}| 
+                              <span className="fw-bold">{" "}
+                                {product.material}
+                              </span>{" "}
+                            </h6>
+                              
+                            <h5 className="mt-1 flext-item  ">
+                              ₹{product.product_price}
+                              <span className="text-decoration-line-through text-muted fs-6 fw-light">
+                                599
+                              </span>
+                              <span
+                                className="text-muted"
+                                style={{
+                                  fontSize: "13px",
+                                }}
+                              >
+                                {" "}
+                                {/* {product.product_stock} */}
+                              </span>
+                            </h5>
+                            {/* code end by ganesh */}
+                            <div>
+                              <span className=" fw-bold" style={{fontSize:"12px"}}>Available size:</span>{" "}
+                              <span className="px-1" style={{backgroundColor:"#d9725f",fontSize:"14px"}}>{product.product_size}</span>
+                            </div>
+                          </div>
 
-                      <div className=" cart-btn px-1">
-                        <button
-                          className={`btn ${
-                            wishlistClicked[index]
-                              ? "btn-success"
-                              : "btn-primary"
-                          } w-21 my-2`}
-                          // style={{ height: "20px", fill: "white" }}
-                          onClick={() => handleWishListToCart(product, index)}
-                        >
-                          ❤
-                        </button>
-                        <button
-                          onClick={() => handleAddToCart(product, index)}
-                          className="btn btn-primary my-2  ms-2"
-                        >
-                          Add to cart
-                        </button>
+                          
+
+                         <div className=" cart-btn px-1">
+                          
+                          <button
+                            onClick={() => handleAddToCart(product, index)}
+                            className="btn btn-primary my-2  ms-2"
+                          >
+                            Add to cart
+                          </button>
+                          <button
+                            className={`btn ${
+                              wishlistClicked[index]
+                                ? "btn-success"
+                                : "btn-primary"
+                            } w-21 my-2`}
+                            // style={{ height: "20px", fill: "white" }}
+                            onClick={() => handleWishListToCart(product, index)}
+                          >
+                            ❤
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  // </div>
-                ))
-              )}
+                    </div>
+                  ))}
             </div>
           </div>
         </div>
