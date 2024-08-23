@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { RxLapTimer } from "react-icons/rx";
 import { FaLocationDot } from "react-icons/fa6";
 import Filter from "../components/Filter";
 import Ban from "../components/images/product.png";
@@ -537,8 +538,8 @@ const HomeProducts = () => {
 
                       <div className="product-content d-flex flex-column gap-1 pt-3  px-1 pb-3  ">
                         <div
-                        style={{ fontSize: "14px" }}
-                            className="d-flex justify-content-between"
+                          style={{ fontSize: "14px" }}
+                          className="d-flex justify-content-between"
                           // className=""
                           // style={{
                           //   height: "40px",
@@ -549,23 +550,25 @@ const HomeProducts = () => {
                           // }}
                         >
                           <div
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span className="">{product.client_name}</span>
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span className="">{product.client_name}</span>
+                            <span>
+                              <RxLapTimer style={{ marginRight: "5px" }} />
                               <span style={{ color: "orange" }}>36 min</span>
-                            </div>
+                            </span>
+                          </div>
                           {isNewProduct(product.date) && (
                             <span className="ms-4" style={{ color: "#ffc107" }}>
                               New
                             </span>
                           )}
-                          
                         </div>
                         {/* <a
                           href={`/${product.product_id}`}
@@ -586,58 +589,93 @@ const HomeProducts = () => {
                             : product.product_title}
                         </a> */}
                         <a
-                            href={`/${product.product_id}`}
-                            target="_blank"
-                            style={{
-                              textDecoration: "none",
-                              color: "black",
-                            }}
-                            className="fw-semibold"
-                          >
-                            {windowWidth <= 1024
-                              ? product.product_name &&
-                                product.product_name.length > 15
-                                ? product.product_name.substring(0, 15) + "..."
-                                : product.product_name
-                              : product.product_name &&
-                                product.product_name.length > 23
-                              ? product.product_name.substring(0, 23) + "..."
-                              : product.product_name}
-                          </a>
+                          href={`/${product.product_id}`}
+                          target="_blank"
+                          style={{
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                          className="fw-semibold"
+                        >
+                          {windowWidth <= 1024
+                            ? product.product_name &&
+                              product.product_name.length > 15
+                              ? product.product_name.substring(0, 15) + "..."
+                              : product.product_name
+                            : product.product_name &&
+                              product.product_name.length > 23
+                            ? product.product_name.substring(0, 23) + "..."
+                            : product.product_name}
+                        </a>
                         <div className="flex-container ">
-                            <h6 className="fs-9 text-start">
-                              <span className="fw-semibold">
-                                {product.product_title}
-                              </span>{" "}
-                              
-                              |<span className="fw-bold"> Color:</span>{" "}
-                              {product.product_color1} {" "}| 
-                              <span className="fw-bold">{" "}
-                                {product.material}
-                              </span>{" "}
-                            </h6>
-                              
-                            <h5 className="mt-1 flext-item  " style={{fontSize:"1rem"}}>
-                              ₹{product.product_price}
-                              <span className="text-decoration-line-through text-muted  fw-light" style={{fontSize:"0.813rem"}}>
-                                599
-                              </span>
-                              <span
-                                className="text-muted"
+                          <h6 className="fs-9 text-start">
+                            <span className="fw-semibold">
+                              {product.product_title}
+                            </span>{" "}
+                            |<span className="fw-bold"> Color:</span>{" "}
+                            {product.product_color1} |
+                            <span className="fw-bold"> {product.material}</span>{" "}
+                          </h6>
+
+                          <h5
+                            className="mt-1 flext-item  "
+                            style={{ fontSize: "1rem" }}
+                          >
+                            ₹{product.product_price}
+                            <span
+                              className="text-decoration-line-through text-muted  fw-light"
+                              style={{ fontSize: "0.813rem" }}
+                            >
+                              599
+                            </span>
+                            <span
+                              className="text-muted"
+                              style={{
+                                fontSize: "10px",
+                              }}
+                            >
+                              {" "}
+                              {/* {product.product_stock} */}
+                            </span>
+                          </h5>
+                          {/* code end by ganesh */}
+                          <div>
+                            <span
+                              className=" fw-bold"
+                              style={{ fontSize: "0.875rem" }}
+                            >
+                              Available size:
+                            </span>{" "}
+                            {product.product_size.includes(",") ? (
+                              <select
+                                className="px-1"
                                 style={{
-                                  fontSize: "10px",
+                                  backgroundColor: "#d9725f",
+                                  fontSize: "0.875rem",
+                                  borderRadius:"5px"
                                 }}
                               >
-                                {" "}
-                                {/* {product.product_stock} */}
+                                {product.product_size
+                                  .split(",")
+                                  .map((size, index) => (
+                                    <option key={index} value={size}>
+                                      {size}
+                                    </option>
+                                  ))}
+                              </select>
+                            ) : (
+                              <span
+                                className="px-1"
+                                style={{
+                                  backgroundColor: "#d9725f",
+                                  fontSize: "0.875rem",
+                                }}
+                              >
+                                {product.product_size}
                               </span>
-                            </h5>
-                            {/* code end by ganesh */}
-                            <div>
-                              <span className=" fw-bold" style={{fontSize:"0.875rem"}}>Available size:</span>{" "}
-                              <span className="px-1" style={{backgroundColor:"#d9725f",fontSize:"0.875rem"}}>{product.product_size}</span>
-                            </div>
+                            )}
                           </div>
+                        </div>
 
                         {/* <h5 className="mt-1">
                           <sup>&#x20B9;</sup>
@@ -653,7 +691,7 @@ const HomeProducts = () => {
                             {product.product_stock}
                           </span>
                         </h5> */}
-{/* 
+                        {/* 
                         <div className="d-flex flex-column flex-sm-row justify-content-between ">
                           <h6>
                             Size: <span>{product.product_size}</span>
@@ -689,8 +727,8 @@ const HomeProducts = () => {
 
                       {/* Buttons */}
                       <div className="cart-btn px-1">
-                      <button
-                          className="btn btn-primary my-2  ms-2 px-2 "
+                        <button
+                          className="btn btn-primary my-2   px-2 "
                           onClick={() => handleAddToCart(product, index)}
                         >
                           Add to cart
@@ -706,7 +744,7 @@ const HomeProducts = () => {
                         >
                           ❤
                         </button>
-                        
+
                         {/* <button className="btn btn-primary my-2  ms-2 ">
                           <Link
                             to="/checkout"

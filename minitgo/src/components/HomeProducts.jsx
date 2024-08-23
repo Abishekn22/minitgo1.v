@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { BiSolidCategory } from "react-icons/bi";
 import { FaLocationDot } from "react-icons/fa6";
+import { RxLapTimer } from "react-icons/rx";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -537,7 +538,7 @@ const HomeProducts = () => {
                           <div
                             style={{ fontSize: "14px" }}
                             className="d-flex justify-content-between"
-                           >
+                          >
                             <div
                               style={{
                                 width: "100%",
@@ -545,10 +546,14 @@ const HomeProducts = () => {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 justifyContent: "space-between",
+                                // gap:"20px"
                               }}
                             >
-                              <span>{product.client_name}</span>
-                              <span style={{ color: "orange" }}>36 min</span>
+                              <span className="line-clamp-1" style={{width:"50%"}}>{product.client_name}</span>
+                              <span>
+                                <RxLapTimer style={{ marginRight: "5px" }} />
+                                <span style={{ color: "orange" }}>36 min</span>
+                              </span>
                             </div>
                             <div>
                               {isNewProduct(product.date) && (
@@ -586,14 +591,14 @@ const HomeProducts = () => {
                               <span className="fw-semibold">
                                 {product.product_title}
                               </span>{" "}
-                              
                               |<span className="fw-bold"> Color:</span>{" "}
-                              {product.product_color1} {" "}| 
-                              <span className="fw-bold">{" "}
+                              {product.product_color1} |
+                              <span className="fw-bold">
+                                {" "}
                                 {product.material}
                               </span>{" "}
                             </h6>
-                              
+
                             <h5 className="mt-1 flext-item  ">
                               ₹{product.product_price}
                               <span className="text-decoration-line-through text-muted fs-6 fw-light">
@@ -611,35 +616,47 @@ const HomeProducts = () => {
                             </h5>
                             {/* code end by ganesh */}
                             <div>
-                              <span className=" fw-bold" style={{fontSize:"12px"}}>Available size:</span>{" "}
-                              <span className="px-1" style={{backgroundColor:"#d9725f",fontSize:"14px"}}>{product.product_size}</span>
+                              <span
+                                className=" fw-bold"
+                                style={{ fontSize: "12px" }}
+                              >
+                                Available size:
+                              </span>{" "}
+                              <span
+                                className="px-1"
+                                style={{
+                                  backgroundColor: "#d9725f",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {product.product_size}
+                              </span>
                             </div>
                           </div>
 
-                          
-
-                         <div className=" cart-btn px-1">
-                          
-                          <button
-                            onClick={() => handleAddToCart(product, index)}
-                            className="btn btn-primary my-2  ms-2"
-                          >
-                            Add to cart
-                          </button>
-                          <button
-                            className={`btn ${
-                              wishlistClicked[index]
-                                ? "btn-success"
-                                : "btn-primary"
-                            } w-21 my-2`}
-                            // style={{ height: "20px", fill: "white" }}
-                            onClick={() => handleWishListToCart(product, index)}
-                          >
-                            ❤
-                          </button>
+                          <div className=" cart-btn px-1">
+                            <button
+                              onClick={() => handleAddToCart(product, index)}
+                              className="btn btn-primary my-2  ms-2"
+                            >
+                              Add to cart
+                            </button>
+                            <button
+                              className={`btn ${
+                                wishlistClicked[index]
+                                  ? "btn-success"
+                                  : "btn-primary"
+                              } w-21 my-2`}
+                              // style={{ height: "20px", fill: "white" }}
+                              onClick={() =>
+                                handleWishListToCart(product, index)
+                              }
+                            >
+                              ❤
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
                     </div>
                   ))}
             </div>
