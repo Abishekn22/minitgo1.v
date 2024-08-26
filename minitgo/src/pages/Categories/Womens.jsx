@@ -17,6 +17,7 @@ import {
   hideSnackbarForWishlist,
   showSnackbarForWishlist,
 } from "../../components/redux/Slices/CartSlice.js";
+import { RxLapTimer } from "react-icons/rx";
 
 const Women = () => {
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,8 @@ const Women = () => {
   }, []);
 
   const navigate = useNavigate();
+  const [selectedSizes, setSelectedSizes] = useState({});
+
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFiltered, setCategoryFiltered] = useState([]);
@@ -71,15 +74,18 @@ const Women = () => {
 
   const cart = useSelector((state) => state.cart);
 
-  const handleAddToCart = (product, index) => {
-    const size=product.product_size.split(',')
-    const color=product.product_color1.split(',')    
+  const handleAddToCart = (product, index, selectedSize) => {
+    // Ensure that the selected size is used, or default to the first size
+    const size = selectedSize || product.product_size.split(",")[0];
+    const color = product.product_color1.split(",")[0]; // Assuming color is managed similarly
+
     const productWithCoordinates = {
       ...product,
-      product_size: size[0],
-      product_color1:color[0],
+      product_size: size,
+      product_color1: color,
       // coordinates,
     };
+
     dispatch(addToCart(productWithCoordinates));
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
 
@@ -88,7 +94,20 @@ const Women = () => {
       dispatch(hideSnackbar());
     }, 1000);
   };
+  const handleSizeChange = (productId, size) => {
+    setSelectedSizes((prevState) => ({
+      ...prevState,
+      [productId]: size,
+    }));
+  };
 
+  // Handle add to cart click
+  const handleAddToCartClick = (product, index) => {
+    // Get the selected size, or default to the first size
+    const selectedSize =
+      selectedSizes[product.id] || product.product_size.split(",")[0];
+    handleAddToCart(product, index, selectedSize);
+  };
   // for wishlist button
   const [wishlistClicked, setWishlistClicked] = useState(
     Array(products.length).fill(false)
@@ -310,7 +329,7 @@ const Women = () => {
               filteredProducts?.map((product, index) => (
                 <div
                   key={index}
-                  className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2"
+                  className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 px-2"
                 >
                   <div className="product-card">
                     <a
@@ -351,126 +370,159 @@ const Women = () => {
                       </div>
                       {/* end code by ganesh */}
 
-                      <div className="product-content d-flex flex-column gap-1 pt-3  px-2">
-                        <div
-                          style={{ fontSize: "14px" }}
-                          className="d-flex justify-content-between"
-                        >
-                          <span>{product.category}</span>
-                          <div>
-                            {isNewProduct(product.date) && (
-                              <span
-                                className="btn  btn-secondary p-0 px-1"
-                                style={{ color: "#ffc107", fontSize: "14px" }}
-                              >
-                                New
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        {/* <a
-                          href={`/${product.product_id}`}
-                          target="_blank"
-                          style={{
-                            textDecoration: "none",
-                            color: "black",
-                          }}
-                          className="fw-semibold"
-                        >
-                          {windowWidth <= 1024
-  ? product.product_name && product.product_name.length > 15
-    ? product.product_name.substring(0, 15) + "..."
-    : product.product_name
-  : product.product_name && product.product_name.length > 23
-  ? product.product_name.substring(0, 23) + "..."
-  : product.product_name}
-                        </a> */}
-                        {/* code start by ganesh */}
-                        <div className="flex-container">
-                          <h5 className="mt-1 flex-item">
-                            {/* code end by ganesh */}₹{product.product_price}
-                            <span className="text-decoration-line-through text-muted fs-6 fw-light">
-                              599
-                            </span>
-                            <span
-                              className="text-muted"
-                              style={{
-                                fontSize: "13px",
-                              }}
-                            >
-                              {" "}
-                              {product.product_stock}
-                            </span>
-                          </h5>
-                          <div>
-                            <span className="fw-semibold">Size:</span>{" "}
-                            <span>{product.product_size}</span>
-                          </div>
-                        </div>
-
-                        <div
-                          className="d-flex justify-content-between "
-                          style={{ fontSize: "14px" }}
-                        >
-                          <div>
-                            <span className="fw-semibold"></span>{" "}
-                            <span>{product.material}</span>
-                          </div>
-                          <div className="">
-                            <span className="fw-semibold">Color:</span>{" "}
-                            <span>{product.product_color1}</span>
-                          </div>
-                        </div>
-                        {/* code start by ganesh */}
-                        <div
-                          className="mt-1 clamped-text"
-                          style={{ textAlign: "justify" }}
-                        >
-                          {/* code end by ganesh */}
-                          {windowWidth <= 576
-                            ? product.product_discription.length > 20
-                              ? product.product_discription.substring(0, 19) +
-                                "..."
-                              : product.product_discription
-                            : product.product_discription.length > 50
-                            ? product.product_discription.slice(0, 45) + "..."
-                            : product.product_discription}
-
-                          {/* {product.product_discription.length > 50
-                              ? product.product_discription.slice(0, 45) + "..."
-                              : product.product_discription} */}
-                        </div>
-
-                        <div className="d-flex justify-content-between mt-1">
-                          {/* <div className="product-rating text-warning d-flex ">
-                            <StarRatings rating={product.product_ratings} />
-                          </div> */}
-                          {userCords && (
-                            <div className="product-distance text-secondary ">
-                              {product.distance ||
-                                calculateDistance(
-                                  ...userCords,
-                                  product.lat,
-                                  product.log
-                                )}
-                              km away.
-                            </div>
-                          )}
-                        </div>
-
-                        {cart.snackbar.open &&
-                          cart.snackbar.index === index && (
+                      <div className="product-content d-flex flex-column gap-1 pt-3  ">
+                           
                             <div
-                              style={{ fontSize: "12px" }}
-                              className="border text-center rounded w-75 mx-auto"
+                              style={{ fontSize: "14px" }}
+                              className="d-flex justify-content-between"
                             >
-                              {cart.snackbar.message}
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  justifyContent: "space-between",
+                                  // gap:"20px"
+                                }}
+                              >
+                                <span
+                                  className="line-clamp-1"
+                                  style={{ width: "50%" }}
+                                >
+                                  {product.client_name}
+                                </span>
+                                <span>
+                                  <RxLapTimer style={{ marginRight: "5px" }} />
+                                  <span style={{ color: "orange" }}>
+                                    36 min
+                                  </span>
+                                </span>
+                              </div>
+                              <div>
+                                {isNewProduct(product.date) && (
+                                  <span
+                                    className="btn  btn-secondary p-0 px-1"
+                                    style={{
+                                      color: "#ffc107",
+                                      fontSize: "14px",
+                                    }}
+                                  >
+                                    New
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          )}
-                      </div>
+
+                            {/* code start by ganesh */}
+                          </div>
+                          <div className="flex-container ">
+                            <h6 className="fs-9 text-start">
+                              <span className="fw-semibold">
+                                {product.product_title}
+                              </span>{" "}
+                              |<span className="fw-bold"> Color:</span>{" "}
+                              {product.product_color1} |
+                              <span className="fw-bold">
+                                {" "}
+                                {product.material}
+                              </span>{" "}
+                            </h6>
+
+                            <h5 className="mt-1 flext-item  ">
+                              ₹{product.product_price}
+                              <span className="text-decoration-line-through text-muted fs-6 fw-light">
+                                599
+                              </span>
+                              <span
+                                className="text-muted"
+                                style={{
+                                  fontSize: "13px",
+                                }}
+                              >
+                                {" "}
+                                {/* {product.product_stock} */}
+                              </span>
+                            </h5>
+                            {/* code end by ganesh */}
+                            <div>
+                              <span
+                                className=" fw-bold"
+                                style={{ fontSize: "12px" }}
+                              >
+                                Available size:
+                              </span>{" "}
+                              {product.product_size.includes(",") ? (
+                                <select
+                                  className="px-1"
+                                  style={{
+                                    backgroundColor: "#d9725f",
+                                    fontSize: "0.875rem",
+                                    borderRadius: "5px",
+                                  }}
+                                  onChange={(e) =>
+                                    handleSizeChange(product.id, e.target.value)
+                                  }
+                                  value={
+                                    selectedSizes[product.id] ||
+                                    product.product_size.split(",")[0]
+                                  }
+                                >
+                                  {product.product_size
+                                    .split(",")
+                                    .map((size, index) => (
+                                      <option key={index} value={size}>
+                                        {size}
+                                      </option>
+                                    ))}
+                                </select>
+                              ) : (
+                                <span
+                                  className="px-1"
+                                  style={{
+                                    backgroundColor: "#d9725f",
+                                    fontSize: "0.875rem",
+                                  }}
+                                >
+                                  {product.product_size}
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <span
+                                className=" fw-bold"
+                                style={{
+                                  fontSize: "12px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  gap: "10px",
+                                }}
+                              >
+                                {product.product_stock <= 1
+                                  ? "Only one left"
+                                  : "In stock"}
+                                <div
+                                  style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    borderRadius: "50%",
+                                    background: "#d9725f",
+                                  }}
+                                ></div>
+                              </span>
+                            </div>
+                          </div>
+                        
                     </a>
 
-                    <div className="cart-btn px-1">
+                    <div className="cart-btn px-1  ">
+                    <button
+                          onClick={() => handleAddToCartClick(product, index)}
+                          className="btn btn-primary my-2   px-2 "
+                      >
+                        Add to cart
+                      </button>
                     <button
                             className={`btn ${
                               wishlistClicked[index]
@@ -482,12 +534,7 @@ const Women = () => {
                           >
                             ❤
                           </button>
-                      <button
-                        onClick={() => handleAddToCart(product, index)}
-                        className="btn btn-primary my-2  ms-2 px-2 "
-                      >
-                        Add to cart
-                      </button>
+                      
                     </div>
                   </div>
                 </div>

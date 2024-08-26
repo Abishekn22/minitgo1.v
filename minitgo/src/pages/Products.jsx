@@ -32,6 +32,7 @@ const HomeProducts = () => {
   const navigate = useNavigate();
 
   const [recommendedHeading, setRecommendedHeading] = useState(false);
+  const [selectedSizes, setSelectedSizes] = useState({});
 
   const context = useContext(myContext);
   const {
@@ -55,15 +56,18 @@ const HomeProducts = () => {
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const handleAddToCart = (product, index) => {
-    const size = product.product_size.split(",");
-    const color = product.product_color1.split(",");
+  const handleAddToCart = (product, index, selectedSize) => {
+    // Ensure that the selected size is used, or default to the first size
+    const size = selectedSize || product.product_size.split(",")[0];
+    const color = product.product_color1.split(",")[0]; // Assuming color is managed similarly
+
     const productWithCoordinates = {
       ...product,
-      product_size: size[0],
-      product_color1: color[0],
+      product_size: size,
+      product_color1: color,
       // coordinates,
     };
+
     dispatch(addToCart(productWithCoordinates));
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
 
@@ -71,6 +75,20 @@ const HomeProducts = () => {
     setTimeout(() => {
       dispatch(hideSnackbar());
     }, 1000);
+  };
+  const handleSizeChange = (productId, size) => {
+    setSelectedSizes((prevState) => ({
+      ...prevState,
+      [productId]: size,
+    }));
+  };
+
+  // Handle add to cart click
+  const handleAddToCartClick = (product, index) => {
+    // Get the selected size, or default to the first size
+    const selectedSize =
+      selectedSizes[product.id] || product.product_size.split(",")[0];
+    handleAddToCart(product, index, selectedSize);
   };
 
   // for wishlist button
@@ -483,7 +501,7 @@ const HomeProducts = () => {
                 </div>
               ) : (
                 filteredProducts.map((product, index) => (
-                  <div key={index} className="col-6 col-sm-3 py-2">
+                  <div key={index} className="col-6 col-sm-3 py-2 px-2">
                     <div className="product-card">
                       <div
                         className="product-image"
@@ -652,8 +670,15 @@ const HomeProducts = () => {
                                 style={{
                                   backgroundColor: "#d9725f",
                                   fontSize: "0.875rem",
-                                  borderRadius:"5px"
+                                  borderRadius: "5px",
                                 }}
+                                onChange={(e) =>
+                                  handleSizeChange(product.id, e.target.value)
+                                }
+                                value={
+                                  selectedSizes[product.id] ||
+                                  product.product_size.split(",")[0]
+                                }
                               >
                                 {product.product_size
                                   .split(",")
@@ -675,6 +700,16 @@ const HomeProducts = () => {
                               </span>
                             )}
                           </div>
+                          <div >
+                              <span
+                                className=" fw-bold"
+                                style={{ fontSize: "12px",display:"flex",alignItems:"center",justifyContent:"center",gap:"10px" }}
+                              >
+                                {product.product_stock <= 1 ? "Only one left" : "In stock"}
+                                <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#d9725f",}}></div>
+                              </span>
+                              
+                            </div>
                         </div>
 
                         {/* <h5 className="mt-1">
@@ -729,8 +764,8 @@ const HomeProducts = () => {
                       <div className="cart-btn px-1">
                         <button
                           className="btn btn-primary my-2   px-2 "
-                          onClick={() => handleAddToCart(product, index)}
-                        >
+                          onClick={() => handleAddToCartClick(product, index)}
+                          >
                           Add to cart
                         </button>
                         <button

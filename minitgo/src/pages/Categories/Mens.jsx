@@ -6,8 +6,8 @@ import StarRatings from "../../components/ProductInfo/StarRatings.jsx";
 import { useContext } from "react";
 import myContext from "../../components/context/MyContext.js";
 import { addToCart } from "../../components/redux/Slices/CartSlice.js";
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import cartIcon from "../../assets/cart-icon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +17,7 @@ import {
   hideSnackbarForWishlist,
   showSnackbarForWishlist,
 } from "../../components/redux/Slices/CartSlice.js";
+import { RxLapTimer } from "react-icons/rx";
 
 const Mens = () => {
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,8 @@ const Mens = () => {
   }, []);
 
   const navigate = useNavigate();
+  const [selectedSizes, setSelectedSizes] = useState({});
+
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFiltered, setCategoryFiltered] = useState([]);
@@ -70,15 +73,18 @@ const Mens = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
-  const handleAddToCart = (product, index) => {
-    const size=product.product_size.split(',')
-    const color=product.product_color1.split(',')    
+  const handleAddToCart = (product, index, selectedSize) => {
+    // Ensure that the selected size is used, or default to the first size
+    const size = selectedSize || product.product_size.split(",")[0];
+    const color = product.product_color1.split(",")[0]; // Assuming color is managed similarly
+
     const productWithCoordinates = {
       ...product,
-      product_size: size[0],
-      product_color1:color[0],
+      product_size: size,
+      product_color1: color,
       // coordinates,
     };
+
     dispatch(addToCart(productWithCoordinates));
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
 
@@ -86,6 +92,20 @@ const Mens = () => {
     setTimeout(() => {
       dispatch(hideSnackbar());
     }, 1000);
+  };
+  const handleSizeChange = (productId, size) => {
+    setSelectedSizes((prevState) => ({
+      ...prevState,
+      [productId]: size,
+    }));
+  };
+
+  // Handle add to cart click
+  const handleAddToCartClick = (product, index) => {
+    // Get the selected size, or default to the first size
+    const selectedSize =
+      selectedSizes[product.id] || product.product_size.split(",")[0];
+    handleAddToCart(product, index, selectedSize);
   };
 
   // for wishlist button
@@ -216,7 +236,7 @@ const Mens = () => {
   }, [products, category, selectedPrice, offer]);
   function shuffleArray(array) {
     return array
-      .map(value => ({ value, sort: Math.random() }))
+      .map((value) => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value);
   }
@@ -286,10 +306,12 @@ const Mens = () => {
 
           <div className="col-md-10">
             <div className="row ">
-              {
-                loading ? (
-                  Array.from({ length: 8 }).map((_, index) => (
-                    <div key={index} className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2">
+              {loading
+                ? Array.from({ length: 8 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2"
+                    >
                       <Skeleton height={200} />
                       <Skeleton height={20} width="80%" />
                       <Skeleton height={20} width="60%" />
@@ -297,169 +319,202 @@ const Mens = () => {
                       <Skeleton height={20} width="30%" />
                     </div>
                   ))
-                ) :(
-              filteredProducts?.map((product, index) => (
-                <div
-                  key={index}
-                  className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 "
-                >
-                  <div className="product-card ">
-                    <a
-                      href={`/${product.pid}`}
-                      target="_blank"
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                      }}
+                : filteredProducts?.map((product, index) => (
+                    <div
+                      key={index}
+                      className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 px-2"
                     >
-                      {/* update code by ganesh */}
-                      <div
-                        className="product-image"
-                        style={{ position: "relative" }}
-                      >
-                        <img src={product.product_image1} alt="Product 1" />
-                        <div
-                          className="offer-tag text-center p-1 text-bold mt-2"
-                          style={{
-                            position: "absolute",
-                            bottom: "15px",
-                            right: "15px",
-                            fontSize: "0.8rem",
-                            padding: "1rem",
-                            textDecorationColor: "HighlightText",
-                            border: "2px solid",
-                            borderRadius: "50px",
-                            fontWeight: "bold",
-                            backgroundColor:
-                              product.offers === "0" ? "" : "#e8d9b7",
-                            opacity: product.offers === "0" ? 0 : 0.5,
-                          }}
-                        >
-                          {product.offers === "0"
-                            ? "No Offer"
-                            : `${product.offers}% Off`}
-                        </div>
-                      </div>
-                      {/* code end by ganesh */}
-
-                      <div className="product-content d-flex flex-column gap-1 pt-3  px-2">
-                        <div
-                          style={{ fontSize: "14px" }}
-                          className="d-flex justify-content-between"
-                        >
-                          <span>{product.category}</span>
-                          <div>
-                            {isNewProduct(product.date) && (
-                              <span
-                                className="btn  btn-secondary p-0 px-1"
-                                style={{ color: "#ffc107", fontSize: "14px" }}
-                              >
-                                New
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        {/* <a
-                          href={`/${product.product_id}`}
+                      <div className="product-card ">
+                        <a
+                          href={`/${product.pid}`}
                           target="_blank"
                           style={{
                             textDecoration: "none",
                             color: "black",
                           }}
-                          className="fw-semibold "
                         >
-                          {windowWidth <= 1024
-  ? product.product_name && product.product_name.length > 15
-    ? product.product_name.substring(0, 15) + "..."
-    : product.product_name
-  : product.product_name && product.product_name.length > 23
-  ? product.product_name.substring(0, 23) + "..."
-  : product.product_name}
-                        </a> */}
-                        {/* code start by ganesh */}
-                        <div className="flex-container">
-                          <h5 className="mt-1 flext-item ">
-                            {/* code end by ganesh */}₹{product.product_price}
-                            <span className="text-decoration-line-through text-muted fs-6 fw-light">
-                              599
-                            </span>
-                            <span
-                              className="text-muted"
+                          {/* update code by ganesh */}
+                          <div
+                            className="product-image"
+                            style={{ position: "relative" }}
+                          >
+                            <img src={product.product_image1} alt="Product 1" />
+                            <div
+                              className="offer-tag text-center p-1 text-bold mt-2"
                               style={{
-                                fontSize: "13px",
+                                position: "absolute",
+                                bottom: "15px",
+                                right: "15px",
+                                fontSize: "0.8rem",
+                                padding: "1rem",
+                                textDecorationColor: "HighlightText",
+                                border: "2px solid",
+                                borderRadius: "50px",
+                                fontWeight: "bold",
+                                backgroundColor:
+                                  product.offers === "0" ? "" : "#e8d9b7",
+                                opacity: product.offers === "0" ? 0 : 0.5,
                               }}
                             >
-                              {" "}
-                              {product.product_stock}
-                            </span>
-                          </h5>
-                          <div>
-                            <span className="fw-semibold">Size:</span>{" "}
-                            <span>{product.product_size}</span>
+                              {product.offers === "0"
+                                ? "No Offer"
+                                : `${product.offers}% Off`}
+                            </div>
                           </div>
-                        </div>
-
-                        <div
-                          className="d-flex justify-content-between "
-                          style={{ fontSize: "14px" }}
-                         >
-                          <div>
-                            <span className="fw-semibold"></span>{" "}
-                            <span>{product.material}</span>
-                          </div>
-                          <div className="">
-                            <span className="fw-semibold">Color:</span>{" "}
-                            <span>{product.product_color1}</span>
-                          </div>
-                        </div>
-                        {/* code start by gaensh */}
-                        <div
-                          className="mt-1 clamped-text"
-                          style={{ textAlign: "justify" }}
-                         >
                           {/* code end by ganesh */}
-                          {windowWidth <= 576
-                            ? product.product_discription.length > 20
-                              ? product.product_discription.substring(0, 19) +
-                                "..."
-                              : product.product_discription
-                            : product.product_discription.length > 50
-                            ? product.product_discription.slice(0, 45) + "..."
-                            : product.product_discription}
 
-                          {/* {product.product_discription.length > 50
-                              ? product.product_discription.slice(0, 45) + "..."
-                              : product.product_discription} */}
-                        </div>
-
-                        <div className="d-flex justify-content-between mt-1">
-                          {/* w */}
-                          {userCords && (
-                            <div className="product-distance text-secondary ">
-                              {product.distance ||
-                                calculateDistance(
-                                  ...userCords,
-                                  product.lat,
-                                  product.log
-                                )}
-                              km away.
-                            </div>
-                          )}
-                        </div>
-
-                        {cart.snackbar.open &&
-                          cart.snackbar.index === index && (
+                          <div className="product-content d-flex flex-column gap-1 pt-3  ">
+                           
                             <div
-                              style={{ fontSize: "12px" }}
-                              className="border text-center rounded w-75 mx-auto"
-                            >
-                              {cart.snackbar.message}
+                              style={{ fontSize: "14px" }}
+                              className="d-flex justify-content-between"
+                             >
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  justifyContent: "space-between",
+                                  // gap:"20px"
+                                }}
+                               >
+                                <span
+                                  className="line-clamp-1"
+                                  style={{ width: "50%" }}
+                                >
+                                  {product.client_name}
+                                </span>
+                                <span>
+                                  <RxLapTimer style={{ marginRight: "5px" }} />
+                                  <span style={{ color: "orange" }}>
+                                    36 min
+                                  </span>
+                                </span>
+                              </div>
+                              <div>
+                                {isNewProduct(product.date) && (
+                                  <span
+                                    className="btn  btn-secondary p-0 px-1"
+                                    style={{
+                                      color: "#ffc107",
+                                      fontSize: "14px",
+                                    }}
+                                  >
+                                    New
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          )}
-                      </div>
-                    </a>
 
-                    <div className="cart-btn px-1">
+                            {/* code start by ganesh */}
+                          </div>
+                          <div className="flex-container ">
+                            <h6 className="fs-9 text-start">
+                              <span className="fw-semibold">
+                                {product.product_title}
+                              </span>{" "}
+                              |<span className="fw-bold"> Color:</span>{" "}
+                              {product.product_color1} |
+                              <span className="fw-bold">
+                                {" "}
+                                {product.material}
+                              </span>{" "}
+                            </h6>
+
+                            <h5 className="mt-1 flext-item  ">
+                              ₹{product.product_price}
+                              <span className="text-decoration-line-through text-muted fs-6 fw-light">
+                                599
+                              </span>
+                              <span
+                                className="text-muted"
+                                style={{
+                                  fontSize: "13px",
+                                }}
+                              >
+                                {" "}
+                                {/* {product.product_stock} */}
+                              </span>
+                            </h5>
+                            {/* code end by ganesh */}
+                            <div>
+                              <span
+                                className=" fw-bold"
+                                style={{ fontSize: "12px" }}
+                              >
+                                Available size:
+                              </span>{" "}
+                              {product.product_size.includes(",") ? (
+                                <select
+                                  className="px-1"
+                                  style={{
+                                    backgroundColor: "#d9725f",
+                                    fontSize: "0.875rem",
+                                    borderRadius: "5px",
+                                  }}
+                                  onChange={(e) =>
+                                    handleSizeChange(product.id, e.target.value)
+                                  }
+                                  value={
+                                    selectedSizes[product.id] ||
+                                    product.product_size.split(",")[0]
+                                  }
+                                >
+                                  {product.product_size
+                                    .split(",")
+                                    .map((size, index) => (
+                                      <option key={index} value={size}>
+                                        {size}
+                                      </option>
+                                    ))}
+                                </select>
+                              ) : (
+                                <span
+                                  className="px-1"
+                                  style={{
+                                    backgroundColor: "#d9725f",
+                                    fontSize: "0.875rem",
+                                  }}
+                                >
+                                  {product.product_size}
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <span
+                                className=" fw-bold"
+                                style={{
+                                  fontSize: "12px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  gap: "10px",
+                                }}
+                              >
+                                {product.product_stock <= 1
+                                  ? "Only one left"
+                                  : "In stock"}
+                                <div
+                                  style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    borderRadius: "50%",
+                                    background: "#d9725f",
+                                  }}
+                                ></div>
+                              </span>
+                            </div>
+                          </div>
+                        </a>
+
+                        <div className="cart-btn px-1  ">
+                    <button
+                          onClick={() => handleAddToCartClick(product, index)}
+                          className="btn btn-primary my-2   px-2 "
+                      >
+                        Add to cart
+                      </button>
                     <button
                             className={`btn ${
                               wishlistClicked[index]
@@ -471,22 +526,17 @@ const Mens = () => {
                           >
                             ❤
                           </button>
-                      <button
-                        onClick={() => handleAddToCart(product, index)}
-                        className="btn btn-primary my-2  ms-2 px-2 "
-                      >
-                        Add to cart
-                      </button>
+                      
                     </div>
-                  </div>
-                </div>
-              )))}
+                      </div>
+                    </div>
+                  ))}
             </div>
           </div>
         </div>
       </div>
-      <br/>
-      <br/>
+      <br />
+      <br />
     </>
   );
 };

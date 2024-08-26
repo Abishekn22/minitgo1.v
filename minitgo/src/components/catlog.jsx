@@ -164,7 +164,7 @@ export default function Catlog({ latitude, longitude }) {
           setStreet(fetchedAddress.name);
 
           // Concatenate the fetched address into a single string
-          const fullAddress = `${fetchedAddress.name}, ${fetchedAddress.label}, ${fetchedAddress.county}, ${fetchedAddress.pincode}, ${fetchedAddress.region}, ${fetchedAddress.country}`;
+          const fullAddress = `${fetchedAddress.label},${fetchedAddress.pincode}`;
 
           // Split the full address into an array of words
           const addressWords = fullAddress.split("");

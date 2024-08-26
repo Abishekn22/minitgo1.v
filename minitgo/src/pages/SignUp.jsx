@@ -429,7 +429,7 @@ function SignUp() {
           const fetchedAddress = await fetchAddress(latitude, longitude);
           if (fetchedAddress) {
             setStreet(fetchedAddress.name);
-            setAddresss(`${fetchedAddress.name},${fetchedAddress.label},${fetchedAddress.county},${fetchedAddress.pincode},${fetchedAddress.region},${fetchedAddress.country} `);
+            setAddresss(`${fetchedAddress.label},${fetchedAddress.pincode} `);
             setPincode(fetchedAddress.postalcode);
             setCountry(fetchedAddress.country);
             setRegion(fetchedAddress.region);

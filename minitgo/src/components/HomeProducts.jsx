@@ -22,6 +22,8 @@ import {
 import zIndex from "@mui/material/styles/zIndex";
 
 const HomeProducts = () => {
+  const [selectedSizes, setSelectedSizes] = useState({});
+
   const dispatch = useDispatch();
   const [coordinates, setCoordinates] = useState("");
   const context = useContext(myContext);
@@ -75,28 +77,62 @@ const HomeProducts = () => {
     setImages(productImages);
   }, [filteredProducts]);
   // code start by ganesh
-  const handleAddToCart = (product, index) => {
-    const size = product.product_size.split(",");
-    const color = product.product_color1.split(",");
+  // const handleAddToCart = (product, index) => {
+  //   const size = product.product_size.split(",");
+  //   const color = product.product_color1.split(",");
+  //   const productWithCoordinates = {
+  //     ...product,
+  //     product_size: size[0],
+  //     product_color1: color[0],
+  //     coordinates,
+  //   };
+
+  //   console.log("Product to add: ", product);
+  //   console.log("Coordinates: ", coordinates);
+  //   console.log("Product with coordinates: ", productWithCoordinates);
+
+  //   // alert("Adding product to cart");
+  //   dispatch(addToCart(productWithCoordinates));
+  //   console.log("Product added to cart", productWithCoordinates);
+
+  //   dispatch(showSnackbar({ message: "Product added successfully!", index }));
+  //   setTimeout(() => {
+  //     dispatch(hideSnackbar());
+  //   }, 1000);
+  // };
+  const handleAddToCart = (product, index, selectedSize) => {
+    // Ensure that the selected size is used, or default to the first size
+    const size = selectedSize || product.product_size.split(",")[0];
+    const color = product.product_color1.split(",")[0]; // Assuming color is managed similarly
+
     const productWithCoordinates = {
       ...product,
-      product_size: size[0],
-      product_color1: color[0],
+      product_size: size,
+      product_color1: color,
       coordinates,
     };
 
-    console.log("Product to add: ", product);
-    console.log("Coordinates: ", coordinates);
-    console.log("Product with coordinates: ", productWithCoordinates);
-
-    // alert("Adding product to cart");
     dispatch(addToCart(productWithCoordinates));
-    console.log("Product added to cart", productWithCoordinates);
-
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
+
+    // Wait for 1 second, then hide snackbar
     setTimeout(() => {
       dispatch(hideSnackbar());
     }, 1000);
+  };
+  const handleSizeChange = (productId, size) => {
+    setSelectedSizes((prevState) => ({
+      ...prevState,
+      [productId]: size,
+    }));
+  };
+
+  // Handle add to cart click
+  const handleAddToCartClick = (product, index) => {
+    // Get the selected size, or default to the first size
+    const selectedSize =
+      selectedSizes[product.id] || product.product_size.split(",")[0];
+    handleAddToCart(product, index, selectedSize);
   };
 
   // for wishlist button
@@ -417,7 +453,7 @@ const HomeProducts = () => {
                 : filteredProducts?.slice(0, 16).map((product, index) => (
                     <div
                       key={index}
-                      className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 "
+                      className="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 py-2 px-2 "
                       id="sections"
                     >
                       <div className="product-card ">
@@ -538,7 +574,7 @@ const HomeProducts = () => {
                           <div
                             style={{ fontSize: "14px" }}
                             className="d-flex justify-content-between"
-                          >
+                           >
                             <div
                               style={{
                                 width: "100%",
@@ -622,15 +658,41 @@ const HomeProducts = () => {
                               >
                                 Available size:
                               </span>{" "}
+                              {product.product_size.includes(",") ? (
+                              <select
+                                className="px-1"
+                                style={{
+                                  backgroundColor: "#d9725f",
+                                  fontSize: "0.875rem",
+                                  borderRadius: "5px",
+                                }}
+                                onChange={(e) =>
+                                  handleSizeChange(product.id, e.target.value)
+                                }
+                                value={
+                                  selectedSizes[product.id] ||
+                                  product.product_size.split(",")[0]
+                                }
+                              >
+                                {product.product_size
+                                  .split(",")
+                                  .map((size, index) => (
+                                    <option key={index} value={size}>
+                                      {size}
+                                    </option>
+                                  ))}
+                              </select>
+                            ) : (
                               <span
                                 className="px-1"
                                 style={{
                                   backgroundColor: "#d9725f",
-                                  fontSize: "14px",
+                                  fontSize: "0.875rem",
                                 }}
                               >
                                 {product.product_size}
                               </span>
+                            )}
                             </div>
                             <div >
                               <span
@@ -646,8 +708,8 @@ const HomeProducts = () => {
 
                           <div className=" cart-btn ">
                             <button
-                              onClick={() => handleAddToCart(product, index)}
-                              className="btn btn-primary my-2  "
+                          onClick={() => handleAddToCartClick(product, index)}
+                          className="btn btn-primary my-2  "
                             >
                               Add to cart
                             </button>
