@@ -31,6 +31,8 @@ function RightSection({ productId }) {
   const [productColors, setProductColors] = useState([]);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     axios
@@ -72,8 +74,10 @@ function RightSection({ productId }) {
       product_size: selectedSize,
       product_color1: selectedColor,
     };
+    
     console.log("pro", selectedProduct);
     dispatch(addToCart(selectedProduct));
+    
     toast.success("Item added to cart!", {
       position: "top-right",
       autoClose: 2000,
@@ -83,7 +87,12 @@ function RightSection({ productId }) {
       draggable: true,
       progress: undefined,
     });
+    
+    setTimeout(() => {
+      navigate('/cart'); // Adjust the path based on your routing setup
+    }, 2000);
   };
+
   const handleSizeClick = (size) => {
     setSelectedSize(size);
   };

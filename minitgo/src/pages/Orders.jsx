@@ -360,7 +360,7 @@ console.log("sorted data",sortedAndReversedData);
                                 )}
                               </div>
                               <div className="d-flex flex-wrap align-items-center py-3">
-                                {order.product_status.toLowerCase() === "delivered" ? (
+                                {/* {order.product_status.toLowerCase() === "delivered" ? (
                                   <Link
                                     to="/"
                                     className="btn btn-disabled mx-1 disabled"
@@ -405,7 +405,7 @@ console.log("sorted data",sortedAndReversedData);
                                   aria-disabled=""
                                 >
                                   Replace
-                                </Link>
+                                </Link> */}
                                 <Link
                                   to="/contact"
                                   className="btn btn-light border rounded-pill mx-1"

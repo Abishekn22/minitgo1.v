@@ -694,7 +694,7 @@ const HomeProducts = () => {
                               </span>
                             )}
                             </div>
-                            <div >
+                            <div style={{width:"100%" ,display:"flex"}} >
                               <span
                                 className=" fw-bold"
                                 style={{ fontSize: "12px",display:"flex",alignItems:"center",justifyContent:"center",gap:"10px" }}
