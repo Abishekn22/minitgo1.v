@@ -110,7 +110,7 @@ function SignUp() {
             return {
               name: address.name || "",
               houseNumber: address.house_number || "",
-              neighbourhood: address.neighbourhood || "",
+              label: address.label || "",
               street: address.street || "",
               pincode: address.postalcode || "",
               country: address.country || "",
@@ -429,7 +429,7 @@ function SignUp() {
           const fetchedAddress = await fetchAddress(latitude, longitude);
           if (fetchedAddress) {
             setStreet(fetchedAddress.name);
-            setAddresss(`${fetchedAddress.name},${fetchedAddress.neighbourhood},${fetchedAddress.county},${fetchedAddress.pincode},${fetchedAddress.region},${fetchedAddress.country} `);
+            setAddresss(`${fetchedAddress.name},${fetchedAddress.label},${fetchedAddress.county},${fetchedAddress.pincode},${fetchedAddress.region},${fetchedAddress.country} `);
             setPincode(fetchedAddress.postalcode);
             setCountry(fetchedAddress.country);
             setRegion(fetchedAddress.region);

@@ -330,7 +330,7 @@ const HomeProducts = () => {
             </h3>
           </div>
 
-          <div className="col-md-3 col-4 col-xl-3 d-lg-none p-0">
+          <div className="col-md-3 col-4 col-xl-3 d-lg-none p-0 distance ">
             <div className="select-wrapper" id="distanceDropdownWrapper">
               <select
                 className="form-control rounded  "
@@ -632,12 +632,22 @@ const HomeProducts = () => {
                                 {product.product_size}
                               </span>
                             </div>
+                            <div >
+                              <span
+                                className=" fw-bold"
+                                style={{ fontSize: "12px",display:"flex",alignItems:"center",justifyContent:"center",gap:"10px" }}
+                              >
+                                {product.product_stock <= 1 ? "Only one left" : "In stock"}
+                                <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#d9725f",}}></div>
+                              </span>
+                              
+                            </div>
                           </div>
 
-                          <div className=" cart-btn px-1">
+                          <div className=" cart-btn ">
                             <button
                               onClick={() => handleAddToCart(product, index)}
-                              className="btn btn-primary my-2  ms-2"
+                              className="btn btn-primary my-2  "
                             >
                               Add to cart
                             </button>

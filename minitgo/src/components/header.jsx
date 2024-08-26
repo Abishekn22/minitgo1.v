@@ -419,6 +419,8 @@ function Header() {
     try {
       const response = await axios.get(url);
       const data = response.data;
+      console.log("data",data);
+      
 
       if (
         data &&
@@ -432,7 +434,7 @@ function Header() {
           if (address.postalcode) {
             return {
               name: address.name || "",
-              neighbourhood: address.neighbourhood || "",
+              label: address.label || "",
               street: address.street || "",
               pincode: address.postalcode || "",
               country: address.country || "",
@@ -1375,7 +1377,33 @@ function Header() {
                 justifyContent: "center",
               }}
             >
-              <FaMapMarkerAlt className="text-red-500 " />
+              {/* < className="text-red-500 " /> */}
+              {parsedSignInData ? (
+                    <>
+                      <FaMapMarkerAlt className="text-red-500" />
+                      <span
+                        id="addressDisplay"
+                        className="fw-bold"
+                        style={{ color: "black", fontSize: "0.8rem" }}
+                      >
+                        {" "}
+                        {parsedSignInData.Address.length > 10
+                          ? parsedSignInData.Address.substring(0, 12) + "..."
+                          : parsedSignInData.Address}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <FaMapMarkerAlt className="text-red-500" />
+                      <span
+                        id="addressDisplay"
+                        className="fw-bold"
+                        style={{ color: "#fff", fontSize: "0.8rem" }}
+                      >
+                        
+                      </span>
+                    </>
+                  )}
               {/* <span>{parsedSignInData.address ? parsedSignInData.address : ""}</span> */}
             </div>
             <button

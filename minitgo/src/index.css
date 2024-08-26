@@ -1715,7 +1715,11 @@ button:hover {
     margin-right: auto;
   }
 }
-
+@media (max-width: 768px) {
+  .distance {
+    display: none;
+  }
+}
 
 
 /* code starte by ganesh */

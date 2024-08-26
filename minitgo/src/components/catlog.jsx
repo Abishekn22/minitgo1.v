@@ -116,7 +116,7 @@ export default function Catlog({ latitude, longitude }) {
           if (address.postalcode) {
             const fetchedAddress = {
               name: address.name || "",
-              neighbourhood: address.neighbourhood || "",
+              label: address.label || "",
               street: address.street || "",
               pincode: address.postalcode || "",
               country: address.country || "",
@@ -164,7 +164,7 @@ export default function Catlog({ latitude, longitude }) {
           setStreet(fetchedAddress.name);
 
           // Concatenate the fetched address into a single string
-          const fullAddress = `${fetchedAddress.name}, ${fetchedAddress.neighbourhood}, ${fetchedAddress.county}, ${fetchedAddress.pincode}, ${fetchedAddress.region}, ${fetchedAddress.country}`;
+          const fullAddress = `${fetchedAddress.name}, ${fetchedAddress.label}, ${fetchedAddress.county}, ${fetchedAddress.pincode}, ${fetchedAddress.region}, ${fetchedAddress.country}`;
 
           // Split the full address into an array of words
           const addressWords = fullAddress.split("");
@@ -181,7 +181,7 @@ export default function Catlog({ latitude, longitude }) {
           // Store the updated user data back in localStorage
           // localStorage.setItem("user", JSON.stringify(storedUserData));
           setAddress(truncatedAddress);
-          console.log(address);
+          console.log("turncatedAddress",address);
           
 
           // Set the other address components
@@ -440,9 +440,9 @@ export default function Catlog({ latitude, longitude }) {
                         style={{ color: "#fff", fontSize: "0.8rem" }}
                       >
                         {" "}
-                        {addressDisplay.length > 10
-                          ? addressDisplay.substring(0, 12) + "..."
-                          : addressDisplay}
+                        {address.length > 10
+                          ? address.substring(0, 12) + "..."
+                          : address}
                       </span>
                     </>
                   ) : (
