@@ -73,7 +73,7 @@ const App = () => {
 
     const modalTimer = setTimeout(() => {
       setShowModal(false);
-    }, 600000); // 5 seconds after modal is shown
+    }, 6000); // 5 seconds after modal is shown
 
     return () => {
       clearTimeout(timer);
