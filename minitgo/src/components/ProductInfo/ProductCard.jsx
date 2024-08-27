@@ -14,13 +14,13 @@ import {
   showSnackbarForWishlist,
 } from "../redux/Slices/CartSlice";
 import cartIcon from "../../assets/cart-icon.svg";
+import { RxLapTimer } from "react-icons/rx";
 
 function ProductCard({ product, index }) {
   const context = useContext(myContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState({});
-
 
   const { products } = context;
   const dispatch = useDispatch();
@@ -160,34 +160,35 @@ function ProductCard({ product, index }) {
               style={{ fontSize: "14px" }}
               className="d-flex justify-content-between"
             >
-              {loading ? (
-                <Skeleton width={80} />
-              ) : (
-                <span>{product.product_title}</span>
-              )}
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  justifyContent: "space-between",
+                  // gap:"20px"
+                }}
+              >
+                <span className="line-clamp-1" style={{ width: "50%" }}>
+                  {product.client_name}
+                </span>
+                <span>
+                  <RxLapTimer style={{ marginRight: "5px" }} />
+                  <span style={{ color: "orange" }}>36 min</span>
+                </span>
+              </div>
+              {/* <div>
+                {isNewProduct(product.date) && (
+                  <span
+                    className="btn  btn-secondary p-0 px-1"
+                    style={{ color: "#ffc107", fontSize: "14px" }}
+                  >
+                    New
+                  </span>
+                )}
+              </div> */}
             </div>
-            {loading ? (
-              <Skeleton width={150} />
-            ) : (
-              ""
-              //             <a
-              //               href={`/${product.product_id}`}
-              //               target="_blank"
-              //               style={{
-              //                 textDecoration: "none",
-              //                 color: "black",
-              //               }}
-              //               className="fw-semibold"
-              //             >
-              //               {windowWidth <= 1024
-              // ? product.product_name && product.product_name.length > 15
-              //   ? product.product_name.substring(0, 15) + "..."
-              //   : product.product_name
-              // : product.product_name && product.product_name.length > 23
-              // ? product.product_name.substring(0, 23) + "..."
-              // : product.product_name}
-              //             </a>
-            )}
 
             <div className="flex-container">
               <h6 className="fs-9 text-start">
@@ -271,32 +272,27 @@ function ProductCard({ product, index }) {
                   ></div>
                 </span>
               </div>
-              
             </div>
-            
-            
+
             {/* <div className="product-rating text-warning">
               Rating: {loading ? <Skeleton width={50} /> : <StarRatings rating={product.product_ratings} />}
             </div> */}
-            
-           
           </div>
         </a>
-        {cart.snackbar.open &&
-                          cart.snackbar.index === index && (
-                            <div
-                              style={{ fontSize: "12px" }}
-                              className="border text-center rounded w-75 mx-auto"
-                            >
-                              {cart.snackbar.message}
-                            </div>
-                          )}
+        {cart.snackbar.open && cart.snackbar.index === index && (
+          <div
+            style={{ fontSize: "12px" }}
+            className="border text-center rounded w-75 mx-auto"
+          >
+            {cart.snackbar.message}
+          </div>
+        )}
 
         <div className="cart-btn px-1">
           <button
             className="btn btn-secondary"
             onClick={() => handleAddToCartClick(product, index)}
-            >
+          >
             <img
               className="img-fluid"
               src={cartIcon}

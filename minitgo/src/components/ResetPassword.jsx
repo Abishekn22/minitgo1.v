@@ -34,6 +34,55 @@ function ResetPassword({setLoginModal}) {
   const [sendOTPagain, setSendOTPagain] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState("");
+  const [emailData, setEmailData] = useState({
+    from: "minitgo@minitgo.com", // Initialize with an empty string or default if needed
+    to: "",
+    subject: "",
+    text: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmailData({
+      ...emailData,
+      [name]: value,
+    });
+  };
+  async function handleEmail(OTP) {
+    setTimer(150);
+    setShowOTP(true);
+    setSendOTPagain(true);
+    // setOTPExpiry(false);
+
+    console.log("emaildata_to", emailData.to);
+    const otp = generateOTP();
+    setOTP(otp);
+    const emailDataWithPhoneAndOTP = {
+      ...emailData,
+      to: `${emailData.to}`,
+      subject: `OTP: ${otp}`,
+      text: `OTP: ${otp}`,
+    };
+
+    console.log("emaildatawith phone and otp", emailDataWithPhoneAndOTP);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/send-email",
+        emailDataWithPhoneAndOTP
+      );
+      console.log(response.status);
+      if (response.status === 200) {
+        toast.success("Message successfully sent", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          onClose: () => {
+            // navigate('/'); // Navigate to home page and refresh
+          },
+        });
+      }
+    } catch (error) {
+      alert("Error sending email: " + error.message);
+    }
+  }
 
 
   
@@ -83,40 +132,40 @@ function ResetPassword({setLoginModal}) {
     }
   }
 
-  function handleEmail(e) {
-    e.preventDefault();
+  // function handleEmail(e) {
+  //   e.preventDefault();
 
-    console.log("RESET", resetEmail);
-    axios
-      .get("https://minitgo.com/api/fetch_login.php")
-      .then((response) => {
-        if (response.data && response.data.length > 0) {
-          const allUsers = response.data;
+  //   console.log("RESET", resetEmail);
+  //   axios
+  //     .get("https://minitgo.com/api/fetch_login.php")
+  //     .then((response) => {
+  //       if (response.data && response.data.length > 0) {
+  //         const allUsers = response.data;
 
-          const foundUser = allUsers.find(
-            (user) => user.email === resetEmail // Use resetEmail instead of data.email
-          );
+  //         const foundUser = allUsers.find(
+  //           (user) => user.email === resetEmail // Use resetEmail instead of data.email
+  //         );
 
-          if (foundUser) {
-            setFoundUserID(foundUser.id)
-            const newOTP = generateOTP();
-            setOTP(newOTP)
-            console.log("NEW OTP", newOTP);
-            sendOTPtoEmail(newOTP);
-          } else {
-            console.log("User does not exist");
-            toast.error("User does not exist", {
-              autoClose: 1000,
-              hideProgressBar: true,
-            });
-            return;
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to fetch user information:", error);
-      });
-  }
+  //         if (foundUser) {
+  //           setFoundUserID(foundUser.id)
+  //           const newOTP = generateOTP();
+  //           setOTP(newOTP)
+  //           console.log("NEW OTP", newOTP);
+  //           sendOTPtoEmail(newOTP);
+  //         } else {
+  //           console.log("User does not exist");
+  //           toast.error("User does not exist", {
+  //             autoClose: 1000,
+  //             hideProgressBar: true,
+  //           });
+  //           return;
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Failed to fetch user information:", error);
+  //     });
+  // }
 
   function handleSendOTPAgain() {
     setSendOTPagain(true);
@@ -467,8 +516,9 @@ function ResetPassword({setLoginModal}) {
                             type="email"
                             className="form-control rounded-5 w-100"
                             placeholder="Enter email"
-                            value={resetEmail}
-                            onChange={(e) => setResetEmail(e.target.value)}
+                               name="to"
+                            value={emailData.to}
+                  onChange={handleChange}
                           />
                         </div>
                         <button
