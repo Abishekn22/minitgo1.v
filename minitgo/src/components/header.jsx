@@ -351,13 +351,10 @@ function Header() {
                   // console.log("area",area);
                   // console.log("areapincode",area.pincode);
                   // console.log("fetchedpincode",fetchedAddress.pincode);
-                  
-                  
-                  
-                  area.pincode === fetchedAddress.pincode 
-                  // area.colony.toLowerCase() ===
-                  // fetchedAddress.neighbourhood.toLowerCase()
-                
+
+                  area.pincode === fetchedAddress.pincode
+                // area.colony.toLowerCase() ===
+                // fetchedAddress.neighbourhood.toLowerCase()
               );
 
               if (matchingArea) {
@@ -365,7 +362,6 @@ function Header() {
                   toast.warn("Minitgo is not available in this area.");
                   hasShownToast.current = true; // Mark that the toast has been shown
                 }
-                
               } else {
                 console.log("Fetched address:", fetchedAddress);
                 // You can process the address further here
@@ -419,8 +415,7 @@ function Header() {
     try {
       const response = await axios.get(url);
       const data = response.data;
-      console.log("data",data);
-      
+      console.log("data", data);
 
       if (
         data &&
@@ -1379,44 +1374,56 @@ function Header() {
             >
               {/* < className="text-red-500 " /> */}
               {parsedSignInData ? (
-                    <>
-                      <FaMapMarkerAlt className="text-red-500" />
-                      <span
-                        id="addressDisplay"
-                        className="fw-bold"
-                        style={{ color: "black", fontSize: "0.8rem" }}
-                      >
-                        {" "}
-                        {parsedSignInData.Address.length > 10
-                          ? parsedSignInData.Address.substring(0, 12) + "..."
-                          : parsedSignInData.Address}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <FaMapMarkerAlt className="text-red-500" />
-                      <span
-                        id="addressDisplay"
-                        className="fw-bold"
-                        style={{ color: "#fff", fontSize: "0.8rem" }}
-                      >
-                        
-                      </span>
-                    </>
-                  )}
+                <>
+                  <FaMapMarkerAlt className="text-red-500" />
+                  <span
+                    id="addressDisplay"
+                    className="fw-bold"
+                    style={{ color: "black", fontSize: "0.8rem" }}
+                  >
+                    {" "}
+                    {parsedSignInData.Address.length > 10
+                      ? parsedSignInData.Address.substring(0, 12) + "..."
+                      : parsedSignInData.Address}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <FaMapMarkerAlt className="text-red-500" />
+                  <span
+                    id="addressDisplay"
+                    className="fw-bold"
+                    style={{ color: "#fff", fontSize: "0.8rem" }}
+                  ></span>
+                </>
+              )}
               {/* <span>{parsedSignInData.address ? parsedSignInData.address : ""}</span> */}
             </div>
-            <button
-              style={{
-                backgroundColor: "#f4d9d8",
-                border: "none",
-                borderRadius: "20px",
-              }}
-              className=" text-pink-600 px-3 py-1 rounded-md"
-              onClick={fetchLocation}
-            >
-              + Address
-            </button>
+            {parsedSignInData ? (
+              <button
+                style={{
+                  backgroundColor: "#f4d9d8",
+                  border: "none",
+                  borderRadius: "20px",
+                }}
+                className="text-pink-600 px-3 py-1 rounded-md"
+                onClick={fetchLocation}
+              >
+                + Address
+              </button>
+            ) : (
+              <button
+                style={{
+                  backgroundColor: "#f4d9d8",
+                  border: "none",
+                  borderRadius: "20px",
+                }}
+                className="text-pink-600 px-3 py-1 rounded-md"
+                onClick={() => setShowModal(true)}
+              >
+                Sign Up
+              </button>
+            )}
           </div>
           <div
             className="d-flex flex-column justify-content-center align-items-center  my-2"

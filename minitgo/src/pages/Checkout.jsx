@@ -648,7 +648,7 @@ export const Checkout = () => {
                           Home Address
                         </p>
                         <span className="ms-auto fs-6">
-                          {parsedSignInData ? parsedSignInData.address : ""}
+                          {parsedSignInData ? parsedSignInData.Address : ""}
                         </span>
                       </div>
                     </div>

@@ -35,7 +35,7 @@ function Filter({ brand, mobileView }) {
           <div className="container-sm container-md">
             <div className="">
               <form>
-                <div className="form-group mt-1">
+                {/* <div className="form-group mt-1">
                   <label htmlFor="priceFilter">Set Distance</label>
 
                   <select
@@ -50,7 +50,7 @@ function Filter({ brand, mobileView }) {
                     <option value="15">15 km</option>
                     <option value="20">20 km</option>
                   </select>
-                </div>
+                </div> */}
                 <div className="form-group mt-1">
                   <label htmlFor="priceFilter">{brand} Set Price</label>
                   <select
@@ -84,7 +84,7 @@ function Filter({ brand, mobileView }) {
                     <option value="Music">Music</option>
                   </select>
                 </div>
-                <div className="form-group mt-1">
+                {/* <div className="form-group mt-1">
                   <label htmlFor="accesFilter">Accessories</label>
                   <select
                     className="form-control rounded-pill mt-1"
@@ -97,7 +97,7 @@ function Filter({ brand, mobileView }) {
                     <option value="Womens">Womens</option>
                     <option value="Kids">Kids</option>
                   </select>
-                </div>
+                </div> */}
                 <div className="form-group mt-2">Todays deals</div>
                 <div className="form-group mt-1">
                   <label htmlFor="offerFilter">Offers</label>
@@ -126,7 +126,7 @@ function Filter({ brand, mobileView }) {
         <div className="container-sm container-md">
           <div className="shadow filter-bg">
             <form>
-              <div className="form-group mt-1">
+              {/* <div className="form-group mt-1">
                 <h6 htmlFor="distanceFilter">Filter</h6>
                 <label htmlFor="priceFilter">Set Distance</label>
 
@@ -142,7 +142,7 @@ function Filter({ brand, mobileView }) {
                   <option value="15">15 km</option>
                   <option value="20">20 km</option>
                 </select>
-              </div>
+              </div> */}
               <div className="form-group mt-1">
                 <label htmlFor="priceFilter">{brand} Set Price</label>
                 <select
@@ -176,7 +176,7 @@ function Filter({ brand, mobileView }) {
                   <option value="Music">Music</option>
                 </select>
               </div>
-              <div className="form-group mt-1">
+              {/* <div className="form-group mt-1">
                 <label htmlFor="accesFilter">Accessories</label>
                 <select
                   className="form-control rounded-pill mt-1"
@@ -189,7 +189,7 @@ function Filter({ brand, mobileView }) {
                   <option value="Womens">Womens</option>
                   <option value="Kids">Kids</option>
                 </select>
-              </div>
+              </div> */}
               <div className="form-group mt-2">Todays deals</div>
               <div className="form-group mt-1">
                 <label htmlFor="offerFilter">Offers</label>

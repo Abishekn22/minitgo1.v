@@ -213,11 +213,11 @@ export default function Catlog({ latitude, longitude }) {
     }, [selectedAddress, addressStore, officeAddressStore]);
 
     return (
-      location.pathname === "/products"
-      // location.pathname === "/mens-category" ||
-      // location.pathname === "/womens-category" ||
-      // location.pathname === "/accessories" ||
-      // location.pathname === "/category"
+      location.pathname === "/products" ||
+      location.pathname === "/mens-category" ||
+      location.pathname === "/womens-category" ||
+      location.pathname === "/accessories" ||
+      location.pathname === "/category"
     );
   };
 
@@ -226,10 +226,10 @@ export default function Catlog({ latitude, longitude }) {
     // Check if location pathname is not '/signin' or '/register'
     return (
       locationHy.pathname === "/" ||
-      locationHy.pathname === "/mens-category" ||
-      location.pathname === "/womens-category" ||
-      location.pathname === "/accessories" ||
-      location.pathname === "/category" ||
+      // locationHy.pathname === "/mens-category" ||
+      // location.pathname === "/womens-category" ||
+      // location.pathname === "/accessories" ||
+      // location.pathname === "/category" ||
       location.pathname === "/about" ||
       location.pathname === "/connect" ||
       location.pathname === "/orders" ||

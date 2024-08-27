@@ -12,6 +12,7 @@ import {
   deleteQuantity,
   removeFromCart,
   deleteWishList,
+  addItemToWishlist,
 } from "../components/redux/Slices/CartSlice";
 import { addToCart } from "../components/redux/Slices/CartSlice.js";
 import { selectTotalQuantity } from "../components/redux/Slices/CartSlice.js";
@@ -19,9 +20,8 @@ import { useLocation } from "react-router-dom";
 import { Col, Modal, Row } from "react-bootstrap";
 import Login from "../pages/Signin.jsx";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -68,6 +68,9 @@ const Cart = () => {
   const DeleteQty = (productId) => {
     dispatch(deleteQuantity({ product_id: productId }));
   };
+  const handleAddToWishlist = (item) => {
+    dispatch(addItemToWishlist(item));
+  };
 
   const handleDeleteFromWishList = (productId) => {
     dispatch(deleteWishList({ product_id: productId }));
@@ -92,7 +95,7 @@ const Cart = () => {
 
   // size validation
   function productSizeSelection() {
-    handleCheckoutClick()
+    handleCheckoutClick();
     if (Array.isArray(cartData)) {
       let notificationShown = false;
 
@@ -178,7 +181,6 @@ const Cart = () => {
       event.preventDefault(); // Prevent redirection
       // toast.error("Minitgo is not available in this area.");
       console.log("hiii");
-      
     }
   };
 
@@ -195,89 +197,110 @@ const Cart = () => {
                 <div className="card-body">
                   {cartData?.map((cart_item, index) => {
                     return (
-                      <div className="row my-2" key={index}>
-                        <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                          <div className="bg-image rounded hover-zoom hover-overlay">
-                            <img
-                              src={cart_item.product_image1}
-                              className="w-100"
-                              alt="Product"
-                            />
-                            <a href="#!">
-                              <div
-                                className="mask"
-                                style={{
-                                  backgroundColor: "rgba(251, 251, 251, 0.2)",
-                                }}
-                              ></div>
-                            </a>
-                          </div>
-                        </div>
-                        <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                          <p className="mb-1">
-                            <span>{cart_item.client_name}</span>
-                          </p>
-                          <p className="mb-1">
-                            <strong>{cart_item.product_title}</strong>
-                          </p>
-                          <p className="mb-1">Material: {cart_item.material}</p>
-                          <p className="mb-1">
-                            Color: {cart_item.product_color1}
-                          </p>
-                          <p className="mb-1">Size: {cart_item.product_size}</p>
-                          <p className="mb-1">
-                            Price: {cart_item.product_price}
-                          </p>
-                          <p className="mb-1">Category: {cart_item.category}</p>
-                          <p className="line-clamp-2 mb-0 ">
-                            Description: {cart_item.product_discription}
-                          </p>
-                          <br></br>
-                          <button
-                            className="btn btn-danger  ml-2 mr-2"
-                            onClick={() =>
-                              handleRemoveFromCart(cart_item.product_id)
-                            }
-                          >
-                            <BsTrash3 />
-                          </button>
-                          <button className="btn btn-secondary  mx-2">
-                            {" "}
-                            <AiOutlineHeart />
-                          </button>
-                        </div>
-                        <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                          <div
-                            className="d-flex mb-4"
-                            style={{ maxWidth: "300px" }}
-                          >
-                            <button
-                              className="btn btn-primary px-3 me-2"
-                              onClick={() => DeleteQty(cart_item.product_id)}
-                            >
-                              <i className="minus"> - </i>
-                            </button>
-                            <div
-                              className="form-control text-center"
-                              placeholder="Quantity"
-                            >
-                              {cart_item.quantity}
+                      <a
+                        href={`/${cart_item.pid}`}
+                        target="_blank"
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                        }}
+                        className="fw-semibold"
+                      >
+                        <div className="row my-2" key={index}>
+                          <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                            <div className="bg-image rounded hover-zoom hover-overlay">
+                              <img
+                                src={cart_item.product_image1}
+                                className="w-100"
+                                alt="Product"
+                              />
+                              <a href="#!">
+                                <div
+                                  className="mask"
+                                  style={{
+                                    backgroundColor: "rgba(251, 251, 251, 0.2)",
+                                  }}
+                                ></div>
+                              </a>
                             </div>
+                          </div>
+                          <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                            <p className="mb-1">
+                              <span>{cart_item.client_name}</span>
+                            </p>
+                            <p className="mb-1">
+                              <strong>{cart_item.product_title}</strong>
+                            </p>
+                            <p className="mb-1">
+                              Material: {cart_item.material}
+                            </p>
+                            <p className="mb-1">
+                              Color: {cart_item.product_color1}
+                            </p>
+                            <p className="mb-1">
+                              Size: {cart_item.product_size}
+                            </p>
+                            <p className="mb-1">
+                              Price: {cart_item.product_price}
+                            </p>
+                            <p className="mb-1">
+                              Category: {cart_item.category}
+                            </p>
+                            <p className="line-clamp-2 mb-0 ">
+                              Description: {cart_item.product_discription}
+                            </p>
+                            <br></br>
                             <button
-                              className="btn btn-primary px-3 ms-2 "
-                              onClick={() => handleAddQty(cart_item.product_id)}
+                              className="btn btn-danger  ml-2 mr-2"
+                              onClick={() =>
+                                handleRemoveFromCart(cart_item.product_id)
+                              }
                             >
-                              <i className="plus"> + </i>
+                              <BsTrash3 />
+                            </button>
+                            <button
+                              // onClick={() =>
+                              onClick={() => handleAddToWishlist(cart_item)}
+                              className="btn btn-secondary  mx-2"
+                            >
+                              <AiOutlineHeart />
                             </button>
                           </div>
-                          <p className="text-start text-md-center">
-                            <strong>
-                              {cart_item.quantity} * {cart_item.product_price}
-                            </strong>
-                          </p>
+                          <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                            <div
+                              className="d-flex mb-4"
+                              style={{ maxWidth: "300px" }}
+                            >
+                              <button
+                                className="btn btn-primary px-3 me-2"
+                                onClick={() => DeleteQty(cart_item.product_id)}
+                              >
+                                <i className="minus"> - </i>
+                              </button>
+                              <div
+                                className="form-control text-center"
+                                placeholder="Quantity"
+                              >
+                                {cart_item.quantity}
+                              </div>
+                              <button
+                                className="btn btn-primary px-3 ms-2 "
+                                onClick={() =>
+                                  handleAddQty(cart_item.product_id)
+                                }
+                              >
+                                <i className="plus"> + </i>
+                              </button>
+                            </div>
+                            <p className="text-start text-md-center">
+                              <strong>
+                                {cart_item.quantity} * {cart_item.product_price}
+                              </strong>
+                            </p>
+                          </div>
+                          <hr className="my-2" />
                         </div>
-                        <hr className="my-2" />
-                      </div>
+                      </a>
                     );
                   })}
                 </div>
@@ -455,22 +478,31 @@ const Cart = () => {
                   </ul>
                   {parsedSignInData && cartData?.length > 0 ? (
                     <>
-                    <Link to={isPincodeMatch ? "#" : "/checkout"} >
-                    {/* // <Link to={"/checkout"}> */}
-                      <button
-                        className="btn btn-lg btn-block btn-primary"
-                        onClick={productSizeSelection}
-                        disabled={isPincodeMatch}
-                      >
-                        Go to checkout
-                      </button>
-                    </Link>
-                     {isPincodeMatch && (
-                      <p style={{ color: 'red', display: 'flex', alignItems: 'center' }}>
-                      <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: '8px' }} />
-                      Minitgo is not available in this area.
-                    </p>
-                    )}
+                      <Link to={isPincodeMatch ? "#" : "/checkout"}>
+                        {/* // <Link to={"/checkout"}> */}
+                        <button
+                          className="btn btn-lg btn-block btn-primary"
+                          onClick={productSizeSelection}
+                          disabled={isPincodeMatch}
+                        >
+                          Go to checkout
+                        </button>
+                      </Link>
+                      {isPincodeMatch && (
+                        <p
+                          style={{
+                            color: "red",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faExclamationTriangle}
+                            style={{ marginRight: "8px" }}
+                          />
+                          Minitgo is not available in this area.
+                        </p>
+                      )}
                     </>
                   ) : (
                     <>
@@ -483,10 +515,8 @@ const Cart = () => {
                             Login
                           </div>
                           <p>Please Login here</p>
-
                         </>
                       )}
-                     
                     </>
                   )}
                 </div>

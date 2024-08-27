@@ -125,115 +125,174 @@ const Mens = () => {
       dispatch(hideSnackbarForWishlist());
     }, 1000); // Hide after 3 seconds
   };
-
   useEffect(() => {
     setSearchQuery("");
     setAccessoriesCategory("");
-    // Apply price filtering
-    let productsToFilter = products;
-    // const lowerCategory = category.toLowerCase();
     setSelectedCategory("Men's Fashion");
+  
+    let productsToFilter = products;
     let mensProduct = productsToFilter.filter((product) =>
       product.category.toLowerCase().startsWith("men")
     );
     productsToFilter = mensProduct;
-    if (selectedPrice !== "" && selectedPrice !== "500 +") {
-      const [minPrice, maxPrice] = selectedPrice.split("-").map(Number);
-
-      const withinRangeProducts = productsToFilter.filter((product) => {
+  
+    if (selectedPrice !== "") {
+      let minPrice, maxPrice;
+  
+      if (selectedPrice === "500 +") {
+        minPrice = 500;
+      } else {
+        [minPrice, maxPrice] = selectedPrice.split("-").map(Number);
+      }
+  
+      productsToFilter = productsToFilter.filter((product) => {
         const price = parseInt(product.product_price);
-        return price >= minPrice && price <= maxPrice;
-      });
-
-      const aboveRangeProducts = productsToFilter.filter((product) => {
-        const price = parseInt(product.product_price);
-        return price > maxPrice;
-      });
-
-      let combinedProducts = [...withinRangeProducts, ...aboveRangeProducts];
-
-      combinedProducts.sort(
-        (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
-      );
-
-      const remainingProducts = productsToFilter.filter((product) => {
-        if (selectedPrice !== "") {
-          const [minPrice] = selectedPrice.split("-").map(Number);
-          const price = parseInt(product.product_price);
-          return price < minPrice;
+        if (selectedPrice === "500 +") {
+          return price >= minPrice;
         } else {
-          return true; // Include all products if no price range is selected
+          return price >= minPrice && price <= maxPrice;
         }
       });
-
-      remainingProducts.sort(
-        (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
-      );
-
-      productsToFilter = [...combinedProducts, ...remainingProducts];
+  
+      productsToFilter.sort((a, b) => parseFloat(a.product_price) - parseFloat(b.product_price));
     }
-
-    if (selectedPrice === "500 +") {
-      console.log("above 500");
-      const above500Products = productsToFilter.filter((product) => {
-        const price = parseInt(product.product_price);
-        return price >= 500;
-      });
-
-      above500Products.sort(
-        (a, b) => parseFloat(b.product_price) - parseFloat(a.product_price)
-      );
-
-      const remainingProducts = productsToFilter.filter((product) => {
-        if (selectedPrice !== "") {
-          let minPrice = 500;
-          console.log("ELSE MIN", minPrice);
-          const price = parseInt(product.product_price);
-          return price < minPrice;
-        } else {
-          return true; // Include all products if no price range is selected
-        }
-      });
-      console.log("ELSE REMAINING PROD", remainingProducts);
-
-      remainingProducts.sort(
-        (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
-      );
-
-      productsToFilter = [...above500Products, ...remainingProducts];
-    }
-
+  
     if (offer !== "") {
       const selectedOffer = parseInt(offer);
-
+  
       const filteredByOffer = productsToFilter.filter((product) => {
-        // Assuming 'product_offer' is the property containing offer percentage
         const offerPercentage = parseInt(product.offers);
         return offerPercentage >= selectedOffer;
       });
-
+  
       filteredByOffer.sort(
         (a, b) => parseFloat(a.offers) - parseFloat(b.offers)
       );
-
-      if (filteredByOffer.length === 0) {
-        console.log("LENGTH 0", productsToFilter);
-        productsToFilter = productsToFilter;
-      } else {
+  
+      if (filteredByOffer.length !== 0) {
         productsToFilter = filteredByOffer;
       }
     }
-
-    // setFilteredProducts(productsToFilter);
+  
     const shuffledProducts = shuffleArray(productsToFilter);
     setFilteredProducts(shuffledProducts);
-
+  
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // Adjust time as needed
-
+    }, 2000); 
+  
     return () => clearTimeout(timer);
   }, [products, category, selectedPrice, offer]);
+  
+  
+  // useEffect(() => {
+  //   setSearchQuery("");
+  //   setAccessoriesCategory("");
+  //   // Apply price filtering
+  //   let productsToFilter = products;
+  //   // const lowerCategory = category.toLowerCase();
+  //   setSelectedCategory("Men's Fashion");
+  //   let mensProduct = productsToFilter.filter((product) =>
+  //     product.category.toLowerCase().startsWith("men")
+  //   );
+  //   productsToFilter = mensProduct;
+  //   if (selectedPrice !== "" && selectedPrice !== "500 +") {
+  //     const [minPrice, maxPrice] = selectedPrice.split("-").map(Number);
+
+  //     const withinRangeProducts = productsToFilter.filter((product) => {
+  //       const price = parseInt(product.product_price);
+  //       return price >= minPrice && price <= maxPrice;
+  //     });
+
+  //     const aboveRangeProducts = productsToFilter.filter((product) => {
+  //       const price = parseInt(product.product_price);
+  //       return price > maxPrice;
+  //     });
+
+  //     let combinedProducts = [...withinRangeProducts, ...aboveRangeProducts];
+
+  //     combinedProducts.sort(
+  //       (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
+  //     );
+
+  //     const remainingProducts = productsToFilter.filter((product) => {
+  //       if (selectedPrice !== "") {
+  //         const [minPrice] = selectedPrice.split("-").map(Number);
+  //         const price = parseInt(product.product_price);
+  //         return price < minPrice;
+  //       } else {
+  //         return true; // Include all products if no price range is selected
+  //       }
+  //     });
+
+  //     remainingProducts.sort(
+  //       (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
+  //     );
+
+  //     productsToFilter = [...combinedProducts, ...remainingProducts];
+  //   }
+
+  //   if (selectedPrice === "500 +") {
+  //     console.log("above 500");
+  //     const above500Products = productsToFilter.filter((product) => {
+  //       const price = parseInt(product.product_price);
+  //       return price >= 500;
+  //     });
+
+  //     above500Products.sort(
+  //       (a, b) => parseFloat(b.product_price) - parseFloat(a.product_price)
+  //     );
+
+  //     const remainingProducts = productsToFilter.filter((product) => {
+  //       if (selectedPrice !== "") {
+  //         let minPrice = 500;
+  //         console.log("ELSE MIN", minPrice);
+  //         const price = parseInt(product.product_price);
+  //         return price < minPrice;
+  //       } else {
+  //         return true; // Include all products if no price range is selected
+  //       }
+  //     });
+  //     console.log("ELSE REMAINING PROD", remainingProducts);
+
+  //     remainingProducts.sort(
+  //       (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
+  //     );
+
+  //     productsToFilter = [...above500Products, ...remainingProducts];
+  //   }
+
+  //   if (offer !== "") {
+  //     const selectedOffer = parseInt(offer);
+
+  //     const filteredByOffer = productsToFilter.filter((product) => {
+  //       // Assuming 'product_offer' is the property containing offer percentage
+  //       const offerPercentage = parseInt(product.offers);
+  //       return offerPercentage >= selectedOffer;
+  //     });
+
+  //     filteredByOffer.sort(
+  //       (a, b) => parseFloat(a.offers) - parseFloat(b.offers)
+  //     );
+
+  //     if (filteredByOffer.length === 0) {
+  //       console.log("LENGTH 0", productsToFilter);
+  //       productsToFilter = productsToFilter;
+  //     } else {
+  //       productsToFilter = filteredByOffer;
+  //     }
+  //   }
+
+  //   // setFilteredProducts(productsToFilter);
+  //   const shuffledProducts = shuffleArray(productsToFilter);
+  //   setFilteredProducts(shuffledProducts);
+
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000); // Adjust time as needed
+
+  //   return () => clearTimeout(timer);
+  // }, [products, category, selectedPrice, offer]);
   function shuffleArray(array) {
     return array
       .map((value) => ({ value, sort: Math.random() }))
