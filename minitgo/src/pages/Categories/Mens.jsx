@@ -33,7 +33,6 @@ const Mens = () => {
   const navigate = useNavigate();
   const [selectedSizes, setSelectedSizes] = useState({});
 
-
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryFiltered, setCategoryFiltered] = useState([]);
 
@@ -129,22 +128,22 @@ const Mens = () => {
     setSearchQuery("");
     setAccessoriesCategory("");
     setSelectedCategory("Men's Fashion");
-  
+
     let productsToFilter = products;
     let mensProduct = productsToFilter.filter((product) =>
       product.category.toLowerCase().startsWith("men")
     );
     productsToFilter = mensProduct;
-  
+
     if (selectedPrice !== "") {
       let minPrice, maxPrice;
-  
+
       if (selectedPrice === "500 +") {
         minPrice = 500;
       } else {
         [minPrice, maxPrice] = selectedPrice.split("-").map(Number);
       }
-  
+
       productsToFilter = productsToFilter.filter((product) => {
         const price = parseInt(product.product_price);
         if (selectedPrice === "500 +") {
@@ -153,38 +152,39 @@ const Mens = () => {
           return price >= minPrice && price <= maxPrice;
         }
       });
-  
-      productsToFilter.sort((a, b) => parseFloat(a.product_price) - parseFloat(b.product_price));
+
+      productsToFilter.sort(
+        (a, b) => parseFloat(a.product_price) - parseFloat(b.product_price)
+      );
     }
-  
+
     if (offer !== "") {
       const selectedOffer = parseInt(offer);
-  
+
       const filteredByOffer = productsToFilter.filter((product) => {
         const offerPercentage = parseInt(product.offers);
         return offerPercentage >= selectedOffer;
       });
-  
+
       filteredByOffer.sort(
         (a, b) => parseFloat(a.offers) - parseFloat(b.offers)
       );
-  
+
       if (filteredByOffer.length !== 0) {
         productsToFilter = filteredByOffer;
       }
     }
-  
+
     const shuffledProducts = shuffleArray(productsToFilter);
     setFilteredProducts(shuffledProducts);
-  
+
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); 
-  
+    }, 2000);
+
     return () => clearTimeout(timer);
   }, [products, category, selectedPrice, offer]);
-  
-  
+
   // useEffect(() => {
   //   setSearchQuery("");
   //   setAccessoriesCategory("");
@@ -423,11 +423,10 @@ const Mens = () => {
                           {/* code end by ganesh */}
 
                           <div className="product-content d-flex flex-column gap-1 pt-3  ">
-                           
                             <div
                               style={{ fontSize: "14px" }}
                               className="d-flex justify-content-between"
-                             >
+                            >
                               <div
                                 style={{
                                   width: "100%",
@@ -437,7 +436,7 @@ const Mens = () => {
                                   justifyContent: "space-between",
                                   // gap:"20px"
                                 }}
-                               >
+                              >
                                 <span
                                   className="line-clamp-1"
                                   style={{ width: "50%" }}
@@ -566,15 +565,24 @@ const Mens = () => {
                             </div>
                           </div>
                         </a>
+                        {cart.snackbar.open &&
+                          cart.snackbar.index === index && (
+                            <div
+                              style={{ fontSize: "12px" }}
+                              className="border text-center rounded w-75 mx-auto"
+                            >
+                              {cart.snackbar.message}
+                            </div>
+                          )}
 
                         <div className="cart-btn px-1  ">
-                    <button
-                          onClick={() => handleAddToCartClick(product, index)}
-                          className="btn btn-primary my-2   px-2 "
-                      >
-                        Add to cart
-                      </button>
-                    <button
+                          <button
+                            onClick={() => handleAddToCartClick(product, index)}
+                            className="btn btn-primary my-2   px-2 "
+                          >
+                            Add to cart
+                          </button>
+                          <button
                             className={`btn ${
                               wishlistClicked[index]
                                 ? "btn-success"
@@ -585,8 +593,7 @@ const Mens = () => {
                           >
                             ❤
                           </button>
-                      
-                    </div>
+                        </div>
                       </div>
                     </div>
                   ))}

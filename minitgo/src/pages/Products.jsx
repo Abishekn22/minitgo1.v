@@ -700,16 +700,30 @@ const HomeProducts = () => {
                               </span>
                             )}
                           </div>
-                          <div >
-                              <span
-                                className=" fw-bold"
-                                style={{ fontSize: "12px",display:"flex",alignItems:"center",justifyContent:"center",gap:"10px" }}
-                              >
-                                {product.product_stock <= 1 ? "Only one left" : "In stock"}
-                                <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#d9725f",}}></div>
-                              </span>
-                              
-                            </div>
+                          <div>
+                            <span
+                              className=" fw-bold"
+                              style={{
+                                fontSize: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              {product.product_stock <= 1
+                                ? "Only one left"
+                                : "In stock"}
+                              <div
+                                style={{
+                                  width: "10px",
+                                  height: "10px",
+                                  borderRadius: "50%",
+                                  background: "#d9725f",
+                                }}
+                              ></div>
+                            </span>
+                          </div>
                         </div>
 
                         {/* <h5 className="mt-1">
@@ -759,13 +773,20 @@ const HomeProducts = () => {
                             </div>
                           )} */}
                       </div>
-
+                      {cart.snackbar.open && cart.snackbar.index === index && (
+                        <div
+                          style={{ fontSize: "12px" }}
+                          className="border text-center rounded w-75 mx-auto"
+                        >
+                          {cart.snackbar.message}
+                        </div>
+                      )}
                       {/* Buttons */}
                       <div className="cart-btn px-1">
                         <button
                           className="btn btn-primary my-2   px-2 "
                           onClick={() => handleAddToCartClick(product, index)}
-                          >
+                        >
                           Add to cart
                         </button>
                         <button

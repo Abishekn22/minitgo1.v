@@ -574,6 +574,15 @@ function shuffleArray(array) {
                               </span>
                             </div>
                           </div>
+                          {cart.snackbar.open &&
+                          cart.snackbar.index === index && (
+                            <div
+                              style={{ fontSize: "12px" }}
+                              className="border text-center rounded w-75 mx-auto"
+                            >
+                              {cart.snackbar.message}
+                            </div>
+                          )}
                         {/* </a> */}
                     </a>
 

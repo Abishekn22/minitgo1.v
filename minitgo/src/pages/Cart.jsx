@@ -197,15 +197,15 @@ const Cart = () => {
                 <div className="card-body">
                   {cartData?.map((cart_item, index) => {
                     return (
-                      <a
-                        href={`/${cart_item.pid}`}
-                        target="_blank"
-                        style={{
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                        className="fw-semibold"
-                      >
+                      // <a
+                      //   href={`/${cart_item.pid}`}
+                      //   target="_blank"
+                      //   style={{
+                      //     textDecoration: "none",
+                      //     color: "black",
+                      //   }}
+                      //   className="fw-semibold"
+                      // >
                         <div className="row my-2" key={index}>
                           <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                             <div className="bg-image rounded hover-zoom hover-overlay">
@@ -300,7 +300,7 @@ const Cart = () => {
                           </div>
                           <hr className="my-2" />
                         </div>
-                      </a>
+                      // </a>
                     );
                   })}
                 </div>
