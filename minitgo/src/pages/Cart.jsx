@@ -206,25 +206,39 @@ const Cart = () => {
                       //   }}
                       //   className="fw-semibold"
                       // >
-                        <div className="row my-2" key={index}>
-                          <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                            <div className="bg-image rounded hover-zoom hover-overlay">
-                              <img
-                                src={cart_item.product_image1}
-                                className="w-100"
-                                alt="Product"
-                              />
-                              <a href="#!">
-                                <div
-                                  className="mask"
-                                  style={{
-                                    backgroundColor: "rgba(251, 251, 251, 0.2)",
-                                  }}
-                                ></div>
-                              </a>
-                            </div>
+                      <div className="row my-2" key={index}>
+                        <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                          <div className="bg-image rounded hover-zoom hover-overlay">
+                            <a  href={`/${cart_item.pid}`}
+                        target="_blank"
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                        }}>
+                            <img
+                              src={cart_item.product_image1}
+                              className="w-100"
+                              alt="Product"
+                            />
+                              <div
+                                className="mask"
+                                style={{
+                                  backgroundColor: "rgba(251, 251, 251, 0.2)",
+                                }}
+                              ></div>
+                            </a>
                           </div>
-                          <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                        </div>
+                        <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                          <a
+                            href={`/${cart_item.pid}`}
+                            target="_blank"
+                            style={{
+                              textDecoration: "none",
+                              color: "black",
+                            }}
+                            className="fw-semibold"
+                          >
                             <p className="mb-1">
                               <span>{cart_item.client_name}</span>
                             </p>
@@ -249,57 +263,67 @@ const Cart = () => {
                             <p className="line-clamp-2 mb-0 ">
                               Description: {cart_item.product_discription}
                             </p>
-                            <br></br>
-                            <button
-                              className="btn btn-danger  ml-2 mr-2"
-                              onClick={() =>
-                                handleRemoveFromCart(cart_item.product_id)
-                              }
-                            >
-                              <BsTrash3 />
-                            </button>
-                            <button
-                              // onClick={() =>
-                              onClick={() => handleAddToWishlist(cart_item)}
-                              className="btn btn-secondary  mx-2"
-                            >
-                              <AiOutlineHeart />
-                            </button>
-                          </div>
-                          <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                            <div
-                              className="d-flex mb-4"
-                              style={{ maxWidth: "300px" }}
-                            >
-                              <button
-                                className="btn btn-primary px-3 me-2"
-                                onClick={() => DeleteQty(cart_item.product_id)}
-                              >
-                                <i className="minus"> - </i>
-                              </button>
-                              <div
-                                className="form-control text-center"
-                                placeholder="Quantity"
-                              >
-                                {cart_item.quantity}
-                              </div>
-                              <button
-                                className="btn btn-primary px-3 ms-2 "
-                                onClick={() =>
-                                  handleAddQty(cart_item.product_id)
-                                }
-                              >
-                                <i className="plus"> + </i>
-                              </button>
-                            </div>
-                            <p className="text-start text-md-center">
-                              <strong>
-                                {cart_item.quantity} * {cart_item.product_price}
-                              </strong>
-                            </p>
-                          </div>
-                          <hr className="my-2" />
+                          </a>
+                          <br></br>
+                          <button
+                            className="btn btn-danger  ml-2 mr-2"
+                            onClick={() =>
+                              handleRemoveFromCart(cart_item.product_id)
+                            }
+                          >
+                            <BsTrash3 />
+                          </button>
+                          <button
+                            // onClick={() =>
+                            onClick={() => handleAddToWishlist(cart_item)}
+                            className="btn btn-secondary  mx-2"
+                          >
+                            <AiOutlineHeart />
+                          </button>
                         </div>
+
+                        <div className="col-lg-4 col-md-6 mb-4 mb-lg-0" >
+                          <div
+                            className="d-flex mb-4"
+                            style={{ maxWidth: "300px" }}
+                          >
+                            <button
+                              className="btn btn-primary px-3 me-2"
+                              onClick={() => DeleteQty(cart_item.product_id)}
+                            >
+                              <i className="minus"> - </i>
+                            </button>
+                            <div
+                              className="form-control text-center"
+                              placeholder="Quantity"
+                            >
+                              {cart_item.quantity}
+                            </div>
+                            <button
+                              className="btn btn-primary px-3 ms-2 "
+                              onClick={() => handleAddQty(cart_item.product_id)}
+                            >
+                              <i className="plus"> + </i>
+                            </button>
+                          </div>
+                          <p className="text-start text-md-center">
+                            <strong>
+                              {cart_item.quantity} * {cart_item.product_price}
+                            </strong>
+                          </p>
+                          <a
+                            href={`/${cart_item.pid}`}
+                            target="_blank"
+                            style={{
+                              textDecoration: "none",
+                              color: "black",
+                              width:"100px",background:"red"
+                            }}
+                            className="fw-semibold"
+                          ></a>
+                        </div>
+                        <hr className="my-2" />
+                      </div>
                       // </a>
                     );
                   })}

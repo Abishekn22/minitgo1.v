@@ -19,6 +19,8 @@ function ProductCard({ product, index }) {
   const context = useContext(myContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState(true);
+  const [selectedSizes, setSelectedSizes] = useState({});
+
 
   const { products } = context;
   const dispatch = useDispatch();
@@ -31,25 +33,59 @@ function ProductCard({ product, index }) {
 
     return () => clearTimeout(timer);
   }, [product]);
+  const handleAddToCart = (product, index, selectedSize) => {
+    // Ensure that the selected size is used, or default to the first size
+    const size = selectedSize || product.product_size.split(",")[0];
+    const color = product.product_color1.split(",")[0]; // Assuming color is managed similarly
 
-  const handleAddToCart = (product, index) => {
-    const size=product.product_size.split(',')
-    const color=product.product_color1.split(',')    
     const productWithCoordinates = {
       ...product,
-      product_size: size[0],
-      product_color1:color[0],
+      product_size: size,
+      product_color1: color,
       // coordinates,
     };
+
     dispatch(addToCart(productWithCoordinates));
     dispatch(showSnackbar({ message: "Product added successfully!", index }));
-    console.log("index", index);
 
     // Wait for 1 second, then hide snackbar
     setTimeout(() => {
       dispatch(hideSnackbar());
     }, 1000);
   };
+  const handleSizeChange = (productId, size) => {
+    setSelectedSizes((prevState) => ({
+      ...prevState,
+      [productId]: size,
+    }));
+  };
+
+  // Handle add to cart click
+  const handleAddToCartClick = (product, index) => {
+    // Get the selected size, or default to the first size
+    const selectedSize =
+      selectedSizes[product.id] || product.product_size.split(",")[0];
+    handleAddToCart(product, index, selectedSize);
+  };
+
+  // const handleAddToCart = (product, index) => {
+  //   const size = product.product_size.split(",");
+  //   const color = product.product_color1.split(",");
+  //   const productWithCoordinates = {
+  //     ...product,
+  //     product_size: size[0],
+  //     product_color1: color[0],
+  //     // coordinates,
+  //   };
+  //   dispatch(addToCart(productWithCoordinates));
+  //   dispatch(showSnackbar({ message: "Product added successfully!", index }));
+  //   console.log("index", index);
+
+  //   // Wait for 1 second, then hide snackbar
+  //   setTimeout(() => {
+  //     dispatch(hideSnackbar());
+  //   }, 1000);
+  // };
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -127,41 +163,43 @@ function ProductCard({ product, index }) {
               {loading ? (
                 <Skeleton width={80} />
               ) : (
-                <span>{product.category}</span>
+                <span>{product.product_title}</span>
               )}
             </div>
             {loading ? (
               <Skeleton width={150} />
-            ) : ( ""
-  //             <a
-  //               href={`/${product.product_id}`}
-  //               target="_blank"
-  //               style={{
-  //                 textDecoration: "none",
-  //                 color: "black",
-  //               }}
-  //               className="fw-semibold"
-  //             >
-  //               {windowWidth <= 1024
-  // ? product.product_name && product.product_name.length > 15
-  //   ? product.product_name.substring(0, 15) + "..."
-  //   : product.product_name
-  // : product.product_name && product.product_name.length > 23
-  // ? product.product_name.substring(0, 23) + "..."
-  // : product.product_name}
-  //             </a>
+            ) : (
+              ""
+              //             <a
+              //               href={`/${product.product_id}`}
+              //               target="_blank"
+              //               style={{
+              //                 textDecoration: "none",
+              //                 color: "black",
+              //               }}
+              //               className="fw-semibold"
+              //             >
+              //               {windowWidth <= 1024
+              // ? product.product_name && product.product_name.length > 15
+              //   ? product.product_name.substring(0, 15) + "..."
+              //   : product.product_name
+              // : product.product_name && product.product_name.length > 23
+              // ? product.product_name.substring(0, 23) + "..."
+              // : product.product_name}
+              //             </a>
             )}
 
             <div className="flex-container">
-              <h5 className="mt-1 flext-item">
-                Price: <sup>&#x20B9;</sup>
-                {loading ? (
-                  <Skeleton width={50} />
-                ) : (
-                  `₹${product.product_price}`
-                )}
+              <h6 className="fs-9 text-start">
+                <span className="fw-semibold">{product.product_title}</span> |
+                <span className="fw-bold"> Color:</span>{" "}
+                {product.product_color1} |
+                <span className="fw-bold"> {product.material}</span>{" "}
+              </h6>
+              <h5 className="mt-1 flext-item  ">
+                ₹{product.product_price}
                 <span className="text-decoration-line-through text-muted fs-6 fw-light">
-                  {loading ? <Skeleton width={30} /> : "599"}
+                  599
                 </span>
                 <span
                   className="text-muted"
@@ -169,62 +207,96 @@ function ProductCard({ product, index }) {
                     fontSize: "13px",
                   }}
                 >
-                  {loading ? <Skeleton width={50} /> : product.product_stock}
+                  {" "}
+                  {/* {product.product_stock} */}
                 </span>
               </h5>
               <div>
-                <span className="fw-semibold">Size:</span>{" "}
-                {loading ? <Skeleton width={30} /> : <span>{product.product_size}</span>}
+                <span className=" fw-bold" style={{ fontSize: "12px" }}>
+                  Available size:
+                </span>{" "}
+                {product.product_size.includes(",") ? (
+                  <select
+                    className="px-1"
+                    style={{
+                      backgroundColor: "#d9725f",
+                      fontSize: "0.875rem",
+                      borderRadius: "5px",
+                    }}
+                    onChange={(e) =>
+                      handleSizeChange(product.id, e.target.value)
+                    }
+                    value={
+                      selectedSizes[product.id] ||
+                      product.product_size.split(",")[0]
+                    }
+                  >
+                    {product.product_size.split(",").map((size, index) => (
+                      <option key={index} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span
+                    className="px-1"
+                    style={{
+                      backgroundColor: "#d9725f",
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    {product.product_size}
+                  </span>
+                )}
               </div>
-            </div>
-            <div
-              className="d-flex justify-content-between"
-              style={{ fontSize: "14px" }}
-            >
-              <div>
-                <span className="fw-semibold"></span>{" "}
-                {loading ? <Skeleton width={50} /> : <span>{product.material}</span>}
+              <div style={{ width: "100%", display: "flex" }}>
+                <span
+                  className=" fw-bold"
+                  style={{
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "10px",
+                  }}
+                >
+                  {product.product_stock <= 1 ? "Only one left" : "In stock"}
+                  <div
+                    style={{
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      background: "#d9725f",
+                    }}
+                  ></div>
+                </span>
               </div>
-              <div>
-                <span className="fw-semibold">Color:</span>{" "}
-                {loading ? <Skeleton width={30} /> : <span>{product.product_color1}</span>}
-              </div>
+              
             </div>
-            <div className="mt-1 clamped-text" style={{ textAlign: "justify" }}>
-              {loading ? (
-                <Skeleton count={2} />
-              ) : windowWidth <= 576 ? (
-                product.product_discription.length > 20
-                  ? product.product_discription.substring(0, 19) + "..."
-                  : product.product_discription
-              ) : product.product_discription.length > 50 ? (
-                product.product_discription.slice(0, 45) + "..."
-              ) : (
-                product.product_discription
-              )}
-            </div>
+            
+            
             {/* <div className="product-rating text-warning">
               Rating: {loading ? <Skeleton width={50} /> : <StarRatings rating={product.product_ratings} />}
             </div> */}
-            <p className="product-distance text-secondary">
-              {loading ? <Skeleton width={100} /> : `Distance: ${product.distance}km away.`}
-            </p>
-            {cart.snackbar.open && cart.snackbar.index === index && (
-              <div
-                style={{ fontSize: "12px" }}
-                className="border text-center rounded w-75 mx-auto"
-              >
-                {cart.snackbar.message}
-              </div>
-            )}
+            
+           
           </div>
         </a>
+        {cart.snackbar.open &&
+                          cart.snackbar.index === index && (
+                            <div
+                              style={{ fontSize: "12px" }}
+                              className="border text-center rounded w-75 mx-auto"
+                            >
+                              {cart.snackbar.message}
+                            </div>
+                          )}
 
         <div className="cart-btn px-1">
           <button
             className="btn btn-secondary"
-            onClick={() => handleAddToCart(product, index)}
-          >
+            onClick={() => handleAddToCartClick(product, index)}
+            >
             <img
               className="img-fluid"
               src={cartIcon}
