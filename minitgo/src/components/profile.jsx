@@ -63,6 +63,8 @@ const Profile = () => {
         console.log("results", results);
 
         const userId = JSON.parse(localStorage.getItem("user"))?.userId;
+        console.log("userid",userId);
+        
 
         const user = results.find((user) => user.id === userId);
         if (!user) {
