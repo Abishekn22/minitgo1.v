@@ -124,14 +124,14 @@ function LeftSection({ productId, scrollToReviews }) {
                     product[`product_image${index + 1}`] && ( // Check if product image URL exists
                       <div
                         key={index}
-                        className="border rounded-2 product-info"
-                        style={{ height: "80px", cursor: "pointer" }}
+                        className="border rounded-2 product-info "
+                        style={{ height: "90px",width:"90px", cursor: "pointer" }}
                         onClick={() => handleImageClick(index)}
                       >
                         <img
                           src={product[`product_image${index + 1}`]}
                           alt={`Image ${index + 1}`}
-                          style={{ width: "100%", height: "100%" }}
+                          style={{ width: "90%", height: "100%" }}
                           className="rounded-2"
                         />
                       </div>

@@ -360,6 +360,20 @@ export const Checkout = () => {
     setNewAddress("");
     setAddress(true);
   };
+  const truncateAddress = (address) => {
+    const words = address.split(' ');
+    if (words.length > 3) {
+      return words.slice(0, 3).join(' ') + '...';
+    }
+    return address;
+  };
+  
+  // Usage
+  const shortAddress = truncateAddress(parsedSignInData.Address);
+  const offceAddress = truncateAddress(parsedSignInData.officeAddress);
+  console.log(shortAddress); // Outputs the truncated address
+  console.log(offceAddress); // Outputs the truncated address
+  
   console.log(selectedAddress);
   console.log("location", location);
   console.log(selectedAddress);
@@ -648,7 +662,7 @@ export const Checkout = () => {
                           Home Address
                         </p>
                         <span className="ms-auto fs-6">
-                          {parsedSignInData ? parsedSignInData.Address : ""}
+                          {parsedSignInData ? shortAddress : ""}
                         </span>
                       </div>
                     </div>
@@ -678,7 +692,7 @@ export const Checkout = () => {
                         </p>
                         <span className="ms-auto fs-6">
                           {parsedSignInData
-                            ? parsedSignInData.officeAddress
+                            ? offceAddress
                             : ""}
                         </span>
                       </div>

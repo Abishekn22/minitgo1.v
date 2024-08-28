@@ -29,12 +29,15 @@ function RightSection({ productId }) {
   const { handleImageClick } = useContext(myContext);
   const [productSizes, setProductSizes] = useState([]);
   const [productColors, setProductColors] = useState([]);
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   const [selectedElement, setSelectedElement] = useState(null);
+  const [activeSelection, setActiveSelection] = useState({
+    size: product.product_size,
+    color: product.product_color1,
+  });
 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     axios
@@ -55,18 +58,18 @@ function RightSection({ productId }) {
       setProduct(fProduct);
       // Parse the product_size string into an array
       if (fProduct.product_size) {
-        const sizes = fProduct.product_size.split(',');
+        const sizes = fProduct.product_size.split(",");
         setProductSizes(sizes);
         setSelectedSize(sizes[0]);
       }
       if (fProduct.product_color1) {
-        const colors = fProduct.product_color1.split(',');
+        const colors = fProduct.product_color1.split(",");
         setProductColors(colors);
         setSelectedColor(colors[0]);
       }
     }
   }, [id, products]);
-  console.log("product size",productSizes);
+  console.log("product size", productSizes);
   console.log("product color", productColors);
 
   const dispatch = useDispatch();
@@ -76,10 +79,10 @@ function RightSection({ productId }) {
       product_size: selectedSize,
       product_color1: selectedColor,
     };
-    
+
     console.log("pro", selectedProduct);
     dispatch(addToCart(selectedProduct));
-    
+
     toast.success("Item added to cart!", {
       position: "top-right",
       autoClose: 2000,
@@ -89,18 +92,36 @@ function RightSection({ productId }) {
       draggable: true,
       progress: undefined,
     });
-    
+
     setTimeout(() => {
-      navigate('/cart'); // Adjust the path based on your routing setup
+      navigate("/cart"); // Adjust the path based on your routing setup
     }, 2000);
+  };
+  const handleBuy = () => {
+    const selectedProduct = {
+      ...product,
+      product_size: selectedSize,
+      product_color1: selectedColor,
+    };
+
+    console.log("pro", selectedProduct);
+    dispatch(addToCart(selectedProduct));
   };
 
   const handleSizeClick = (size) => {
     setSelectedSize(size);
+    setActiveSelection((prevState) => ({
+      ...prevState,
+      size: size,
+    }));
   };
 
   const handleColorClick = (color) => {
     setSelectedColor(color);
+    setActiveSelection((prevState) => ({
+      ...prevState,
+      color: color,
+    }));
   };
 
   console.log("products send ", product);
@@ -210,7 +231,9 @@ function RightSection({ productId }) {
                 </div>
                 {productColors.length > 0 && (
                   <div className="d-grid gap-1">
-                    <h2 className="fw-semibold fs-5 text-start">Available Colors</h2>
+                    <h2 className="fw-semibold fs-5 text-start">
+                      Available Colors
+                    </h2>
                     <div
                       className="d-grid gap-4"
                       style={{
@@ -223,7 +246,7 @@ function RightSection({ productId }) {
                         <button
                           key={color}
                           className={`border py-1 px-1 rounded text-center ${
-                            product.product_color1 === color
+                            activeSelection.color === color
                               ? "bg-primary text-white"
                               : "bg-body-secondary"
                           }`}
@@ -238,7 +261,9 @@ function RightSection({ productId }) {
                 )}
                 {productSizes.length > 0 && (
                   <div className="d-grid gap-1">
-                    <h2 className="fw-semibold fs-5 text-start">Available Size</h2>
+                    <h2 className="fw-semibold fs-5 text-start">
+                      Available Size
+                    </h2>
                     <div
                       className="d-grid gap-4"
                       style={{
@@ -255,17 +280,15 @@ function RightSection({ productId }) {
                           //     ? "bg-primary text-white"
                           //     : "bg-body-secondary"
                           // }`}
-                          className="px-2 py-1"
+                          className={`border py-1 px-1 rounded text-center ${
+                            activeSelection.size === size
+                              ? "bg-primary text-white"
+                              : "bg-body-secondary"
+                          }`}
                           onClick={() => handleSizeClick(size)}
                           style={{
-                            backgroundColor: selectedElement === size ? 'blue' : 'white',
-                            color: selectedElement === size ? 'white' : 'black',
-                            // padding: '5px',
-                            margin: '5px',
-                             // Remove border
-                            borderRadius: '10px', // Add border radius
-                            cursor: 'pointer', // Optional: Add a pointer cursor on hover
-                            outline: 'none', // Optional: Remove outline when the button is focused
+                            width: "50px",
+                            height: "30px", // Optional: Remove outline when the button is focused
                           }}
                         >
                           {size}
@@ -289,18 +312,28 @@ function RightSection({ productId }) {
                     {product.product_discription}
                   </p>
                 </div>
-                <div className="d-flex gap-3 pb-1">
+                <div
+                  className="d-flex gap-3 pb-1"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <button
                     onClick={handleAddToCart}
-                    className="btn btn-primary my-2 ms-2 px-5"
+                    className="btn btn-primary my-2  px-5"
                   >
                     Add to cart
                   </button>
-                  <Link to="/checkout" style={{width:'150px'}}>
-                      <button className="btn btn-primary   w-100">
-                        Buy Now
-                      </button>
-                    </Link>
+                  <Link to="/checkout" style={{ width: "150px" }}>
+                    <button
+                      className="btn btn-primary   w-100"
+                      onClick={handleBuy}
+                    >
+                      Buy Now
+                    </button>
+                  </Link>
                 </div>
                 {/* <div className="d-flex flex-column gap-1">
                   <h2 className="fs-4 text-start">Description</h2>
