@@ -223,6 +223,8 @@ export default function Catlog({ latitude, longitude }) {
 
   const locationHy = useLocation();
   const showHyDropdown = () => {
+    const regexPattern = /^\/\d+$/; // Adjust the pattern if your :id is not purely numeric
+
     // Check if location pathname is not '/signin' or '/register'
     return (
       locationHy.pathname === "/" ||
@@ -239,6 +241,8 @@ export default function Catlog({ latitude, longitude }) {
       location.pathname === "/help" ||
       location.pathname === "/checkout" ||
       location.pathname === "/cart" ||
+      regexPattern.test(location.pathname) || // Matches paths like "/123", "/456", etc.
+
       // location.pathname === `/:${id}` ||
       location.pathname === "/blog"
     );

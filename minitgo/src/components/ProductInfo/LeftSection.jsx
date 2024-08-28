@@ -117,14 +117,14 @@ function LeftSection({ productId, scrollToReviews }) {
       ) : (
         product && (
           <section className="w-100 md:w-50 d-flex flex-column gap-4 position-relative px-md-4 h-100">
-            <div className="w-100 rounded-lg position-relative d-flex justify-between">
-              <div className="col-2 d-flex flex-column gap-3">
+            <div className="w-100 rounded-lg position-relative d-flex justify-between product-info">
+              <div className=" d-flex flex-column gap-3 product-info">
                 {Array.from({ length: 5 }).map(
                   (_, index) =>
                     product[`product_image${index + 1}`] && ( // Check if product image URL exists
                       <div
                         key={index}
-                        className="border rounded-2"
+                        className="border rounded-2 product-info"
                         style={{ height: "80px", cursor: "pointer" }}
                         onClick={() => handleImageClick(index)}
                       >
@@ -138,12 +138,47 @@ function LeftSection({ productId, scrollToReviews }) {
                     )
                 )}
               </div>
-              <div className="col-10 ps-3" style={{ height: "500px" }}>
+              <div className=" " style={{ height: "500px" }}>
                 <CarouselComponent
                   productId={productId}
                   selectedImageIndex={selectedImageIndex}
                 />
               </div>
+            </div>
+            <div
+              className="d-flex gap-3 mx-1 mx-md-0 product-info-img d-md-none"
+              style={{ height: "60px",display:"flex",alignItems:"center",justifyContent:"center"}} 
+            >
+              {Array.from({ length: 5 }).map(
+                (_, index) =>
+                  product[`product_image${index + 1}`] && (
+                    <div
+                      key={index}
+                      className="border rounded-2 product-info-img"
+                      style={{
+                        height: "100%",
+                        background:"red",
+                        width: "60px",
+                        cursor: "pointer",
+                        display: "flex", // Makes the container a flexbox
+                        alignItems: "center", // Aligns items vertically
+                        justifyContent: "center", // Aligns items horizontally
+                      }}
+                      onClick={() => handleImageClick(index)}
+                    >
+                      {product && product[`product_image${index + 1}`] && (
+                        <img
+                          src={product[`product_image${index + 1}`]}
+                          alt={`Image ${index + 1}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        />
+                      )}
+                    </div>
+                  )
+              )}
             </div>
             <div className="d-flex">
               <div className="border rounded d-flex flex-column w-100 px-md-4 gap-2 px-1">

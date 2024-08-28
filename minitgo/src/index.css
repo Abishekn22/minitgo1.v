@@ -1719,7 +1719,16 @@ button:hover {
   .distance {
     display: none;
   }
+  .product-info{
+    display: none;
+  }
+ 
+  
 }
+@media screen and (min-width: 768px) and (max-width: 767px) {
+
+}
+
 
 
 /* code starte by ganesh */

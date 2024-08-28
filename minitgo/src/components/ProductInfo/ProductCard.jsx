@@ -290,16 +290,20 @@ function ProductCard({ product, index }) {
 
         <div className="cart-btn px-1">
           <button
-            className="btn btn-secondary"
+            className="btn btn-primary my-2  px-2"
             onClick={() => handleAddToCartClick(product, index)}
           >
-            <img
-              className="img-fluid"
-              src={cartIcon}
-              style={{ height: "20px" }}
-            />
+            Add to cart
           </button>
-          <button className="btn btn-primary my-2 ms-2 px-2">Buy Now</button>
+          <button
+            className={`btn ${
+              wishlistClicked[index] ? "btn-success" : "btn-primary"
+            } w-21 my-2`}
+            // style={{ height: "20px", fill: "white" }}
+            onClick={() => handleWishListToCart(product, index)}
+          >
+            ❤
+          </button>{" "}
         </div>
       </div>
     </div>

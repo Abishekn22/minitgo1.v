@@ -296,6 +296,11 @@ function RightSection({ productId }) {
                   >
                     Add to cart
                   </button>
+                  <Link to="/checkout" style={{width:'150px'}}>
+                      <button className="btn btn-primary   w-100">
+                        Buy Now
+                      </button>
+                    </Link>
                 </div>
                 {/* <div className="d-flex flex-column gap-1">
                   <h2 className="fs-4 text-start">Description</h2>
