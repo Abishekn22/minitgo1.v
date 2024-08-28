@@ -357,7 +357,7 @@ function Header() {
                 // fetchedAddress.neighbourhood.toLowerCase()
               );
 
-              if (matchingArea) {
+              if (!matchingArea) {
                 if (!hasShownToast.current) {
                   toast.warn("Minitgo is not available in this area.");
                   hasShownToast.current = true; // Mark that the toast has been shown

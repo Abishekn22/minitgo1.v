@@ -133,7 +133,7 @@ const Profile = () => {
         return pincodeMatch ;
       });
   
-      if (matchingArea) {
+      if (!matchingArea) {
         toast.error("Minitgo is not available in this area.");
         // console.log("Minitgo is not available in this area.");
         

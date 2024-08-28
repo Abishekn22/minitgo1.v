@@ -134,7 +134,7 @@ export default function Catlog({ latitude, longitude }) {
                 //   fetchedAddress.neighbourhood.toLowerCase()
             );
 
-            if (matchingArea) {
+            if (!matchingArea) {
               // toast.error("Minitgo is not available in this area.");
               console.log("Minitgo is not available in this area.");
               

@@ -278,7 +278,7 @@ export const Checkout = () => {
                 //   fetchedAddress.neighbourhood.toLowerCase()
             );
 
-            if (matchingArea) {
+            if (!matchingArea) {
               toast.error("Minitgo is not available in this area.");
             } else {
               // Process the fetched address as needed

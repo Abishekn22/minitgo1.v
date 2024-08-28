@@ -154,7 +154,7 @@ const Cart = () => {
       for (const word of addressWords) {
         const matchingArea = areaData.find((area) => area.pincode === word);
 
-        if (matchingArea) {
+        if (!matchingArea) {
           console.log("Found: Matching area found for pincode:", word);
           // toast.warn("Minitgo is not available in this area.");
           // toast.success(`Found: Area with pincode ${word} is available.`);
@@ -177,10 +177,11 @@ const Cart = () => {
   // Example usage
   checkPincode();
   const handleCheckoutClick = (event) => {
-    if (isPincodeMatch) {
+    if (!isPincodeMatch) {
       event.preventDefault(); // Prevent redirection
       // toast.error("Minitgo is not available in this area.");
-      console.log("hiii");
+      console.log("Minitgo is not available in this area.");
+      // console.log("hiii");
     }
   };
 
@@ -502,17 +503,17 @@ const Cart = () => {
                   </ul>
                   {parsedSignInData && cartData?.length > 0 ? (
                     <>
-                      <Link to={isPincodeMatch ? "#" : "/checkout"}>
+                      <Link to={!isPincodeMatch ? "#" : "/checkout"}>
                         {/* // <Link to={"/checkout"}> */}
                         <button
                           className="btn btn-lg btn-block btn-primary"
                           onClick={productSizeSelection}
-                          disabled={isPincodeMatch}
+                          disabled={!isPincodeMatch}
                         >
                           Go to checkout
                         </button>
                       </Link>
-                      {isPincodeMatch && (
+                      {!isPincodeMatch && (
                         <p
                           style={{
                             color: "red",
