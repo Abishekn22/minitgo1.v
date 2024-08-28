@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -14,6 +14,7 @@ function SignUp() {
 
   // const [latLong, setLatLong] = useState({ lat: null, log: null });
   const [location, setLocation] = useState({ lat: null, log: null });
+  const addressRef = useRef(null);
 
   const [fullName, setFullName] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
@@ -88,13 +89,13 @@ function SignUp() {
   const fetchAddress = async (lat, lng) => {
     const apiKey = "cF25ivfihp3P9dJIhL3mUOTgeCqKjAhb";
     const url = `https://api.geocodify.com/v2/reverse?api_key=${apiKey}&lat=${lat}&lng=${lng}`;
-  
+
     try {
       const response = await axios.get(url);
       console.log("response", response);
       const data = response.data;
       console.log("address details", data);
-  
+
       if (
         data &&
         data.response &&
@@ -104,7 +105,7 @@ function SignUp() {
         // Loop through each feature in the array
         for (const feature of data.response.features) {
           const address = feature.properties;
-  
+
           if (address.postalcode) {
             console.log("Postal code found:", address.postalcode);
             return {
@@ -120,7 +121,7 @@ function SignUp() {
             };
           }
         }
-  
+
         console.log("No postal code found in any of the address objects.");
       }
     } catch (error) {
@@ -128,7 +129,6 @@ function SignUp() {
     }
     return null;
   };
-  
 
   useEffect(() => {
     let intervalId;
@@ -292,17 +292,62 @@ function SignUp() {
   }
   const validatePhoneNumber = async (phoneNumber) => {
     try {
-      const response = await axios.get(`http://localhost:3001/validate-phone?phone=${phoneNumber}`);
+      const response = await axios.get(
+        `http://localhost:3001/validate-phone?phone=${phoneNumber}`
+      );
       const isValid = response.data.valid;
       console.log(response);
-      
+
       setIsPhoneValid(isValid);
     } catch (error) {
-      console.error('Error validating  number:', error);
+      console.error("Error validating  number:", error);
       setIsPhoneValid(false);
     }
   };
-  
+  const fetchAreaData = async () => {
+    try {
+      const response = await axios.get("https://minitgo.com/api/areas.php");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching area data:", error);
+      return [];
+    }
+  };
+  const checkArea=async ()=>{
+    try {
+      const areaData = await fetchAreaData();
+      console.log("areadata", areaData);
+
+      // Get the input address and split it by comma
+      const inputAddress = addressRef.current.value; // Get the input address value
+      const addressParts = inputAddress.split(",").map((part) => part.trim()); // Split and trim parts
+      console.log("Address parts:", addressParts);
+
+      // Check if any part of the address matches the area data
+      const matchingArea = areaData.find((area) => {
+        const pincodeMatch = addressParts.includes(area.pincode);
+        // const colonyMatch = addressParts.some(part =>
+        //   part.toLowerCase() === area.colony.toLowerCase()
+        // );
+        return pincodeMatch;
+      });
+
+      if (matchingArea) {
+        toast.error("Minitgo is not available in this area.");
+        // console.log("Minitgo is not available in this area.");
+
+        return; // Exit the function if the area matches
+      } else {
+        // Process the fetched address if no matching area is found
+        console.log("Fetched address:", inputAddress);
+      }
+
+      // Handle the response as needed
+    } catch (error) {
+      setError(error);
+      console.error("Error updating profile:", error);
+    }
+  }
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -352,57 +397,58 @@ function SignUp() {
         hideProgressBar: true,
       });
       return; // Stop form submission if the phone number is invalid
-    } 
-      axios
-        .get("https://minitgo.com/api/fetch_login.php")
-        .then((response) => {
-          if (response.data && response.data.length > 0) {
-            const allUsers = response.data;
-
-            const foundUser = allUsers.find(
-              (user) => user.email === emailData.to
-            );
-            const foundUserByPhone = allUsers.find(
-              (user) => user.phone_number === phoneNumber
-            );
-
-            if (foundUser) {
-              toast.error("Email already exists", {
-                autoClose: 1000,
-                hideProgressBar: true,
-              });
-              return;
-            }
-            if (foundUserByPhone) {
-              toast.error("Phone number already exists", {
-                autoClose: 1000,
-                hideProgressBar: true,
-              });
-              return;
-            }
-          }
-          const data = {
-            lat: location.lat,
-            log: location.log,
-            Address: addresss,
-            full_name: fullName,
-            phone_number: phoneNumber,
-            office_address: addresss,
-            email: emailData.to,
-            password: password,
-            landmark: "Near Central Park",
-          };
-          setCredentials(data);
-          console.log("cred", data);
-          const OTPvalue = generateOTP();
-          setOTP(OTPvalue);
-          sendOTPtoEmail(OTPvalue);
-          setShowOTP(true);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch user information:", error);
-        });
+    }
+    checkArea()
     
+    axios
+      .get("https://minitgo.com/api/fetch_login.php")
+      .then((response) => {
+        if (response.data && response.data.length > 0) {
+          const allUsers = response.data;
+
+          const foundUser = allUsers.find(
+            (user) => user.email === emailData.to
+          );
+          const foundUserByPhone = allUsers.find(
+            (user) => user.phone_number === phoneNumber
+          );
+
+          if (foundUser) {
+            toast.error("Email already exists", {
+              autoClose: 1000,
+              hideProgressBar: true,
+            });
+            return;
+          }
+          if (foundUserByPhone) {
+            toast.error("Phone number already exists", {
+              autoClose: 1000,
+              hideProgressBar: true,
+            });
+            return;
+          }
+        }
+        const data = {
+          lat: location.lat,
+          log: location.log,
+          Address: addresss,
+          full_name: fullName,
+          phone_number: phoneNumber,
+          office_address: addresss,
+          email: emailData.to,
+          password: password,
+          landmark: "Near Central Park",
+        };
+        setCredentials(data);
+        console.log("cred", data);
+        const OTPvalue = generateOTP();
+        setOTP(OTPvalue);
+        sendOTPtoEmail(OTPvalue);
+        setShowOTP(true);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch user information:", error);
+      });
   }
 
   function generateOTP() {
@@ -747,6 +793,7 @@ function SignUp() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Form.Control
+                  ref={addressRef}
                   type="text"
                   placeholder="Address"
                   className=" w-100 px-4 mb-3 rounded rounded-pill"
