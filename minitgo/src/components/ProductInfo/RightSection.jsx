@@ -31,6 +31,8 @@ function RightSection({ productId }) {
   const [productColors, setProductColors] = useState([]);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const [selectedElement, setSelectedElement] = useState(null);
+
   const navigate = useNavigate();
 
 
@@ -248,13 +250,23 @@ function RightSection({ productId }) {
                       {productSizes.map((size) => (
                         <button
                           key={size}
-                          className={`border py-1 px-1 rounded text-center ${
-                            product.product_size === size
-                              ? "bg-primary text-white"
-                              : "bg-body-secondary"
-                          }`}
+                          // className={`border py-1 px-1 rounded text-center ${
+                          //   product.product_size === size
+                          //     ? "bg-primary text-white"
+                          //     : "bg-body-secondary"
+                          // }`}
+                          className="px-2 py-1"
                           onClick={() => handleSizeClick(size)}
-                          style={{ width: "50px", height: "30px" }}
+                          style={{
+                            backgroundColor: selectedElement === size ? 'blue' : 'white',
+                            color: selectedElement === size ? 'white' : 'black',
+                            // padding: '5px',
+                            margin: '5px',
+                             // Remove border
+                            borderRadius: '10px', // Add border radius
+                            cursor: 'pointer', // Optional: Add a pointer cursor on hover
+                            outline: 'none', // Optional: Remove outline when the button is focused
+                          }}
                         >
                           {size}
                         </button>
