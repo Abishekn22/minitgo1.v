@@ -1725,9 +1725,27 @@ button:hover {
   .instock{
     flex-direction: column;
   }
+  .active-content{
+    font-size: 10px;
+    /* display: none; */
+    /* font-size: 1.5rem; */
+    /* background-color: red; */
+  }
+  .responsive-div {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    /* background-color: red; */
+  }
  
   
 }
+.active-content{
+  /* font-size: 0.9rem; */
+  /* background-color: red; */
+}
+
+
+
 @media screen and (min-width: 768px) and (max-width: 767px) {
 
 }
@@ -1741,6 +1759,13 @@ button:hover {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media (min-width: 768px) {
+  .responsive-div {
+    padding-top: 0;
+    padding-bottom: 0;
+    /* background-color: red; */
+  }
 }
 
 .line-clamp-1 {

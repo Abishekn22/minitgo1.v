@@ -284,6 +284,11 @@ const HomeProducts = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const [isActive, setIsActive] = useState(null);
+
+  const handleClick = (index) => {
+    setIsActive(index);
+  };
 
   return (
     <>
@@ -545,20 +550,24 @@ const HomeProducts = () => {
                         > */}
                           {/* changes done by sonali */}
                           {/* update code for responsive offer section by ganesh */}
-                          <div
-                          className="border px-1 rounded text-center bg-body-secondary"
-                            style={{ position: "absolute",
-                               bottom: "-10px",
-                               left:"1.25rem"
-
-
-                               }}
-                          >
-                            <span style={{fontSize:"0.9rem"}} className=" text-gray-700">
-                              Active now
-                            </span>
-                          </div>
-                          <div >
+                          {isActive === index && (
+                <div
+                  className="border px-1 rounded responsive-div bg-body-secondary md:py-0"
+                  style={{
+                    position: 'absolute',
+                    bottom: '-7px',
+                    left: '1.25rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <span className="active-content text-gray-700">
+                    Active now
+                  </span>
+                </div>
+              )}
+                          <div>
                             <div
                               className="offer-tag text-center p-1 text-bold mt-2"
                               style={{
@@ -596,6 +605,7 @@ const HomeProducts = () => {
                                 width: "0.938rem", // Size of the dot
                                 height: "0.938rem",
                               }}
+                              onClick={() => handleClick(index)}
                             ></div>
                           </div>
                         </div>
@@ -729,7 +739,14 @@ const HomeProducts = () => {
                                 </span>
                               )}
                             </div>
-                            <div className="instock" style={{ width: "100%", display: "flex",justifyContent:"space-between" }}>
+                            <div
+                              className="instock"
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
                               <span
                                 className=" fw-bold"
                                 style={{
@@ -741,7 +758,7 @@ const HomeProducts = () => {
                                 }}
                               >
                                 {product.product_stock <= 1
-                                  ? "Only one left"
+                                  ? "One left"
                                   : "In stock"}
                                 <div
                                   style={{
@@ -752,7 +769,9 @@ const HomeProducts = () => {
                                   }}
                                 ></div>
                               </span>
-                              <span style={{fontSize:"12px"}}>open now - close at 8pm</span>
+                              <span style={{ fontSize: "12px" }}>
+                                open now - close at 8pm
+                              </span>
                             </div>
                           </div>
                           {cart.snackbar.open &&
