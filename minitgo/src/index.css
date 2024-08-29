@@ -1722,6 +1722,9 @@ button:hover {
   .product-info{
     display: none;
   }
+  .instock{
+    flex-direction: column;
+  }
  
   
 }

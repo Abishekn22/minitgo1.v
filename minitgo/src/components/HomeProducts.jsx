@@ -545,7 +545,20 @@ const HomeProducts = () => {
                         > */}
                           {/* changes done by sonali */}
                           {/* update code for responsive offer section by ganesh */}
-                          <div>
+                          <div
+                          className="border px-1 rounded text-center bg-body-secondary"
+                            style={{ position: "absolute",
+                               bottom: "-10px",
+                               left:"1.25rem"
+
+
+                               }}
+                          >
+                            <span style={{fontSize:"0.9rem"}} className=" text-gray-700">
+                              Active now
+                            </span>
+                          </div>
+                          <div >
                             <div
                               className="offer-tag text-center p-1 text-bold mt-2"
                               style={{
@@ -567,6 +580,23 @@ const HomeProducts = () => {
                                 ? "No Offer"
                                 : `${product.offers}% Off`}
                             </div>
+                            <div
+                              className="offer-tag text-center p-1 text-bold mt-2"
+                              style={{
+                                position: "absolute",
+                                bottom: "20px",
+                                left: "10px",
+                                fontSize: "0.8rem",
+                                padding: "1rem",
+                                textDecorationColor: "HighlightText",
+                                border: "none",
+                                borderRadius: "50px",
+                                fontWeight: "bold",
+                                backgroundColor: "#40f858",
+                                width: "0.938rem", // Size of the dot
+                                height: "0.938rem",
+                              }}
+                            ></div>
                           </div>
                         </div>
 
@@ -574,7 +604,7 @@ const HomeProducts = () => {
                           <div
                             style={{ fontSize: "14px" }}
                             className="d-flex justify-content-between"
-                           >
+                          >
                             <div
                               style={{
                                 width: "100%",
@@ -585,7 +615,12 @@ const HomeProducts = () => {
                                 // gap:"20px"
                               }}
                             >
-                              <span className="line-clamp-1" style={{width:"50%"}}>{product.client_name}</span>
+                              <span
+                                className="line-clamp-1"
+                                style={{ width: "50%" }}
+                              >
+                                {product.client_name}
+                              </span>
                               <span>
                                 <RxLapTimer style={{ marginRight: "5px" }} />
                                 <span style={{ color: "orange" }}>36 min</span>
@@ -659,66 +694,83 @@ const HomeProducts = () => {
                                 Available size:
                               </span>{" "}
                               {product.product_size.includes(",") ? (
-                              <select
-                                className="px-1"
-                                style={{
-                                  backgroundColor: "#d9725f",
-                                  fontSize: "0.875rem",
-                                  borderRadius: "5px",
-                                }}
-                                onChange={(e) =>
-                                  handleSizeChange(product.id, e.target.value)
-                                }
-                                value={
-                                  selectedSizes[product.id] ||
-                                  product.product_size.split(",")[0]
-                                }
-                              >
-                                {product.product_size
-                                  .split(",")
-                                  .map((size, index) => (
-                                    <option key={index} value={size}>
-                                      {size}
-                                    </option>
-                                  ))}
-                              </select>
-                            ) : (
-                              <span
-                                className="px-1"
-                                style={{
-                                  backgroundColor: "#d9725f",
-                                  fontSize: "0.875rem",
-                                }}
-                              >
-                                {product.product_size}
-                              </span>
-                            )}
+                                <select
+                                  className="px-1"
+                                  style={{
+                                    backgroundColor: "#d9725f",
+                                    fontSize: "0.875rem",
+                                    borderRadius: "5px",
+                                  }}
+                                  onChange={(e) =>
+                                    handleSizeChange(product.id, e.target.value)
+                                  }
+                                  value={
+                                    selectedSizes[product.id] ||
+                                    product.product_size.split(",")[0]
+                                  }
+                                >
+                                  {product.product_size
+                                    .split(",")
+                                    .map((size, index) => (
+                                      <option key={index} value={size}>
+                                        {size}
+                                      </option>
+                                    ))}
+                                </select>
+                              ) : (
+                                <span
+                                  className="px-1"
+                                  style={{
+                                    backgroundColor: "#d9725f",
+                                    fontSize: "0.875rem",
+                                  }}
+                                >
+                                  {product.product_size}
+                                </span>
+                              )}
                             </div>
-                            <div style={{width:"100%" ,display:"flex"}} >
+                            <div className="instock" style={{ width: "100%", display: "flex",justifyContent:"space-between" }}>
                               <span
                                 className=" fw-bold"
-                                style={{ fontSize: "12px",display:"flex",alignItems:"center",justifyContent:"center",gap:"10px" }}
+                                style={{
+                                  fontSize: "12px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  // justifyContent: "center",
+                                  gap: "3px",
+                                }}
                               >
-                                {product.product_stock <= 1 ? "Only one left" : "In stock"}
-                                <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#d9725f",}}></div>
+                                {product.product_stock <= 1
+                                  ? "Only one left"
+                                  : "In stock"}
+                                <div
+                                  style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    borderRadius: "50%",
+                                    background: "#d9725f",
+                                  }}
+                                ></div>
                               </span>
-                              
+                              <span style={{fontSize:"12px"}}>open now - close at 8pm</span>
                             </div>
                           </div>
                           {cart.snackbar.open &&
-                          cart.snackbar.index === index && (
-                            <div
-                              style={{ fontSize: "12px" }}
-                              className="border text-center rounded w-75 mx-auto"
-                            >
-                              {cart.snackbar.message}
-                            </div>
-                          )}
+                            cart.snackbar.index === index && (
+                              <div
+                                style={{ fontSize: "12px" }}
+                                className="border text-center rounded w-75 mx-auto"
+                              >
+                                {cart.snackbar.message}
+                              </div>
+                            )}
 
                           <div className=" cart-btn ">
                             <button
-                          onClick={() => handleAddToCartClick(product, index)}
-                          className="btn btn-primary my-2  "
+                              onClick={() =>
+                                handleAddToCartClick(product, index)
+                              }
+                              className="btn btn-primary my-2  "
                             >
                               Add to cart
                             </button>
